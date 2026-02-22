@@ -3,4 +3,6 @@
 #
 # Note that this will be included *after* config/*.yml
 
-title: Title here
+title: "Talk Title"
+subtitle: "Optional Subtitle"
+talk_github_url: "pganssle-talks/..."

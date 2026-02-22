@@ -127,7 +127,25 @@ div.left-container {
     text-align: left;
 }
 
+/*********************************************
+ * Title slide
+ *********************************************/
+
+.main-title {
+  font-size: 3em;
+  color: #000;
+  font-family: "News Cycle", "Cantarell", sans-serif;
+  font-weight: bold;
 }
+
+.main-subtitle {
+  font-size: 0.7em;
+}
+
+.main-title-info .author {
+    font-size: 2em;
+}
+
 
 /*********************************************
  * HEADERS
