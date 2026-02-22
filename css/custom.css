@@ -656,6 +656,75 @@ table.alignment-table tr {
     font-size: 0px;
 }
 
+/*****************************
+ * Custom highlighting
+ */
+
+span.pytest-pass {
+    font-weight: bold;
+    color: #269109;
+}
+
+span.pytest-bad {
+    color: #d10000;
+}
+
+span.pytest-error {
+    color: #d10000;
+    font-weight: bold;
+}
+
+span.pytest-good {
+    color: #269109;
+}
+
+span.pytest-ok {
+    font-weight: bold;
+}
+
+span.pytest-warn {
+    color: #c27e00
+}
+
+span.pytest-warning-count {
+    font-weight: bold;
+    color: #c27e00;
+}
+
+.reveal pre {
+    display: inline-block;
+    width: auto;
+}
+
+.reveal pre code
+{
+    display: inline-block;
+}
+
+.reveal pre code,
+.reveal pre tt {
+    font-size: 1.1em;
+    line-height: 1.1;
+}
+
+code.hljs, tt.hljs {
+    display: inline-block;
+    min-width: 60%;
+    background: #fff;
+}
+
+div.big-code pre code,
+div.big-code pre tt {
+    font-size: 1.5em;
+    line-height: 1.3;
+}
+
+div.medium-code pre code,
+div.medium-code pre tt {
+    font-size: 1.3em;
+    line-height: 1.2;
+}
+
 /****************************
  *  HACK
  *
