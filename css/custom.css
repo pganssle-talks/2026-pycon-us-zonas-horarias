@@ -594,10 +594,44 @@ img.sbitem {
     width: 1.1em;
 }
 
+span.footnote,
+p.footnote,
+figcaption.footnote, {
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+/* Separate two unrelated blocks of code so the backgrounds don't merge */
+div.code-separator {
+    margin-bottom: 0.5em;
+}
+
+/* Tables used for alignment */
+
+table.alignment-table td,
+table.alignment-table tr {
+    border-bottom: 0px;
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+}
 
 /*################################
  * Fragments
  */
+
+/* Custom class to bold fragments */
+/* use by adding "fragment custom bolds" */
+.reveal .slides > section .fragment.bolds, .fragment.bolds {
+    font-weight: normal;
+    visibility: visible;
+    opacity: 1;
+    will-change: font-weight;
+}
+
+.reveal .slides > section .fragment.bolds.visible, .fragment.bolds.visible {
+    font-weight: bold;
+}
 
 /* Custom class for fragments that disappear */
 
