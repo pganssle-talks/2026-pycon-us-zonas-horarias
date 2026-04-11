@@ -23,7 +23,7 @@ Given that there is a DST transition between `dt1` and `dt2`, there are two opti
 
 Notes:
 
-There is an analogous problem with aware datetime arithmetic. When you're performing an operation that crosses a daylight saving time transition, there are two reasonable ways to interpret it: you might want "wall time" semantics (e.g., "give me the same time tomorrow") or "absolute time" semantics (e.g., "give me exactly 24 hours of elapsed time").
+And there is an analogous problem with arithmetic, right? Because when you're going over a daylight saving time transition, you can either have wall time semantics, where you say, "Just give me the same time tomorrow" (if you're adding 24 hours), or you could say, "Give me what time it is after 24 hours have elapsed" like in absolute time in UTC. And these may be two different values.
 
 --
 
@@ -62,7 +62,9 @@ When two `datetime`s are subtracted, the behavior is different for same-zone and
 
 Notes:
 
-`datetime` generally prefers wall time semantics when both operands are in the same time zone. However, if they are in different zones, it makes no sense to compare wall times, so it switches to absolute time semantics by converting everything to UTC first. I have a blog post that goes into detail about why this isn't as crazy as it sounds, but unfortunately, many people still find it counter-intuitive and frequently report it as a bug.
+And there's a sort of similar dichotomy here, where `datetime` really likes to use wall time semantics. So when you're adding a `timedelta`, it says, "Oh, that's a same-zone operation, so we'll use wall times." And if you're subtracting two datetimes, if they're in the same zone, we'll use wall time semantics.
+
+And if they're in different zones, again, it doesn't make sense to use wall time semantics, so we'll switch to absolute time. And I have a blog post that goes into detail about why this isn't as crazy as it sounds, but unfortunately, most people really, really, really don't think that should be the case — they are constantly reporting it as a bug.
 
 --
 
@@ -85,5 +87,4 @@ def absolute_diff(dt1: datetime, dt2: datetime) -> timedelta:
 
 Notes:
 
-If you want to ensure consistent absolute time semantics regardless of the time zones involved, I recommend defining small helper functions like the ones shown here. They convert your operands to UTC before performing any calculations, ensuring that you always get results based on elapsed absolute time.
-
+So what I recommend is that you define some little helper functions like this that just take your operands and convert them to UTC before doing any operations on it, and then you can get absolute time semantics regardless of whether they're same zone or different zone or whatever.

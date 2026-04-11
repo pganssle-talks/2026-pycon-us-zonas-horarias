@@ -37,7 +37,9 @@ AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
 
 Notes:
 
-If you're going to migrate from `pytz`, you should be aware that it can be a breaking change if you have any public-facing interfaces that return `pytz` time zone objects. Your users may be expecting to use `pytz`-specific methods like `.localize()` or `.normalize()` on those objects, and those don't exist in `ZoneInfo`.
+So if you're going to migrate from `pytz`, if you have any public-facing interface that returns `pytz` zones, you should be aware that it is a breaking change to switch to `ZoneInfo`, because your users may be expecting you to have a time zone exposed that has `localize` and `normalize` methods and whatever `pytz`-specific interfaces.
+
+So this may be a little bit of a problem for you.
 
 --
 
@@ -77,7 +79,11 @@ https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html
 
 Notes:
 
-To help with this, I've created a third-party library called `pytz-deprecation-shim`. It provides a mostly backwards-compatible implementation of the `pytz` interface, but it's actually just a thin wrapper around `ZoneInfo`.
+To help with that, I've created this third-party library, `pytz-deprecation-shim`. And the way this works is that it's a mostly backwards-compatible implementation of `pytz`'s interface, but it's also just a thin wrapper around `ZoneInfo`.
+
+So it works just fine like a `ZoneInfo` zone. But if it also exposes `pytz`'s interface, and if anyone uses any of the `pytz`-specific stuff, it raises a `DeprecationWarning`.
+
+So the only warning here is that there are some changes in the way arithmetic semantics work here. So I would recommend looking at this migration guide, whether or not you use it, because it's actually — I've been told — it's a quite good migration guide in general for the exact details. But you know, this might be very useful, especially if you have like a big codebase, if you just swap out all your `pytz` zones for something like this, and then start raising errors whenever you see this deprecation warning, and then you can start pulling out all the `pytz`-specific stuff.
 
 --
 
@@ -93,10 +99,6 @@ To help with this, I've created a third-party library called `pytz-deprecation-s
 
     -  "Unwraps" a shim zone into the underlying `zoneinfo` or `dateutil.tz` (Python 2.7) implementation.
     - Turns a `pytz` zone into its `zoneinfo` / `dateutil.tz` equivalent (raises an exception if no equivalent exists)
-
-Notes:
-
-Because it's a wrapper around `ZoneInfo`, it works perfectly fine with standard `datetime` methods. However, if anyone calls a `pytz`-specific method, the shim will raise a `DeprecationWarning`. This can be very useful for large codebases: you can swap out your `pytz` zones for the shim and then slowly find and fix all the `pytz`-specific calls until you're ready to switch to pure `ZoneInfo`.
 
 --
 
@@ -124,8 +126,3 @@ def one_day_later(dt: datetime) -> datetime:
 ```
 
 Other than the deprecation warning, this will be a silent behavior change!
-
-Notes:
-
-The only major warning here is that there are some subtle changes in arithmetic semantics when moving from `pytz` to `ZoneInfo` (or the shim). I recommend looking at the migration guide I've written — even if you don't use the shim — because it goes into detail about these exact differences. It's actually a pretty good general-purpose guide for the transition.
-

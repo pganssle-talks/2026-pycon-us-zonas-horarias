@@ -33,9 +33,9 @@ True
 
 Notes:
 
-To illustrate some of the counter-intuitive semantics in `datetime`, I thought I'd bring up a fun bug report from years ago. Imagine you have a datetime representing March 25th at 1:00 AM in London. If you convert it to a timestamp and then back again, you'd expect to get the same thing, right? But it turns out they don't compare as equal.
+And to illustrate that, I thought I would bring up this bug report that came into `dateutil` years and years ago, which was very fun to debug. Someone said, "Okay, this date March 25th at 1:00 AM in London — if I create this object and I convert it to a timestamp and I convert it back, basically putting it in UTC and back, the datetimes don't compare equal." That seems weird, right?
 
-It gets even weirder. If you create a *new* instance of the London time zone and use that to convert the timestamp back, the result *does* compare as equal to the original. But the two results of the conversion also compare as equal to each other! This means we have a non-transitive equality relationship: X equals Z, and Y equals Z, but X does not equal Y.
+And even weirder, if I create a new instance of the London time zone and I compare those, it *does* compare equal. And even weirder than that, those two things that compared equal to X, they compare equal to each other. So they have this non-transitive relationship, which is very strange, right?
 
 --
 
@@ -57,7 +57,11 @@ It gets even weirder. If you create a *new* instance of the London time zone and
 
 Notes:
 
-So, what's happening here? The first hint is that March 25th at 1:00 AM is actually an *imaginary* time in London (a DST transition). When you convert it to a timestamp, it gets mapped to a real point in UTC, and when you convert it back, it becomes a real local time (like 2:00 AM).
+And the first hint that I got as to how to debug this was when I realized that this is actually an imaginary time; it didn't exist in London.
+
+So Y and Z, they can't represent the original datetime that we passed in, right? It can't be 1:00 AM, because you can't go from UTC to an imaginary datetime.
+
+So what's happening is that X gets converted to some real time in UTC, and then back to whatever the actual existing time is in London.
 
 --
 
@@ -140,9 +144,13 @@ False
 
 Notes:
 
-But the real mystery lies in how `datetime` implements equality. If two aware datetimes have the exact same `tzinfo` object (identity equality), `datetime` uses "wall time" semantics — it only compares the naive portions. If they have different `tzinfo` objects, it uses "absolute time" semantics — it converts both to UTC before comparing. 
+And then this brings up the question of: what does it mean for two datetimes to be equal to each other? Because there are actually two very good candidates. One is wall time semantics, where you only compare the part of the datetime that is the clock and the calendar — the naïve portion of the datetime. In that situation, X should not equal Y or Z, and Y and Z should equal each other, right?
 
-In our case, X and Y shared the same `tzinfo` object, so they compared their wall times (1:00 AM vs 2:00 AM) and were not equal. But X and Z had different `tzinfo` objects, so they were both converted to UTC, where they represented the same absolute point in time.
+The other option is absolute time semantics, where you convert everything to UTC before you do the comparison. And in that case, all three of these are equal.
+
+But neither of these patterns is what we see in the actual result, right?
+
+So the other hint that we need to see to explain why this is happening is that X and Y use the exact same object as their time zone, and X and Z have different objects as a time zone.
 
 --
 
@@ -191,7 +199,11 @@ In our case, X and Y shared the same `tzinfo` object, so they compared their wal
 
 Notes:
 
-This confusing situation really informed the design of `ZoneInfo`. To avoid this kind of non-transitive behavior, `ZoneInfo` is guaranteed to return the exact same object every time you request a given zone (like "Europe/London") through its constructor.
+So the actual semantics of aware datetime comparison are that when two datetimes are in the same zone, you use wall time semantics. But when they're in different zones, it makes no sense to compare their wall times, right?
+
+So you have to convert them to UTC first. And the key here is that you only consider two datetimes to be in the same zone if they have the same `tzinfo` object — it's the exact same object. So this solves the mystery, right?
+
+Because we have wall time semantics for `x == y`, we have absolute time semantics for `x == z`, and then we have wall time semantics again for `y == z`, but it wouldn't matter either way.
 
 --
 
@@ -227,4 +239,6 @@ See [PEP 615](https://www.python.org/dev/peps/pep-0615/) and [the documentation]
 
 Notes:
 
-Because of this caching, you're guaranteed to always get consistent wall-time semantics when working within the same IANA time zone.
+Incidentally, this really informed how `ZoneInfo` was designed, because we didn't really want this confusing situation where sometimes you get wall time semantics and sometimes you get absolute time semantics.
+
+So `ZoneInfo` is guaranteed to give you the same object every single time if you pass it the same key. So if you pass it "America/New_York" to a new constructor, or you just pass around an "America/New_York" object, it's going to be the same object, so you'll always get wall time semantics.

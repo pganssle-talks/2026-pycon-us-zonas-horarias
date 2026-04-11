@@ -30,11 +30,10 @@ Because of the C backend, `zoneinfo` is faster than `pytz` and `dateutil` on eve
 
 Notes:
 
-I don't want to presume that just because `ZoneInfo` is in the standard library, you'll immediately want to switch, especially since it might be a significant migration. So, here are a few key benefits of using `ZoneInfo`.
+Okay, so I don't want to presume that just because it's in the standard library you're going to want to use `ZoneInfo`, and also maybe it's going to be quite a big migration.
 
-First, there's a really big issue coming up (and already here in some ways) with `tzdata` formats. The newer formats allow for transitions beyond the 32-bit limit, which is important for the "year 2038" problem. Anything not updated to support these newer formats will simply stop having DST transitions after 2038. `pytz` is currently in that boat.
+So I thought I would give you a couple benefits of why you should use `ZoneInfo`. For one thing, there's kind of a really big bug that's coming up and is already here in some senses because `pytz` only supports an older time zone data forma, and the older format cannot represent timestamps beyond 32 bits.
 
-Even more immediately, there's a new "slim" format for `tzdata` that many operating systems are adopting. If you are using slim `tzdata` and you're *not* using `ZoneInfo`, you might find that you get no DST transitions at all, even for current dates in the US. `ZoneInfo` is currently the only major time zone library with full support for both year 2038 and slim `tzdata`.
+So after the year 2038, anything that's not updated to the newer format will just not have transitions anymore. But also this is becoming more of an issue because more distros are also distributing a "slim" version of the `tzdata` package where that cut-off point comes much sooner, because the newer format can represent recurring transitions and so to save space they don't list every transition anymore, they just list all the historical transitions up until the rule becomes regular, and then they give the rule, so if you are trying to work with that type of data you may have problems *today* in places like the US where time zones have been relatively stable for some time.
 
-Finally, `ZoneInfo` is incredibly fast. Because it has a C backend, it's significantly faster than `pytz` or `dateutil` on pretty much every benchmark. So, you don't have to give up any performance to get these benefits.
-
+Also, `ZoneInfo` is incredibly fast, because it was written in C and these other things are written in Python. On pretty much every benchmark I ran, `ZoneInfo` was much faster, than the other two, so you don't have to give up any speed to adopt it.

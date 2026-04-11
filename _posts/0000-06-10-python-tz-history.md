@@ -33,8 +33,7 @@ class ET(tzinfo):
 
 Notes:
 
-Historically, this was pretty much all you got in Python. When `datetime` was introduced in Python 2.3, they provided the `tzinfo` interface, but they didn't want to deal with implementing the actual rules for you. You were supposed to figure out how to represent time zones according to your own business logic, perhaps by implementing a class like this one representing Eastern Time.
-
+All right, so historically, that was pretty much what you got in Python. In Python 2.3 they said, "Here is an interface, but we don't want to deal with implementing rules for you." You're supposed to figure out according to your business logic what's the best way to represent time zones, and you're maybe supposed to do something like this, where you have a class that represents Eastern Time and it has its set of rules.
 
 --
 
@@ -51,7 +50,11 @@ Historically, this was pretty much all you got in Python. When `datetime` was in
 
 Notes:
 
-If you think about it, there are really only three kinds of time zones that the vast majority of people want to use: UTC (or fixed offsets), system local time, and IANA time zones (like "America/Chicago"). The first one is actually super easy because it just returns a fixed offset, and that was added to the standard library in Python 3.2. But the other two turned out to be a little bit trickier.
+But if you think about it, there's really only three kinds of time zones that the vast majority of people want to look at.
+
+One is UTC or fixed offsets thereof, the other is local time, which is like whatever time it is on your laptop or something, and the third one is the IANA time zone database, which is basically that America/Chicago, America/New_York kind of thing.
+
+And the first one is actually like super easy, because that just returns a fixed `timedelta`. So that was added early on in 3.2. But these other two, it turns out to be a little bit trickier.
 
 --
 
@@ -87,8 +90,6 @@ print(dt_after)    # OH NO!
 2017-11-05 02:30:00-05:00
 ```
 
-Notes:
-
 --
 
 # Ambiguous times
@@ -121,11 +122,13 @@ There can be multiple times in a time zone differentiated by their offset!
 
 Notes:
 
-To explain why, I have to take a little digression and talk about ambiguous times.
+And to explain why, I have to have a little digression and talk about ambiguous times.
 
-Ambiguous times are times where the same wall time occurs twice, like when you set your clock back one hour for the end of daylight saving time, it's 1:59 and then a minute elapses and it's 1:00 again. If you look at this list, what you'll notice is that I have two 1:30s, and their *main difference* is the offset. Right? That's what differentiates those two times on the timeline.
+Ambiguous times are times where the same wall time occurs twice, so like when you set your clock back one hour, right? It'll be 1:59, and then one minute later you go back one hour and then it's 1:59 again about an hour later, right?
 
-But if you recall, datetime's model is that it has a time zone like a `tzinfo` object thattakes as a function just the naïve portion of the datetime, so it's actually impossible to disambiguate because they are differentiated only by the output of the function. And this is a fundamental problem, it's a flaw that existed in `tzinfo`.
+And you'll notice that in this list here I have two 1:30s, and their main difference is the offset. That's what differentiates those two times on the timeline. But if you recall, `datetime`'s model is that the `tzinfo` time zone object just takes as its argument the naïve portion of the `datetime`, so it's actually impossible to disambiguate these two things because they are differentiated only by the *output* of those functions.
+
+And this is a fundamental problem, a flaw that existed in the `tzinfo` interface at the time.
 
 --
 
@@ -152,5 +155,6 @@ Notice the lack of a `2004-04-04 02:30:00`!
 
 Notes:
 
-Then there's the complement of this, which is called imaginary times. These are basically times that don't exist in a given time zone, such as when you jump forward an hour for DST. It's still ambiguous what the offset should be for a time in that gap because those times simply don't exist on the local calendar, but you still have to deal with it.
+And then there's the complement of this, which is a lot easier to solve, which is called imaginary times. And these are basically times that don't exist in a given time zone, like when you jump forward an hour, any time in that gap doesn't correspond to a real time.
 
+This one's easier to deal with because these times just don't exist rather than being unrepresentable, but also in that case what offset are you supposed to use for the offset? It's undefined.

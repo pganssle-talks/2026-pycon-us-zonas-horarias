@@ -36,11 +36,14 @@ See my blog posts: [Why naïve times are local times](https://blog.ganssle.io/ar
 
 Notes:
 
-We've actually had support for system local time in `datetime` for quite a while now — basically since Python 3.6. It was done somewhat sneakily: naive datetimes (those without an attached `tzinfo`) now represent local time in any situation where they need to be converted to UTC. For example, you can call `.timestamp()` or `.astimezone()` on a naive datetime and it will just work, assuming that the naive time represents the local system time.
+Okay, so this allows you to start implementing those other two time zones I've talked about: local time and IANA zones. And it turns out a lot of people don't know this, but we've already had local time support in `datetime` for quite a while, basically since 3.6. The `fold` attribute just works.
 
-I have a blog post called "Why naive times are local times" that explains the somewhat convoluted reasoning for why this is actually the best way to handle this, rather than having a specific `tzinfo` object that represents "local time". 
+But the thing is, it was done sort of sneakily, where naive datetimes (which is to say, something without a time zone) now represent local time in any situation where they need to be converted to UTC. So you can call `timestamp` on them, you can call `astimezone` on them, and it'll work — it'll just assume that your naive time is in the system local time zone.
 
-The key takeaway is that there's now a `pytz`-like interface for local time. If you want to know the specific offset for a naive datetime, you can call `.astimezone()` with no arguments (or with `None`). This will return a new aware datetime with a fixed offset zone attached, allowing you to query `tzname()` and `utcoffset()`. However, you're not supposed to do arithmetic on that result; instead, you should perform your math on the naive datetime and only call `.astimezone()` when you need to probe the specific offset.
+And I have a blog post called "Why naive times are local times" which explains the convoluted reasoning why this is actually probably the best way you can do this, instead of having some `tzinfo` object that represents local time.
 
-But even with this, as of Python 3.8, we still didn't have a way to access the IANA time zone database directly from the standard library.
+But one thing I'd like to call attention to here is that there's also this sort of `pytz`-like interface here; if you want to know not just some calculation that happens on local time, but you want to specifically know what the offset is, you can call `astimezone` with no argument (or with `None` as an argument), and it will attach a fixed time zone to the result so that you can query `tzname` and UTC offset.
 
+The one caveat is that you're not supposed to do math on that kind of thing; you're supposed to do math on the naive time and then call `astimezone` as necessary.
+
+So this gives us 2 out of our 3 types of time zones, but as of Python 3.8 we still didn't have IANA zones.
