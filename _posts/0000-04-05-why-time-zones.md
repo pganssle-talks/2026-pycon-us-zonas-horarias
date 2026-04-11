@@ -1,40 +1,43 @@
-# Why do we need to work with time zones at all?
-<br/>
+# ¿Por qué narices necesitamos zonas horarias?
 
 ```python
 from dateutil import rrule as rr
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
-# Close of business in New York on weekdays
-closing_times = rr.rrule(freq=rr.DAILY, byweekday=(rr.MO, rr.TU, rr.WE, rr.TH, rr.FR),
-                         byhour=17, dtstart=datetime(2023, 3, 8, 17), count=5)
+# Fin de jornada en Nueva York
+horas_de_cerrar = rr.rrule(freq=rr.DAILY, byweekday=(rr.MO, rr.TU, rr.WE, rr.TH, rr.FR),
+                           byhour=17, dtstart=datetime(2023, 3, 8, 17), count=5)
 
 NYC = ZoneInfo("America/New_York")
-for dt in closing_times:
+for dt in horas_de_cerrar:
     print(dt.replace(tzinfo=NYC))
 ```
 <pre style="margin-top: 0.5em">
+
 2023-03-08 17:00:00-05:00
 2023-03-09 17:00:00-05:00
 2023-03-10 17:00:00<b>-05:00</b>
 2023-03-13 17:00:00<b>-04:00</b>
 2023-03-14 17:00:00-04:00
+
 </pre>
-<br/>
 
 ```python
-# Get close of business in UTC
-for dt in closing_times:
+# Obtener fin de jornada en UTC
+for dt in horas_de_cerrar:
     print(dt.replace(tzinfo=NYC).astimezone(timezone.utc))
 ```
+
 <pre style="margin-top: 0.5em">
+
 2023-03-08 22:00:00+00:00
 2023-03-09 22:00:00+00:00
 2023-03-10 <b>22:00:00</b>+00:00
 2023-03-13 <b>21:00:00</b>+00:00
 2023-03-14 21:00:00+00:00
-<pre>
+
+</pre>
 
 Notes:
 
@@ -49,7 +52,8 @@ If you wanted to do this in UTC, you'd be like, "Oh okay, well close of business
 --
 
 <div style="font-size: 3rem;">
-When storing datetimes where the <em>wall time</em> matters (e.g. meetings), you must store local time, because the mapping between UTC and local time is <em>not stable</em>.</div>
+Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, hay que almacenar el tiempo local, porque el mapeo entre UTC y el tiempo local <em>no es estable</em>.
+</div>
 
 Notes:
 

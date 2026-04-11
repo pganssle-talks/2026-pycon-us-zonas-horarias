@@ -1,4 +1,4 @@
-# A curious case...
+# Un caso curioso...
 
 ```python
 >>> LON = ZoneInfo("Europe/London")
@@ -39,9 +39,9 @@ And even weirder, if I create a new instance of the London time zone and I compa
 
 --
 
-# Hint
+# Pista
 
-`2007-03-25 01:00:00` is imaginary in London!
+¡`2007-03-25 01:00:00` en Londres es imaginario!
 
 ```python
 >>> print(x)                                # x (LON)
@@ -65,14 +65,13 @@ So what's happening is that X gets converted to some real time in UTC, and then 
 
 --
 
-
-# What does equality mean?
+# ¿Qué significa la igualdad?
 
 <div style="display:flex; flex-flow: row nowrap; justify-content: space-between; align-items: flex-start; padding: 1rem;">
 
 <div style="flex-grow: 2">
 <ol>
-    <li>Wall time semantics: compare only naïve portions<br/>
+    <li>Semántica de hora de reloj: solo comparar la parte naíf<br/>
     <table style="margin-top: 0.5em">
         <tr>
             <td><tt>x == y</tt></td>
@@ -89,7 +88,7 @@ So what's happening is that X gets converted to some real time in UTC, and then 
     </table>
     <br/>
     </li>
-    <li>Absolute time semantics: convert to UTC<br/>
+    <li>Semántica de tiempo absoluto: convertir a UTC<br/>
     <table style="margin-top: 0.5em">
         <tr>
             <td><tt>x == y</tt></td>
@@ -110,7 +109,7 @@ So what's happening is that X gets converted to some real time in UTC, and then 
 
 <div style="border: 1px solid; padding-left: 5px; padding-right: 5px; background: #fff; align-items: flex-start">
 <div class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">
-<u>Wall Times:</u><br/>
+<u>Horas de reloj:</u><br/>
 <tt>
     x: <b>2007-03-25 01:00:00</b>+01:00<br/><br/>
     y: <b>2007-03-25 00:00:00</b>+00:00<br/><br/>
@@ -128,7 +127,7 @@ So what's happening is that X gets converted to some real time in UTC, and then 
 </div>
 </div>
 
-## Another hint <!-- .element: class="fragment" data-fragment-index="2" -->
+## Otra pista <!-- .element: class="fragment" data-fragment-index="2" -->
 
 ```python
 >>> x.tzinfo is y.tzinfo
@@ -154,25 +153,25 @@ So the other hint that we need to see to explain why this is happening is that X
 
 --
 
-# Semantics of aware datetime comparison:
+# Semántica de comparación de datetimes conscientes
 
-1. When two `datetime`s are in the *same zone*, only the naïve portion is compared (wall time semantics).
+1. Cuando dos `datetime`s están en la *misma zona*, solo se compara la parte naíf (semántica de hora de reloj).
 
-2. When they are in *different zones*, both are converted to UTC first, then compared (absolute time semantics).
+2. Cuando están en *zonas diferentes*, ambos se convierten a UTC primero y después se comparan (semántica absoluta).
 
-3. Two `datetime`s are in the "same zone" only if `dt1.tzinfo is dt2.tzinfo`.
+3. Dos `datetime`s solo se consideran en la "misma zona" si `dt1.tzinfo is dt2.tzinfo`.
 
 <br/>
 <br/>
 
-## Mystery solved: <!-- .element: class="fragment" data-fragment-index="1" -->
+## Misterio resuelto: <!-- .element: class="fragment" data-fragment-index="1" -->
 
 <div class="fragment" data-fragment-index="1" style="text-align:center">
 <table>
 <tr>
     <td></td>
-    <td>Wall</td>
-    <td>Absolute</td>
+    <td>Pared</td>
+    <td>Absoluto</td>
     <td><tt>datetime</tt></td>
 </tr>
 <tr>
@@ -207,9 +206,9 @@ Because we have wall time semantics for `x == y`, we have absolute time semantic
 
 --
 
-# `zoneinfo`: Cache behavior
+# `zoneinfo`: Comportamiento de la caché
 
-   Calls to the default constructor with identical arguments are guaranteed to return objects which compare as identical; specifically, the following must always be valid:
+Las llamadas al constructor por defecto con argumentos idénticos tienen garantizado devolver objetos idénticos; específicamente, lo siguiente siempre debe ser válido:
 
    ```python
    a = ZoneInfo(key)
@@ -217,7 +216,7 @@ Because we have wall time semantics for `x == y`, we have absolute time semantic
    assert a is b
    ```
 
-   This is because `datetime` assumes that time zones are singletons, which would cause confusing results if we used a simpler implementation:
+   Esto es porque `datetime` asume que las zonas horarias son singletons, lo que daría resultados confusos si usáramos una implementación más simple:
 
    ```python
    >>> from datetime import *
@@ -235,7 +234,7 @@ Because we have wall time semantics for `x == y`, we have absolute time semantic
    1 day, 0:00:00
    ```
 
-See [PEP 615](https://www.python.org/dev/peps/pep-0615/) and [the documentation](https://docs.python.org/3/library/zoneinfo.html) for more information than you would ever want about working with the cache.
+Consultad el [PEP 615](https://www.python.org/dev/peps/pep-0615/) y [la documentación](https://docs.python.org/3/library/zoneinfo.html) para más información de la que jamás querríais saber sobre cómo trabajar con esta caché.
 
 Notes:
 

@@ -1,15 +1,13 @@
-# Python's Time Zone Model: `tzinfo`
-<br/>
+# El modelo de zonas horarias de Python: `tzinfo`
 
-* Time zones are provided by *subclassing* `tzinfo`.
-  <div style="height: 0.25em"></div>
+* Las zonas horarias se definen mediante subclases de `tzinfo`.
 
-* Information provided is a function of the datetime:
-  <div style="height: 0.25em"></div>
+* La información se proporciona en función del objeto `datetime`:
+    * `tzname`: El nombre (normalmente abreviado) de la zona horaria para el `datetime` indicado.
+    * `utcoffset`: El desplazamiento respecto a UTC para ese `datetime`.
+    * <span class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">`dst`: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora).</span><span class="fragment nospace-fragment" data-fragment-index="1" style="color: #b70000"><strike>`dst`: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora).</strike></span>
 
-    * `tzname`: The (usually abbreviated) name of the time zone at the given datetime
-    * `utcoffset`: The offset from UTC at the given datetime
-    * <span class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">`dst`: The size of the `datetime`'s DST offset (usually 0 or 1 hour)</span><span class="fragment nospace-fragment" data-fragment-index="1" style="color: #b70000"><strike>`dst`: The size of the `datetime`'s DST offset (usually 0 or 1 hour)</strike></span>
+<!-- TODO: Use an emphasis transition here rather than two fragments -->
 
 Notes:
 

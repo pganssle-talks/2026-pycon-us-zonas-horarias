@@ -1,18 +1,18 @@
-# Introduction
+# Introducción
 
 ## UTC
 
-- Reference time zone
-- Monotonic-ish (what's a few leap seconds between friends?)
+- Zona horaria de referencia
+- Cambia a casi un segundo por segundo (¿qué son unos segundos intercalares entre amigos?)
 <br/>
 <br/>
 
-## Time zones vs. Offsets <!-- .element: class="fragment" data-fragment-index="1" -->
+## Zonas horarias vs. desplazamientos <!-- .element: class="fragment" data-fragment-index="1" -->
 
 <ul class="fragment" data-fragment-index="1">
-    <li><tt>UTC-6</tt> is an offset</li>
-    <li><tt>America/Chicago</tt> is a time zone</tt></li>
-    <li><tt>CST</tt> is a highly context-dependent abbreviation:
+    <li><tt>UTC-6</tt> es un desplazamiento</li>
+    <li><tt>America/Chicago</tt>  es una zona horaria / un huso horario</tt></li>
+    <li><tt>CST</tt> es una abreviatura poco fiable que depende mucho en su contexto
         <ul>
             <li>Central Standard Time (<tt>UTC-6</tt>)</li>
             <li>Cuba Standard Time (<tt>UTC-5</tt>)</li>

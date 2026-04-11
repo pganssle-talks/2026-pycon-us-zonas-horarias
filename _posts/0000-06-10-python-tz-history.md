@@ -1,10 +1,11 @@
-# History of Python's Time Zones
+# Historia de las zonas horarias en Python
 
-When `datetime` was introduced in [Python 2.3](https://docs.python.org/3/whatsnew/2.3.html#date-time-type), there were *no* concrete time zones in the standard library.
+Cuando `datetime` se estrenó en [Python 2.3](https://docs.python.org/3/whatsnew/2.3.html#date-time-type), no había zonas horarias concretas en la biblioteca estándar.
+
 <div class="small-spacer"></div>
 
 ```python
-from dateutil import relativedelta as rd  # Cheating...
+from dateutil import relativedelta as rd  # Trampita...
 
 class ET(tzinfo):
     def utcoffset(self, dt):
@@ -37,14 +38,14 @@ All right, so historically, that was pretty much what you got in Python. In Pyth
 
 --
 
-# History of Python's Time Zones: Concrete Time Zones
+# Historia de las zonas horarias en Python: Zonas concretas
 
-- UTC / Fixed Offsets <span class="fragment" style="color: green" data-fragment-index="1">✔ Added in 3.2</span>
-- Local time
-- IANA Time Zones
+- UTC / Desplazamientos fijos <span class="fragment" style="color: green" data-fragment-index="1">✔ Añadidos en 3.2</span>
+- Hora local
+- Zonas horarias de IANA
 
 <p style="text-align: center">
-<img src="images/whatsnew3.2.png" alt="What's new in Python 3.2 excerpt"
+<img src="images/nuevo_en_3.2.png" alt="What's new in Python 3.2 excerpt"
      class="fragment" data-fragment-index="1" />
 </p>
 
@@ -60,7 +61,7 @@ And the first one is actually like super easy, because that just returns a fixed
 
 <!-- .slide: data-visibility="hidden" -->
 
-# History of Python's Time Zones: Ambiguous time problem
+# Historia de las zonas horarias en Python: Horas ambiguas
 
 ```python
 EASTERN = ET()
@@ -74,15 +75,13 @@ print(datetime(2017, 11, 5, 12, 0, tzinfo=EASTERN))
 2017-11-05 12:00:00-05:00
 ```
 
-<br/><br/>
-
 ```python
 dt_before_utc = datetime(2017, 11, 5, 0, 30, tzinfo=EASTERN).astimezone(datetime.UTC)
 dt_during = (dt_before_utc + timedelta(hours=1)).astimezone(EASTERN)  # 1:30 EDT
 dt_after = (dt_before_utc + timedelta(hours=2)).astimezone(EASTERN)   # 1:30 EST
 
-print(dt_during)   # Lookin good!
-print(dt_after)    # OH NO!
+print(dt_during)   # ¡Pinta bien!
+print(dt_after)    # ¡Ay no!
 ```
 
 ```
@@ -92,10 +91,9 @@ print(dt_after)    # OH NO!
 
 --
 
-# Ambiguous times
+# Horas ambiguas
 
-Ambiguous times are times where the same "wall time" occurs twice, such as during a DST to STD transition.
-<br/>
+Las horas ambiguas son aquellas en las que la misma "hora de reloj" se repite, como durante una transición de horario de verano (DST) a estándar (STD).
 
 ```python
 from dateutil import tz
@@ -104,21 +102,18 @@ dt1 = datetime(2004, 10, 31, 4, 30, tzinfo=timezone.utc)
 for i in range(4):
     dt = (dt1 + timedelta(hours=i)).astimezone(NYC)
     print('{} | {} |  {}'.format(dt, dt.tzname(), 
-                                   'Ambiguous' if tz.datetime_ambiguous(dt)
-                                   else 'Unambiguous'))
+                                   "Ambigua" if tz.datetime_ambiguous(dt)
+                                   else "No ambigua"))
 ```
 
-<br/>
 <pre>
-2004-10-31 00:30:00-04:00 | EDT |  Unambiguous
-2004-10-31 01:30:00-04:00 | EDT |  Ambiguous
-2004-10-31 01:30:00-05:00 | EST |  Ambiguous
-2004-10-31 02:30:00-05:00 | EST |  Unambiguous
+2004-10-31 00:30:00-04:00 | EDT |  No ambigua
+2004-10-31 01:30:00-04:00 | EDT |  Ambigua
+2004-10-31 01:30:00-05:00 | EST |  Ambigua
+2004-10-31 02:30:00-05:00 | EST |  No ambigua
 </pre>
 
-<br/>
-
-There can be multiple times in a time zone differentiated by their offset!
+¡Pueden existir datetimes en una zona que se diferencian solo por su desplazamiento!
 
 Notes:
 
@@ -132,9 +127,9 @@ And this is a fundamental problem, a flaw that existed in the `tzinfo` interface
 
 --
 
-# Imaginary times
+# Horas imaginarias
 
-The complement of ambiguous times is imaginary times — wall times that don't exist in a given time zone, such as during an STD to DST transition.
+El complemento de las horas ambiguas son las horas imaginarias: horas de reloj que no existen en una zona determinada, como sucede durante una transición de horario estándar (STD) a verano (DST).
 
 
 ```python
@@ -144,14 +139,13 @@ for i in range(3):
     print(f'{dt} | {dt.tzname()} ')
 ```
 
-<br/>
 <pre>
 2004-04-04 01:30:00-05:00 | EST
 2004-04-04 03:30:00-04:00 | EDT
 2004-04-04 04:30:00-04:00 | EDT
 </pre>
 
-Notice the lack of a `2004-04-04 02:30:00`!
+¡Fijaos en la falta de `2004-04-04 02:30:00`!
 
 Notes:
 

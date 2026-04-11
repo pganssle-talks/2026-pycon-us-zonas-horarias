@@ -1,6 +1,6 @@
-# Semantics of aware datetime arithmetic
+# Semántica de aritmética con datetimes conscientes
 
-An analogous problem for comparison semantics is that addition across a DST boundary is not well-defined:
+Un problema análogo a la semántica de comparación es que sumar tiempo tras una transición de DST no está bien definida:
 
 ```python
 >>> NYC = ZoneInfo("America/New_York")
@@ -11,13 +11,13 @@ An analogous problem for comparison semantics is that addition across a DST boun
 <br/>
 <br/>
 
-Given that there is a DST transition between `dt1` and `dt2`, there are two options:
+Dado que hay una transición entre `dt1` y `dt2`, hay dos opciones:
 
 ```python
->>> print(wall_add(dt1, timedelta(days=1)))  # Next calendar day at the same time
+>>> print(sumar_reloj(dt1, timedelta(days=1)))  # Siguiente día del calendario a la misma hora
 2020-03-08 13:00-04:00
 
->>> print(absolute_add(dt1, timedelta(days=1)))  # 24 elapsed hours after dt1
+>>> print(sumar_absoluto(dt1, timedelta(days=1)))  # 24 horas transcurridas después de dt1
 2020-03-08 12:00-04:00
 ```
 
@@ -27,38 +27,37 @@ And there is an analogous problem with arithmetic, right? Because when you're go
 
 --
 
-# Semantics of aware datetime arithmetic
+# Semántica de aritmética con datetimes conscientes en Python
 
-
-Datetime always uses wall-time semantics when interacting with a `timedelta`:
+`datetime` siempre usa semántica de hora de reloj cuando interactúa con un `timedelta`:
 
 
 ```python
->>> print(wall_add(dt1, timedelta(days=1)))
+>>> print(sumar_reloj(dt1, timedelta(days=1)))
 2020-03-08 13:00-04:00
 
->>> print(absolute_add(dt1, timedelta(days=1)))
+>>> print(sumar_absoluto(dt1, timedelta(days=1)))
 2020-03-08 12:00-04:00
 
 >>> print(dt1 + timedelta(days=1))
 2020-03-08 13:00-04:00
 ```
 
-When two `datetime`s are subtracted, the behavior is different for same-zone and different-zone subtractions:
+Cuando se restan dos `datetime`s, el comportamiento es diferente entre los casos de «misma zona» y «zona diferente»:
 
 ```
 >>> dt2 = datetime(2020, 3, 8, 13, tzinfo=NYC)
->>> dt1_same = datetime(2020, 3, 7, 13, tzinfo=NYC)
->>> dt1_different = dt1_same.astimezone(timezone.utc)  # dt1_same == dt1_different!
+>>> dt1_misma = datetime(2020, 3, 7, 13, tzinfo=NYC)
+>>> dt1_diferente = dt1_misma.astimezone(timezone.utc)  # dt1_misma == dt1_diferente!
 
->>> print(dt2 - dt1_same)
+>>> print(dt2 - dt1_misma)
 1 day, 0:00:00
 
->>> print(dt2 - dt1_different)
+>>> print(dt2 - dt1_misma)
 23:00:00
 ```
 
-*See my blog post "Semantics of timezone-aware datetime arithmetic" (https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html) for a more thorough analysis.*
+*Consultad mi artículo de blog (en inglés) ["Semantics of timezone-aware datetime arithmetic"](https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html) para un análisis más exhaustivo.*
 
 Notes:
 
@@ -68,17 +67,17 @@ And if they're in different zones, again, it doesn't make sense to use wall time
 
 --
 
-# Using `zoneinfo`: Absolute time semantics
+# Cómo usar `zoneinfo`: Semántica del tiempo absoluto
 
-Many `pytz` users will be surprised by the "wall time" semantics of `datetime`. To deliberately use absolute time semantics, convert to UTC first:
+La semántica de hora de reloj de Python puede sorprender a muchos usuarios; para utilizar deliberadamente la semántica del tiempo absoluto, primero hay que convertir a UTC:
 
 ```python
-def absolute_add(dt: datetime, td: timedelta) -> datetime:
+def sumar_absoluto(dt: datetime, td: timedelta) -> datetime:
     dt_utc = dt.astimezone(timezone.utc)
     rv_utc = dt_utc + td
     return rv_utc.astimezone(dt.tzinfo)
 
-def absolute_diff(dt1: datetime, dt2: datetime) -> timedelta:
+def restar_absoluto(dt1: datetime, dt2: datetime) -> timedelta:
     dt1_utc = dt1.astimezone(timezone.utc)
     dt2_utc = dt2.astimezone(timezone.utc)
 

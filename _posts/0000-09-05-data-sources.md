@@ -1,15 +1,13 @@
+# Fuente de datos: Zonas horarias de IANA
 
-# data source: IANA Time Zones
+- Proporciona información sobre zonas horarias históricas.
+- Fuente estándar y abierta (dominio público) para información de zonas horarias.
+- Muchos sistemas operativos la incluyen.
+- Fuente de datos para `dateutil` y `pytz`.
+- 2-21 versiones al año (9 de promedio).
 
-- Provides historical time zone information
-- Standard open source (public domain) source for time zone information
-- Shipped with many operating systems
-- Source for `dateutil` and `pytz`'s data.
-- 2-21 releases per year (average 9)
-
-<br/>
 <div style="text-align: center">
-<img src="images/all_zones.png" alt="Map of IANA time zones"/>
+<img src="images/all_zones.png" alt="Mapa de zonas horarias de IANA"/>
 </div>
 
 Notes:
@@ -22,22 +20,23 @@ It's open source and shipped on many operating systems, but the problem is that 
 
 --
 
-# PEP 615: Support for the IANA Time Zone Database in the Standard Library
+# PEP 615: Soporte para la base de datos de zonas horarias de IANA en la biblioteca estándar
 
 <div style="text-align:center">
 <img 
     style="max-height:45vh"
     src="images/zoneinfo-documentation.png"
-    alt="A screenshot of Python 3.9's zoneinfo documentation."/>
+    alt="Captura de pantalla de la documentación de zoneinfo en Python 3.9."/>
 </div>
 
-- When the system has IANA time zone data available, it is used
-    - Defaults to well-known deployment locations
-    - Configurable in-program using `zoneinfo.reset_tzpath`
-    - Configurable with environment variable `PYTHONTZPATH`
-    - Default can be set at compile time
+- Se usa cuando el sistema tiene disponible la base de datos.
+- Por defecto, Python busca en ubicaciones de despliegue "bien conocidas".
+- Se puede configurar en el programa con `zoneinfo.reset_tzpath`.
+- Se puede configurar con la variable de entorno `PYTHONTZPATH`.
+- El valor por defecto se puede configurar en tu compilador.
 
-- We also provide the `tzdata` package on PyPI — a "first party" data-only fallback library.
+- También proporcionamos el paquete `tzdata` en PyPI: un paquete "first party" de solo datos como fallback.
+
 
 Notes:
 
@@ -45,7 +44,7 @@ The solution we decided on for this conundrum was to make this basically a "brin
 
 --
 
-# How to use `zoneinfo`
+# Cómo usar `zoneinfo`
 
 ## Backport (3.6+)
 
@@ -57,7 +56,7 @@ except ImportError:
 ```
 <br/>
 
-## Construct aware datetime
+## Construir datetimes conscientes (aware)
 
 ```python
 >>> dt = datetime(2020, 11, 12, 19, tzinfo=ZoneInfo("America/Chicago"))
@@ -69,7 +68,7 @@ except ImportError:
 ```
 <br/>
 
-## Convert between zones
+## Convertir entre zonas
 
 ```python
 >>> print(dt.astimezone(ZoneInfo("Europe/Paris")))

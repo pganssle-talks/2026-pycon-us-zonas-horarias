@@ -1,9 +1,9 @@
-# Thank you <!-- .element: style="margin-top: 0.5em" -->
+# ¡Gracias! <!-- .element: style="margin-top: 0.5em" -->
 
 <img
     src="external-images/with_time.png"
     id="splash"
-    alt="A hybrid of a globe and a clock"
+    alt="Un híbrido entre un globo terráqueo y un reloj"
 />
 
 Notes:
