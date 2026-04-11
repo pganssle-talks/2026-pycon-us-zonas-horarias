@@ -35,6 +35,10 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
 ```
 
+Notes:
+
+If you're going to migrate from `pytz`, you should be aware that it can be a breaking change if you have any public-facing interfaces that return `pytz` time zone objects. Your users may be expecting to use `pytz`-specific methods like `.localize()` or `.normalize()` on those objects, and those don't exist in `ZoneInfo`.
+
 --
 
 # `pytz-deprecation-shim`
@@ -71,6 +75,10 @@ https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html
 
 **Caution:** There are some changes in arithmetic semantics, see [the migration guide](https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html).
 
+Notes:
+
+To help with this, I've created a third-party library called `pytz-deprecation-shim`. It provides a mostly backwards-compatible implementation of the `pytz` interface, but it's actually just a thin wrapper around `ZoneInfo`.
+
 --
 
 <!-- .slide: data-visibility="hidden" -->
@@ -85,6 +93,10 @@ https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html
 
     -  "Unwraps" a shim zone into the underlying `zoneinfo` or `dateutil.tz` (Python 2.7) implementation.
     - Turns a `pytz` zone into its `zoneinfo` / `dateutil.tz` equivalent (raises an exception if no equivalent exists)
+
+Notes:
+
+Because it's a wrapper around `ZoneInfo`, it works perfectly fine with standard `datetime` methods. However, if anyone calls a `pytz`-specific method, the shim will raise a `DeprecationWarning`. This can be very useful for large codebases: you can swap out your `pytz` zones for the shim and then slowly find and fix all the `pytz`-specific calls until you're ready to switch to pure `ZoneInfo`.
 
 --
 
@@ -112,3 +124,8 @@ def one_day_later(dt: datetime) -> datetime:
 ```
 
 Other than the deprecation warning, this will be a silent behavior change!
+
+Notes:
+
+The only major warning here is that there are some subtle changes in arithmetic semantics when moving from `pytz` to `ZoneInfo` (or the shim). I recommend looking at the migration guide I've written — even if you don't use the shim — because it goes into detail about these exact differences. It's actually a pretty good general-purpose guide for the transition.
+

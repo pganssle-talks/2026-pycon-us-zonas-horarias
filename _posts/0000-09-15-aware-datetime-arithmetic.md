@@ -21,6 +21,10 @@ Given that there is a DST transition between `dt1` and `dt2`, there are two opti
 2020-03-08 12:00-04:00
 ```
 
+Notes:
+
+There is an analogous problem with aware datetime arithmetic. When you're performing an operation that crosses a daylight saving time transition, there are two reasonable ways to interpret it: you might want "wall time" semantics (e.g., "give me the same time tomorrow") or "absolute time" semantics (e.g., "give me exactly 24 hours of elapsed time").
+
 --
 
 # Semantics of aware datetime arithmetic
@@ -56,6 +60,10 @@ When two `datetime`s are subtracted, the behavior is different for same-zone and
 
 *See my blog post "Semantics of timezone-aware datetime arithmetic" (https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html) for a more thorough analysis.*
 
+Notes:
+
+`datetime` generally prefers wall time semantics when both operands are in the same time zone. However, if they are in different zones, it makes no sense to compare wall times, so it switches to absolute time semantics by converting everything to UTC first. I have a blog post that goes into detail about why this isn't as crazy as it sounds, but unfortunately, many people still find it counter-intuitive and frequently report it as a bug.
+
 --
 
 # Using `zoneinfo`: Absolute time semantics
@@ -74,3 +82,8 @@ def absolute_diff(dt1: datetime, dt2: datetime) -> timedelta:
 
     return dt1 - dt2
 ```
+
+Notes:
+
+If you want to ensure consistent absolute time semantics regardless of the time zones involved, I recommend defining small helper functions like the ones shown here. They convert your operands to UTC before performing any calculations, ensuring that you always get results based on elapsed absolute time.
+

@@ -31,6 +31,12 @@ True
 ```
 <fragment/>
 
+Notes:
+
+To illustrate some of the counter-intuitive semantics in `datetime`, I thought I'd bring up a fun bug report from years ago. Imagine you have a datetime representing March 25th at 1:00 AM in London. If you convert it to a timestamp and then back again, you'd expect to get the same thing, right? But it turns out they don't compare as equal.
+
+It gets even weirder. If you create a *new* instance of the London time zone and use that to convert the timestamp back, the result *does* compare as equal to the original. But the two results of the conversion also compare as equal to each other! This means we have a non-transitive equality relationship: X equals Z, and Y equals Z, but X does not equal Y.
+
 --
 
 # Hint
@@ -48,6 +54,10 @@ True
 ...        .astimezone(LON))                # x (LON → UTC → LON)
 2007-03-25 00:00:00+00:00
 ```
+
+Notes:
+
+So, what's happening here? The first hint is that March 25th at 1:00 AM is actually an *imaginary* time in London (a DST transition). When you convert it to a timestamp, it gets mapped to a real point in UTC, and when you convert it back, it becomes a real local time (like 2:00 AM).
 
 --
 
@@ -128,6 +138,12 @@ False
 ```
 <!-- .element: class="fragment" data-fragment-index="2" -->
 
+Notes:
+
+But the real mystery lies in how `datetime` implements equality. If two aware datetimes have the exact same `tzinfo` object (identity equality), `datetime` uses "wall time" semantics — it only compares the naive portions. If they have different `tzinfo` objects, it uses "absolute time" semantics — it converts both to UTC before comparing. 
+
+In our case, X and Y shared the same `tzinfo` object, so they compared their wall times (1:00 AM vs 2:00 AM) and were not equal. But X and Z had different `tzinfo` objects, so they were both converted to UTC, where they represented the same absolute point in time.
+
 --
 
 # Semantics of aware datetime comparison:
@@ -173,6 +189,10 @@ False
 
 </div>
 
+Notes:
+
+This confusing situation really informed the design of `ZoneInfo`. To avoid this kind of non-transitive behavior, `ZoneInfo` is guaranteed to return the exact same object every time you request a given zone (like "Europe/London") through its constructor.
+
 --
 
 # `zoneinfo`: Cache behavior
@@ -204,3 +224,7 @@ False
    ```
 
 See [PEP 615](https://www.python.org/dev/peps/pep-0615/) and [the documentation](https://docs.python.org/3/library/zoneinfo.html) for more information than you would ever want about working with the cache.
+
+Notes:
+
+Because of this caching, you're guaranteed to always get consistent wall-time semantics when working within the same IANA time zone.

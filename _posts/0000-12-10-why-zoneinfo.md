@@ -27,3 +27,14 @@ dateutil: mean: 7.95 µs ± 642.62 ns; min: 7.44 µs (k=5, N=50000)
 ```
 
 Because of the C backend, `zoneinfo` is faster than `pytz` and `dateutil` on every metric.
+
+Notes:
+
+I don't want to presume that just because `ZoneInfo` is in the standard library, you'll immediately want to switch, especially since it might be a significant migration. So, here are a few key benefits of using `ZoneInfo`.
+
+First, there's a really big issue coming up (and already here in some ways) with `tzdata` formats. The newer formats allow for transitions beyond the 32-bit limit, which is important for the "year 2038" problem. Anything not updated to support these newer formats will simply stop having DST transitions after 2038. `pytz` is currently in that boat.
+
+Even more immediately, there's a new "slim" format for `tzdata` that many operating systems are adopting. If you are using slim `tzdata` and you're *not* using `ZoneInfo`, you might find that you get no DST transitions at all, even for current dates in the US. `ZoneInfo` is currently the only major time zone library with full support for both year 2038 and slim `tzdata`.
+
+Finally, `ZoneInfo` is incredibly fast. Because it has a C backend, it's significantly faster than `pytz` or `dateutil` on pretty much every benchmark. So, you don't have to give up any performance to get these benefits.
+
