@@ -36,10 +36,29 @@ for dt in closing_times:
 2023-03-14 21:00:00+00:00
 <pre>
 
+Notes:
+
+All right, so okay I've scared you, and you might be asking yourself, why do we need to work with time zones at all? Can't we just use UTC for everything?
+
+And the answer is that no, you can't, because UTC is not a natural abstraction for most of the world. It's not a great time zone for most of the world, and also the world actually does have daylight saving time in it and people run their schedules based on when the sun is overhead. 
+
+So in the real world, if you want to do something like generate a bunch of datetimes that represent close of business in New York, it's *very convenient* to be able to say, "Hey, here's this RRule, and I want it to be every day Monday through Friday at five o'clock", and then I'll just attach this New York time zone to it. And you'll see that seamlessly your UTC offset changes from -5 to -4 at some point in your sequence. 
+
+If you wanted to do this in UTC, you'd be like, "Oh okay, well close of business is sometimes 10 o'clock UTC, but sometimes it's nine o'clock UTC." And when does this little transition happen? I don't know, maybe I need a set of rules for when that would happen, and that's a time zone, right?
+
 --
 
 <div style="font-size: 3rem;">
 When storing datetimes where the <em>wall time</em> matters (e.g. meetings), you must store local time, because the mapping between UTC and local time is <em>not stable</em>.</div>
+
+Notes:
+
+And you might think, "Okay, well we may have to work with time zones when we're dealing with humans, but can we at least just store everything in UTC so we don't have to think about it?"
+
+And again, I'm sorry to be the bearer of bad news, but you can't do that either, because when what you care about is the wall time; like, if I'm going to have a meeting in Lebanon at two o'clock and everyone's scheduled around two o'clock because lunch is at 12 and all these things — if you take that meeting at two o'clock and you store it in your databases UTC, and then — as really happened — they change when daylight saving time is on like three days' notice, all of a sudden, when you try and look up what's the local time for whatever UTC you stored, it's now a different value. It's not two o'clock; it's one o'clock or three o'clock or something like that, because the mapping between UTC and local time is not stable.
+
+So what you need to care about is the abstraction that most closely matches what you're trying to represent.
+
 
 --
 

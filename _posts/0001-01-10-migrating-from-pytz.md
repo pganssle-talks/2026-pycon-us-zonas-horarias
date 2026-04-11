@@ -35,6 +35,12 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
 ```
 
+Notes:
+
+So if you're going to migrate from `pytz`, if you have any public-facing interface that returns `pytz` zones, you should be aware that it is a breaking change to switch to `ZoneInfo`, because your users may be expecting you to have a time zone exposed that has `localize` and `normalize` methods and whatever `pytz`-specific interfaces.
+
+So this may be a little bit of a problem for you.
+
 --
 
 # `pytz-deprecation-shim`
@@ -70,6 +76,14 @@ https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html
 ```
 
 **Caution:** There are some changes in arithmetic semantics, see [the migration guide](https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html).
+
+Notes:
+
+To help with that, I've created this third-party library, `pytz-deprecation-shim`. And the way this works is that it's a mostly backwards-compatible implementation of `pytz`'s interface, but it's also just a thin wrapper around `ZoneInfo`.
+
+So it works just fine like a `ZoneInfo` zone. But if it also exposes `pytz`'s interface, and if anyone uses any of the `pytz`-specific stuff, it raises a `DeprecationWarning`.
+
+So the only warning here is that there are some changes in the way arithmetic semantics work here. So I would recommend looking at this migration guide, whether or not you use it, because it's actually — I've been told — it's a quite good migration guide in general for the exact details. But you know, this might be very useful, especially if you have like a big codebase, if you just swap out all your `pytz` zones for something like this, and then start raising errors whenever you see this deprecation warning, and then you can start pulling out all the `pytz`-specific stuff.
 
 --
 

@@ -27,3 +27,13 @@ dateutil: mean: 7.95 µs ± 642.62 ns; min: 7.44 µs (k=5, N=50000)
 ```
 
 Because of the C backend, `zoneinfo` is faster than `pytz` and `dateutil` on every metric.
+
+Notes:
+
+Okay, so I don't want to presume that just because it's in the standard library you're going to want to use `ZoneInfo`, and also maybe it's going to be quite a big migration.
+
+So I thought I would give you a couple benefits of why you should use `ZoneInfo`. For one thing, there's kind of a really big bug that's coming up and is already here in some senses because `pytz` only supports an older time zone data forma, and the older format cannot represent timestamps beyond 32 bits.
+
+So after the year 2038, anything that's not updated to the newer format will just not have transitions anymore. But also this is becoming more of an issue because more distros are also distributing a "slim" version of the `tzdata` package where that cut-off point comes much sooner, because the newer format can represent recurring transitions and so to save space they don't list every transition anymore, they just list all the historical transitions up until the rule becomes regular, and then they give the rule, so if you are trying to work with that type of data you may have problems *today* in places like the US where time zones have been relatively stable for some time.
+
+Also, `ZoneInfo` is incredibly fast, because it was written in C and these other things are written in Python. On pretty much every benchmark I ran, `ZoneInfo` was much faster, than the other two, so you don't have to give up any speed to adopt it.
