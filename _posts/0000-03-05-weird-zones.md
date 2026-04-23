@@ -57,7 +57,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
         <li><tt>WEST (+1 DST) -> WET  (+0 STD)  1996-10-27</tt></li>
     </ul>
     </li>
-</ul>
+    </ul>
 
 Notes:
 

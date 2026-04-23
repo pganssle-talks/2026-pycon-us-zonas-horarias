@@ -11,15 +11,15 @@
 
 <ul class="fragment" data-fragment-index="1">
     <li><tt>UTC-6</tt> es un desplazamiento</li>
-    <li><tt>America/Chicago</tt>  es una zona horaria / un huso horario</tt></li>
-    <li><tt>CST</tt> es una abreviatura poco fiable que depende mucho en su contexto
+    <li><tt>America/Chicago</tt> es una zona horaria / un huso horario</li>
+    <li><tt>CST</tt> es una abreviatura poco fiable que depende mucho de su contexto:
         <ul>
             <li>Central Standard Time (<tt>UTC-6</tt>)</li>
             <li>Cuba Standard Time (<tt>UTC-5</tt>)</li>
             <li>China Standard Time (<tt>UTC+8</tt>)</li>
         </ul>
     </li>
-<ul>
+</ul>
 
 Notes:
 

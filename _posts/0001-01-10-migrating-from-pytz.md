@@ -9,7 +9,7 @@ def pre_migration():
 def post_migration():
     return datetime(2020, 1, 1, tzinfo=ZoneInfo("America/New_York"))
 
-def sesenta_dias_despuesdt: datetime) -> datetime:
+def sesenta_dias_despues(dt: datetime) -> datetime:
     non_normalized_dt = dt + timedelta(days=60)
     return dt.tzinfo.normalize(non_normalized_dt)
 ```
