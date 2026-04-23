@@ -31,14 +31,14 @@ Para más información, mirad mis posts de blog (en inglés): [Why naïve times 
 
 Notes:
 
-Okay, so this allows you to start implementing those other two time zones I've talked about: local time and IANA zones. And it turns out a lot of people don't know this, but we've already had local time support in `datetime` for quite a while, basically since 3.6. The `fold` attribute just works.
+Vale, entonces esto te permite empezar a implementar las otras dos formas de zona horaria que comenté antes: hora local y zonas de IANA. Y resulta que muy poca gente lo sabe, pero llevamos ya un buen rato con soporte para horas locales en `datetime`, básicamente desde la versión tres punto seis (3.6). El atributo `fold` simplemente funciona.
 
-But the thing is, it was done sort of sneakily, where naive datetimes (which is to say, something without a time zone) now represent local time in any situation where they need to be converted to UTC. So you can call `timestamp` on them, you can call `astimezone` on them, and it'll work — it'll just assume that your naive time is in the system local time zone.
+Pero la cosa es que se hizo un poco a escondidas, porque lo que hicieron fue cambiar el sentido de los `datetime`s naíf; antes representaban una fecha y hora abstractas, desancladas de la realidad humana, pero después se convirtieron en algo más concreto, y ahora representan una fecha y hora en la hora local de tu sistema. Así que hoy en día puedes llamar a `timestamp` o `astimezone` y ya está, Python asume que la zona horaria será la hora local de tu sistema.
 
-And I have a blog post called "Why naive times are local times" which explains the convoluted reasoning why this is actually probably the best way you can do this, instead of having some `tzinfo` object that represents local time.
+Y tengo un post de blog en inglés, "Por qué las horas naíf son horas locales", que explica el tortuoso razonamiento de por qué esta es probablemente la mejor manera de hacerlo, en lugar de tener un objeto `tzinfo` que represente la hora local.
 
-But one thing I'd like to call attention to here is that there's also this sort of `pytz`-like interface here; if you want to know not just some calculation that happens on local time, but you want to specifically know what the offset is, you can call `astimezone` with no argument (or with `None` as an argument), and it will attach a fixed time zone to the result so that you can query `tzname` and UTC offset.
+Pero algo sobre lo que quiero llamar la atención es que, en este caso, hay una interfaz parecida a la de `pytz`; si quieres saber el desplazamiento que se aplica a alguna hora local, puedes llamar a `.astimezone` sin argumentos, y le adjunta un `tzinfo` fijo al resultado para que puedas consultar `tzname` y el `utcoffset`.
 
-The one caveat is that you're not supposed to do math on that kind of thing; you're supposed to do math on the naive time and then call `astimezone` as necessary.
+Pero al igual que con `pytz`, no puedes hacer aritmética con ese tipo de cosas, se supone que tienes que hacer los cálculos antes de llamar a `astimezone`.
 
-So this gives us 2 out of our 3 types of time zones, but as of Python 3.8 we still didn't have IANA zones.
+Así que esto nos da dos de nuestros tres tipos de zonas horarias, pero en Python tres punto ocho (3.8), todavía no teníamos zonas de IANA.
