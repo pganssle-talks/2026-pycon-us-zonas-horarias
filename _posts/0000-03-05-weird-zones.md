@@ -18,7 +18,20 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
 
 ## Cambio de desplazamiento sin cambio de estatus DST
 
-TODO: Add examples of base offset change
+<ul>
+    <li>
+    Venezuela, 2007
+    <ul>
+        * <tt>VET (-4 STD) → VET (-4:30 STD) 2007-12-09</tt></li>
+        </ul>
+        </li>
+        <li>
+        Singapur, 1982
+        <ul>
+            <li><tt>SGT (+7:30 STD) → SGT (+8 STD) 1982-01-01</tt></li>
+        </ul>
+        </li>
+        </ul>
 
 ## Cambio de estatus DST sin cambio de desplazamiento
 
@@ -50,7 +63,7 @@ Notes:
 
 Además, puede ser que tengas un cuñado que crea que el desplazamiento del UTC solo cambia debido al horario de verano o que el estatus DST solo cambia cuando cambia el desplazamiento... ¡pero ninguna de las dos cosas es cierta!
 
-De vez en cuando, una localidad quiere cambiar su desplazamiento estándar sin introducir un cambio biannual, como... (TODO: Add examples)
+De vez en cuando, una localidad quiere cambiar su desplazamiento estándar sin introducir un cambio bianual, como hizo Venezuela en dos mil siete al retrasar sus relojes media hora, o Singapur en mil novecientos ochenta y dos, al adelantar su hora estándar media hora para alinearse con Malasia.
 
 O al revés, ha habido ejemplos de cambio de estatus DST sin cambio de desplazamiento del UTC. Por ejemplo, en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, cambiando su desplazamiento una hora. Por comodidad para las personas, este cambio se hizo saltándose un cambio de horario: hicieron la transición al horario de verano y, cuando se acabó el verano, los relojes no cambiaron, pero la interpretación cambió de 'horario de verano de Europa Occidental' a 'horario estándar de Europa Central'. Muy conveniente para humanos, pero te romperá el código si estás asumiendo que una transición de estatus DST siempre viene acompañada de un cambio en el reloj.
 
