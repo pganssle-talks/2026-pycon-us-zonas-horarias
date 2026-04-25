@@ -19,12 +19,14 @@ import argparse
 import datetime
 import json
 import math
+import os
 import sys
 import zipfile
 import io
 import zoneinfo
 from collections import defaultdict, deque
 from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Optional
 
@@ -186,6 +188,32 @@ def expand_small_polys(
             result.append(poly)
 
     return result[0] if len(result) == 1 else MultiPolygon(result)
+
+def _process_group(
+    h: float,
+    geoms: Sequence,
+    all_geoms: Sequence,
+    threshold_km2: float,
+    margin_km: float,
+    nearby_km: float,
+    simplify_tol: Optional[float],
+) -> tuple[float, object]:
+    """Expand small islands, union, clip, and simplify one offset group."""
+    geom_ids = {id(g) for g in geoms}
+    others = [g for g in all_geoms if id(g) not in geom_ids]
+    processed = [
+        expand_small_polys(g, others, threshold_km2, margin_km, nearby_km)
+        for g in geoms
+    ]
+    merged = unary_union(processed).intersection(MAP_CLIP)
+    if simplify_tol:
+        merged = merged.simplify(simplify_tol, preserve_topology=True)
+    return h, merged
+
+def _compute_ocean_band(i: int, land_union) -> tuple[float, object]:
+    """Return the ocean portion of the idealized band for integer offset i."""
+    band = MAP_CLIP.intersection(box(i * 15 - 7.5, LAT_MIN, i * 15 + 7.5, LAT_MAX))
+    return float(i), safe_difference(band, land_union)
 
 # ── Offset calculations ───────────────────────────────────────────────────────
 
@@ -457,62 +485,63 @@ def main() -> None:
     get_off = {"current": current_offset, "standard": standard_offset, "dst": dst_offset}[
         args.mode
     ]
+    simplify_tol = None if args.no_simplify else args.simplify
+    workers = os.cpu_count() or 1
 
-    print("Computing offsets...", file=sys.stderr)
-    zone_offset: MutableMapping[str, float] = {}
-    for feat in features:
+    # Phase 1 — compute offset + load/validate geometry for every feature in parallel.
+    # DST mode can do 100+ zoneinfo lookups per zone; this is the dominant cost there.
+    def _process_feature(feat: Mapping) -> Optional[tuple[float, object]]:
         name = feat["properties"]["tzid"]
         h = get_off(name, dt)
-        if h is not None:
-            zone_offset[name] = h
+        if h is None:
+            return None
+        return h, make_valid(shape(feat["geometry"]))
 
-    # Group raw geometries by offset
-    print("Grouping geometries...", file=sys.stderr)
+    print("Computing offsets and loading geometries...", file=sys.stderr)
     groups: MutableMapping[float, MutableSequence] = defaultdict(list)
-    for feat in features:
-        name = feat["properties"]["tzid"]
-        if name not in zone_offset:
-            continue
-        g = make_valid(shape(feat["geometry"]))
-        groups[zone_offset[name]].append(g)
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for result in pool.map(_process_feature, features):
+            if result is not None:
+                h, g = result
+                groups[h].append(g)
 
-    simplify_tol = None if args.no_simplify else args.simplify
+    # Phase 2 — expand small islands, union, clip, simplify — one task per offset group.
+    # Each group is independent; GEOS ops release the GIL so threads run truly in parallel.
+    all_geoms_flat = [g for gs in groups.values() for g in gs]
 
     print("Expanding small islands and merging by offset...", file=sys.stderr)
     actual_offset_map: MutableMapping[float, object] = {}
-    for h, geoms in groups.items():
-        others = [g for oh, gs in groups.items() for g in gs if oh != h]
-        processed = [
-            expand_small_polys(
-                g, others,
-                args.small_threshold_km2,
-                args.island_margin_km,
-                args.nearby_km,
-            )
-            for g in geoms
-        ]
-        merged = unary_union(processed)
-        merged = merged.intersection(MAP_CLIP)
-        if simplify_tol:
-            merged = merged.simplify(simplify_tol, preserve_topology=True)
-        actual_offset_map[h] = merged
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {
+            pool.submit(
+                _process_group,
+                h, geoms, all_geoms_flat,
+                args.small_threshold_km2, args.island_margin_km,
+                args.nearby_km, simplify_tol,
+            ): h
+            for h, geoms in groups.items()
+        }
+        for fut in as_completed(futures):
+            h, merged = fut.result()
+            actual_offset_map[h] = merged
 
-    # Union of all defined zones — used as the land layer and as the mask for idealized fills
+    # Union of all defined zones — land layer and mask for idealized fills.
     print("Computing land/defined-area union...", file=sys.stderr)
     land_union = shapely.make_valid(
         unary_union(list(actual_offset_map.values())).intersection(MAP_CLIP)
     )
 
-    # For each integer offset, fill the undefined ocean within its idealized band and merge
-    # into the corresponding actual zone (creating it if no real zone has that offset).
+    # Phase 3 — compute ocean fills for all 27 integer bands in parallel, then merge.
     print("Merging idealized ocean bands...", file=sys.stderr)
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        band_results = list(pool.map(
+            lambda i: _compute_ocean_band(i, land_union),
+            range(-12, 15),
+        ))
     offset_map = dict(actual_offset_map)
-    for i in range(-12, 15):
-        band = MAP_CLIP.intersection(box(i * 15 - 7.5, LAT_MIN, i * 15 + 7.5, LAT_MAX))
-        ocean_fill = safe_difference(band, land_union)
+    for h, ocean_fill in band_results:
         if ocean_fill.is_empty:
             continue
-        h = float(i)
         if h in offset_map:
             offset_map[h] = offset_map[h].union(ocean_fill)
         else:
