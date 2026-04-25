@@ -55,11 +55,11 @@ SVG_WIDTH = 1800
 LAT_MIN, LAT_MAX = -60.0, 84.0
 LON_MIN, LON_MAX = -180.0, 180.0
 SVG_HEIGHT = round(SVG_WIDTH * (LAT_MAX - LAT_MIN) / (LON_MAX - LON_MIN))
-LABEL_MARGIN = 22  # px above/below for offset labels
+LABEL_MARGIN = 28  # px above/below for offset labels (colored band + bold text)
 TOTAL_HEIGHT = SVG_HEIGHT + 2 * LABEL_MARGIN
 
-LAND_COLOR = "#333333"   # 20% grey; shows slightly darker through the semi-opaque TZ layer
-TZ_FILL_OPACITY = "0.5"  # TZ fill opacity; stroke stays full so borders are bold
+LAND_COLOR = "#aaaaaa"   # medium-light grey; shows slightly darker through the semi-opaque TZ layer
+TZ_FILL_OPACITY = "0.75"  # TZ fill opacity; stroke stays full so borders are bold
 BORDER_WIDTH = "1.5"
 
 MAP_CLIP = box(LON_MIN, LAT_MIN, LON_MAX, LAT_MAX)
@@ -102,13 +102,10 @@ def ly(lat: float) -> float:
 # ── Geometry utils ────────────────────────────────────────────────────────────
 
 def area_km2(geom) -> float:
-    """Estimate area via the circumscribed circle of the bounding box."""
-    b = geom.bounds  # (minx, miny, maxx, maxy)
+    """Estimate area using Shapely's planar area scaled by a latitude correction."""
+    b = geom.bounds
     cy = (b[1] + b[3]) / 2
-    w_km = (b[2] - b[0]) * 111.0 * math.cos(math.radians(cy))
-    h_km = (b[3] - b[1]) * 111.0
-    r_km = math.sqrt((w_km / 2) ** 2 + (h_km / 2) ** 2)
-    return math.pi * r_km ** 2
+    return geom.area * 111.0 * 111.0 * math.cos(math.radians(cy))
 
 def dist_km(a, b) -> float:
     """Approximate great-circle distance between representative points."""
@@ -159,35 +156,56 @@ def geom_to_svg_path(geom) -> str:
 
 # ── Small island handling ─────────────────────────────────────────────────────
 
-def expand_small_polys(
+def _bbox_for(poly, constraints: Sequence, margin_km: float, nearby_km: float):
+    """Return a padded bounding box for a small polygon."""
+    nearest = min((dist_km(poly, o) for o in constraints), default=float("inf"))
+    m = min(margin_km, nearest / 2) if nearest < nearby_km else margin_km
+    m_deg = m / 111.0
+    b = poly.bounds
+    return box(b[0] - m_deg, b[1] - m_deg, b[2] + m_deg, b[3] + m_deg)
+
+def _replace_small_components(
     geom,
-    others: Sequence,
+    other_zone_geoms: Sequence,
     threshold_km2: float,
     margin_km: float,
     nearby_km: float,
+    simplify_tol: Optional[float],
 ):
-    """Replace sub-threshold individual polygons with buffered bounding boxes."""
+    """Post-merge: simplify large components; replace small isolated ones with bboxes.
+
+    Works on the already-merged geometry for one offset group so that adjacent
+    same-timezone islands are treated as a unit before the area threshold is applied.
+    """
     if geom is None or geom.is_empty:
         return geom
+
     if geom.geom_type == "Polygon":
-        polys = [geom]
-    elif geom.geom_type == "MultiPolygon":
-        polys = list(geom.geoms)
+        components = [geom]
+    elif geom.geom_type in ("MultiPolygon", "GeometryCollection"):
+        components = [g for g in geom.geoms if g.geom_type == "Polygon" and not g.is_empty]
     else:
         return geom
 
-    result = []
-    for poly in polys:
-        if area_km2(poly) < threshold_km2:
-            nearest = min((dist_km(poly, o) for o in others), default=float("inf"))
-            m = min(margin_km, nearest / 2) if nearest < nearby_km else margin_km
-            m_deg = m / 111.0  # approximate: 1° ≈ 111 km
-            b = poly.bounds
-            result.append(box(b[0] - m_deg, b[1] - m_deg, b[2] + m_deg, b[3] + m_deg))
-        else:
-            result.append(poly)
+    large = [c for c in components if area_km2(c) >= threshold_km2]
+    small = [c for c in components if area_km2(c) < threshold_km2]
 
-    return result[0] if len(result) == 1 else MultiPolygon(result)
+    if not small:
+        if simplify_tol:
+            return geom.simplify(simplify_tol, preserve_topology=True)
+        return geom
+
+    # Distance constraints: large same-zone components + all other-zone geometries,
+    # so boxes don't bleed into adjacent regions or the zone's own mainland.
+    constraints = large + list(other_zone_geoms)
+
+    result = []
+    for c in large:
+        result.append(c.simplify(simplify_tol, preserve_topology=True) if simplify_tol else c)
+    for c in small:
+        result.append(_bbox_for(c, constraints, margin_km, nearby_km))
+
+    return make_valid(unary_union(result))
 
 def _process_group(
     h: float,
@@ -197,18 +215,18 @@ def _process_group(
     margin_km: float,
     nearby_km: float,
     simplify_tol: Optional[float],
-) -> tuple[float, object]:
-    """Expand small islands, union, clip, and simplify one offset group."""
+) -> tuple[float, object, object]:
+    """Union one offset group and return (offset, raw_merged, display_merged).
+
+    raw_merged   – full-resolution union, used for the land layer
+    display_merged – simplified timezone boundaries + bbox for small islands
+    """
     geom_ids = {id(g) for g in geoms}
     others = [g for g in all_geoms if id(g) not in geom_ids]
-    processed = [
-        expand_small_polys(g, others, threshold_km2, margin_km, nearby_km)
-        for g in geoms
-    ]
-    merged = unary_union(processed).intersection(MAP_CLIP)
-    if simplify_tol:
-        merged = merged.simplify(simplify_tol, preserve_topology=True)
-    return h, merged
+
+    raw_merged = make_valid(unary_union(geoms)).intersection(MAP_CLIP)
+    display = _replace_small_components(raw_merged, others, threshold_km2, margin_km, nearby_km, simplify_tol)
+    return h, raw_merged, display
 
 def _compute_ocean_band(i: int, land_union) -> tuple[float, object]:
     """Return the ocean portion of the idealized band for integer offset i."""
@@ -351,7 +369,34 @@ def render(
             f' stroke="#556" stroke-width="{BORDER_WIDTH}" stroke-linejoin="round"/>'
         )
 
-    # Map border
+    # Colored label bars — one rectangle per integer offset at top and bottom,
+    # matching the palette color of that band, with bold UTC offset text inside.
+    bot_y = LABEL_MARGIN + SVG_HEIGHT
+    for i in range(-12, 15):
+        x1 = max(0.0, lx(i * 15 - 7.5))
+        x2 = min(float(SVG_WIDTH), lx(i * 15 + 7.5))
+        if x2 <= x1:
+            continue
+        col = fill_color(float(i))
+        cx = (x1 + x2) / 2
+        lbl = offset_label(float(i))
+        ty = LABEL_MARGIN - 7  # vertically centered in margin
+        # Top bar
+        lines.append(f'<rect x="{x1:.2f}" y="0" width="{x2-x1:.2f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+        lines.append(
+            f'<text x="{cx:.1f}" y="{ty}"'
+            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#333"'
+            f' text-anchor="middle">{lbl}</text>'
+        )
+        # Bottom bar
+        lines.append(f'<rect x="{x1:.2f}" y="{bot_y}" width="{x2-x1:.2f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+        lines.append(
+            f'<text x="{cx:.1f}" y="{bot_y + LABEL_MARGIN - 7}"'
+            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#333"'
+            f' text-anchor="middle">{lbl}</text>'
+        )
+
+    # Map border (drawn after label bars so it sits on top of them)
     lines.append(
         f'<rect x="0" y="{LABEL_MARGIN}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
         f' fill="none" stroke="#445" stroke-width="1"/>'
@@ -366,25 +411,6 @@ def render(
         f' font-family="sans-serif" font-size="9" fill="#445" opacity="0.6"'
         f' text-anchor="middle">International Date Line</text>'
     )
-
-    # Offset labels top and bottom
-    for h in offsets:
-        lon_c = h * 15
-        if not (LON_MIN <= lon_c <= LON_MAX):
-            continue
-        x = lx(lon_c)
-        lbl = offset_label(h)
-        fs = 8 if is_frac(h) else 10
-        lines.append(
-            f'<text x="{x:.1f}" y="{LABEL_MARGIN - 5}"'
-            f' font-family="sans-serif" font-size="{fs}" fill="#333"'
-            f' text-anchor="middle">{lbl}</text>'
-        )
-        lines.append(
-            f'<text x="{x:.1f}" y="{TOTAL_HEIGHT - 4}"'
-            f' font-family="sans-serif" font-size="{fs}" fill="#333"'
-            f' text-anchor="middle">{lbl}</text>'
-        )
 
     lines.append("</svg>")
     out.write_text("\n".join(lines), encoding="utf-8")
@@ -419,8 +445,8 @@ def main() -> None:
              "(default: ../../tmp_geojson relative to this script)",
     )
     p.add_argument(
-        "--small-threshold-km2", type=float, default=100.0, metavar="KM2",
-        help="Islands smaller than this area get a bounding box (default: 100)",
+        "--small-threshold-km2", type=float, default=5000.0, metavar="KM2",
+        help="Disconnected components smaller than this area get a bounding box (default: 5000)",
     )
     p.add_argument(
         "--island-margin-km", type=float, default=100.0, metavar="KM",
@@ -509,8 +535,11 @@ def main() -> None:
     # Each group is independent; GEOS ops release the GIL so threads run truly in parallel.
     all_geoms_flat = [g for gs in groups.values() for g in gs]
 
+    # Phase 2 — per-offset group: returns (h, raw_full_res, display_simplified+boxed).
+    # Raw geometries feed the land layer; display geometries feed the TZ color overlay.
     print("Expanding small islands and merging by offset...", file=sys.stderr)
     actual_offset_map: MutableMapping[float, object] = {}
+    raw_offset_map: MutableMapping[float, object] = {}
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {
             pool.submit(
@@ -522,13 +551,14 @@ def main() -> None:
             for h, geoms in groups.items()
         }
         for fut in as_completed(futures):
-            h, merged = fut.result()
-            actual_offset_map[h] = merged
+            h, raw_merged, display_merged = fut.result()
+            raw_offset_map[h] = raw_merged
+            actual_offset_map[h] = display_merged
 
-    # Union of all defined zones — land layer and mask for idealized fills.
+    # Land union uses the raw (unsimplified) geometries so coastlines stay sharp.
     print("Computing land/defined-area union...", file=sys.stderr)
     land_union = shapely.make_valid(
-        unary_union(list(actual_offset_map.values())).intersection(MAP_CLIP)
+        unary_union(list(raw_offset_map.values())).intersection(MAP_CLIP)
     )
 
     # Phase 3 — compute ocean fills for all 27 integer bands in parallel, then merge.
