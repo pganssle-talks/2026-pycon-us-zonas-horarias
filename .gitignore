@@ -3,6 +3,7 @@ docs/
 docs
 gh_pages/
 misc_local/
+worktrees/
 
 # Bundle stuff
 .vendor/
