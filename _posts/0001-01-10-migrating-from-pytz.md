@@ -37,9 +37,7 @@ AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
 
 Notes:
 
-So if you're going to migrate from `pytz`, if you have any public-facing interface that returns `pytz` zones, you should be aware that it is a breaking change to switch to `ZoneInfo`, because your users may be expecting you to have a time zone exposed that has `localize` and `normalize` methods and whatever `pytz`-specific interfaces.
-
-So this may be a little bit of a problem for you.
+Si vas a migrar de `pytz`, y tienes alguna interfaz orientada al público que devuelva sus zonas horarias, hay que ser consciente de que cambiar a `ZoneInfo` supondrá un *breaking change* (un cambio disruptivo). Básicamente, porque tus usuarios pueden esperar que los objetos que devuelves tengan los métodos `localize` y `normalize` u otras interfaces exclusivas de `pytz`, lo cual podría daros algún que otro problema.
 
 --
 
@@ -79,9 +77,8 @@ https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html
 
 Notes:
 
-To help with that, I've created this third-party library, `pytz-deprecation-shim`. And the way this works is that it's a mostly backwards-compatible implementation of `pytz`'s interface, but it's also just a thin wrapper around `ZoneInfo`.
+Para ayudar con eso, he creado esta librería de terceros que se llama `pytz-deprecation-shim`. Funciona así: aunque es imposible ser cien por cien compatible con la interfaz de `pytz`, es "mayormente" compatible porque es un  «thin wrapper» sobre `ZoneInfo`. Expone las interfaces de `pytz`, pero lanza un `DeprecationWarning` cuando se usa algo exclusivo de `pytz` para avisar a tus usuarios de que deberían dejar de usar esos métodos.
 
-So it works just fine like a `ZoneInfo` zone. But if it also exposes `pytz`'s interface, and if anyone uses any of the `pytz`-specific stuff, it raises a `DeprecationWarning`.
+Mi única advertencia es que hay algunos cambios sutiles en la semántica de la aritmética, así que, en ciertas circunstancias, el comportamiento de las zonas cambiará para tus usuarios sin aviso previo. Para entender mejor qué cambios son, os recomiendo que le echéis un ojo a la guía de migración. E incluso si no tenéis pensado usar la librería, os sugiero leerla igual, porque me dicen que explica muy bien los problemas típicos al migrar desde `pytz`.
 
-So the only warning here is that there are some changes in the way arithmetic semantics work here. So I would recommend looking at this migration guide, whether or not you use it, because it's actually — I've been told — it's a quite good migration guide in general for the exact details. But you know, this might be very useful, especially if you have like a big codebase, if you just swap out all your `pytz` zones for something like this, and then start raising errors whenever you see this deprecation warning, and then you can start pulling out all the `pytz`-specific stuff.
-
+De hecho, espero que no tengáis que usar la librería para migrar, pero si tienes una base de código grande, te puede venir bien para detectar dónde se están llamando a los métodos de `pytz` más allá de los usos directos.
