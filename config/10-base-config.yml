@@ -3,6 +3,7 @@ exclude:
   - 'docs'
   - 'jekyll-revealjs'
   - 'config'
+  - 'worktrees'
 destination: 'docs'
 markdown: redcarpet
 highlighter: rouge
