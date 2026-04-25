@@ -759,6 +759,20 @@ code.lang-C {
     font-family: Noto Color Emoji !important;
 }
 
+.small-spacer {
+    height: 0.25em;
+}
+
+/* Normalize strike so that the line is constant across multiple fonts.
+ *
+ * Credit Scott Kellum: https://typetura.social/@scott/110233491361318220 */
+strike {
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: 0.1em;
+    text-underline-offset: -0.3em;
+}
+
 /** Speaker notes */
 
 div.speaker-controls-notes div.value {
