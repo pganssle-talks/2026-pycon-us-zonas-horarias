@@ -47,6 +47,43 @@ GEOJSON_URL = (
 )
 DEFAULT_VERSION = "2026a"
 
+# ── Styling ───────────────────────────────────────────────────────────────────
+
+STYLE = {
+    "land": {
+        "fill": "#000",
+        "fill-opacity": "0.12",
+        "stroke": "none",
+        "stroke-width": "0.5",
+        "stroke-dasharray": "none",
+    },
+    "zone_band": {
+        "fill-opacity": "0.92",
+        "stroke": "#334",
+        "stroke-width": "1.8",
+        "stroke-linejoin": "round",
+    },
+    "map_border": {
+        "stroke": "#334",
+        "stroke-width": "1.5",
+    },
+    "label": {
+        "font-family": "sans-serif",
+        "font-weight": "bold",
+        "fill": "#222",
+        "opacity": "0.8",
+        "size_top_bot": 10,
+        "size_frac_min": 7,
+        "size_frac_max": 13,
+    },
+    "idl": {
+        "font-family": "sans-serif",
+        "font-size": "9",
+        "fill": "#445",
+        "opacity": "0.6",
+    },
+}
+
 # 4-color NOAA-inspired pastel palette cycling by integer UTC offset
 PALETTE = [
     "#A8CCA0",  # light sage green
@@ -60,15 +97,15 @@ LAT_MIN, LAT_MAX = -60.0, 84.0
 # The 7.5° strip at [-180°, -172.5°] reappears on the right via antimeridian wrapping.
 LON_MIN, LON_MAX = -172.5, 187.5
 
-LAND_OVERLAY_OPACITY = "0.12"  # dark overlay on land to make it slightly darker than ocean
-TZ_FILL_OPACITY = "0.92"
-BORDER_WIDTH = "1.8"  # TZ zone border width
-
 # Geometry clip uses the full ±180° geographic range; display wraps via lx().
 MAP_CLIP = box(-180.0, LAT_MIN, 180.0, LAT_MAX)
 
 _HOUR: datetime.timedelta = datetime.timedelta(hours=1)
 _ZERO_TD: datetime.timedelta = datetime.timedelta(0)
+
+_DISPLAY_CLIP = box(LON_MIN, -90.0, 180.0, 90.0)
+_OVERFLOW_CLIP = box(-180.0, -90.0, LON_MIN, 90.0)
+
 # ── Color helpers ─────────────────────────────────────────────────────────────
 
 def _cidx(h: float) -> int:
@@ -377,6 +414,11 @@ def render(
     highlight_non_integer: bool = False,
 ) -> None:
     offsets = sorted(offset_map)
+    z_sty = STYLE["zone_band"]
+    l_sty = STYLE["land"]
+    b_sty = STYLE["map_border"]
+    txt_sty = STYLE["label"]
+    idl_sty = STYLE["idl"]
 
     lines: MutableSequence[str] = [
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"',
@@ -431,8 +473,9 @@ def render(
         else:
             f = fill_color(h)
         lines.append(
-            f'<path d="{d}" fill="{f}" fill-opacity="{TZ_FILL_OPACITY}"'
-            f' stroke="#334" stroke-width="{BORDER_WIDTH}" stroke-linejoin="round"/>'
+            f'<path d="{d}" fill="{f}" fill-opacity="{z_sty["fill-opacity"]}"'
+            f' stroke="{z_sty["stroke"]}" stroke-width="{z_sty["stroke-width"]}"'
+            f' stroke-linejoin="{z_sty["stroke-linejoin"]}"/>'
         )
 
     # All map-specific overlays (land, fractional labels) are clipped to the map viewport
@@ -442,7 +485,11 @@ def render(
     if land_geom and not land_geom.is_empty:
         d = geom_to_svg_path(_wrap_for_display(land_geom), width, map_height, margin)
         if d:
-            lines.append(f'<path d="{d}" fill="#000" fill-opacity="{LAND_OVERLAY_OPACITY}" stroke="none"/>')
+            lines.append(
+                f'<path d="{d}" fill="{l_sty["fill"]}" fill-opacity="{l_sty["fill-opacity"]}"'
+                f' stroke="{l_sty["stroke"]}" stroke-width="{l_sty["stroke-width"]}"'
+                f' stroke-dasharray="{l_sty["stroke-dasharray"]}"/>'
+            )
 
     # Labels for fractional zones placed at their representative point inside the map
     for h in offsets:
@@ -457,13 +504,13 @@ def render(
             continue
         bbox = geom.bounds
         bbox_px_width = lx(min(bbox[2], LON_MAX), width) - lx(max(bbox[0], LON_MIN), width)
-        font_size = max(7, min(13, int(bbox_px_width / 5)))
+        font_size = max(txt_sty["size_frac_min"], min(txt_sty["size_frac_max"], int(bbox_px_width / 5)))
         lbl = frac_label(h)
         lines.append(
             f'<text x="{px:.1f}" y="{py:.1f}"'
-            f' font-family="sans-serif" font-size="{font_size}"'
-            f' font-weight="bold" fill="#222" text-anchor="middle"'
-            f' dominant-baseline="middle" opacity="0.8">{lbl}</text>'
+            f' font-family="{txt_sty["font-family"]}" font-size="{font_size}"'
+            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}" text-anchor="middle"'
+            f' dominant-baseline="middle" opacity="{txt_sty["opacity"]}">{lbl}</text>'
         )
 
     lines.append("</g>")
@@ -471,7 +518,7 @@ def render(
     # Outer map border (Sides ONLY - top and bottom are open for bands to flow through)
     lines.append(
         f'<path d="M0,{margin} L0,{map_bot} M{width},{map_bot} L{width},{margin}"'
-        f' fill="none" stroke="#334" stroke-width="1.5"/>'
+        f' fill="none" stroke="{b_sty["stroke"]}" stroke-width="{b_sty["stroke-width"]}"/>'
     )
 
     # Offset labels centered in the padding areas (directly on background bands)
@@ -488,26 +535,30 @@ def render(
         lbl = offset_label(float(i))
         lines.append(
             f'<text x="{cx:.1f}" y="{ty_top}"'
-            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
-            f' text-anchor="middle">{lbl}</text>'
+            f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' opacity="{txt_sty["opacity"]}" text-anchor="middle">{lbl}</text>'
         )
         lines.append(
             f'<text x="{cx:.1f}" y="{ty_bot}"'
-            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
-            f' text-anchor="middle">{lbl}</text>'
+            f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' opacity="{txt_sty["opacity"]}" text-anchor="middle">{lbl}</text>'
         )
 
     if m12_x2 > m12_x1:
         cx_m12 = (m12_x1 + m12_x2) / 2
         lines.append(
             f'<text x="{cx_m12:.1f}" y="{ty_top}"'
-            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
-            f' text-anchor="middle">-12</text>'
+            f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' opacity="{txt_sty["opacity"]}" text-anchor="middle">-12</text>'
         )
         lines.append(
             f'<text x="{cx_m12:.1f}" y="{ty_bot}"'
-            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
-            f' text-anchor="middle">-12</text>'
+            f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' opacity="{txt_sty["opacity"]}" text-anchor="middle">-12</text>'
         )
 
     # International Date Line label (vertical)
@@ -516,7 +567,8 @@ def render(
     lines.append(
         f'<text x="{idl_label_x:.1f}" y="{idl_label_y:.1f}"'
         f' transform="rotate(-90,{idl_label_x:.1f},{idl_label_y:.1f})"'
-        f' font-family="sans-serif" font-size="9" fill="#445" opacity="0.6"'
+        f' font-family="{idl_sty["font-family"]}" font-size="{idl_sty["font-size"]}"'
+        f' fill="{idl_sty["fill"]}" opacity="{idl_sty["opacity"]}"'
         f' text-anchor="middle">International Date Line</text>'
     )
 
