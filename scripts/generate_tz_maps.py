@@ -410,6 +410,7 @@ def render(
     total_height: float,
     map_height: float,
     margin: float,
+    date_line_text: str,
     metadata: Optional[Mapping] = None,
     highlight_non_integer: bool = False,
 ) -> None:
@@ -564,16 +565,17 @@ def render(
             f' opacity="{txt_sty["opacity"]}" text-anchor="middle">-12</text>'
         )
 
-    # International Date Line label (vertical)
-    idl_label_x = idl_x - 4
-    idl_label_y = margin + map_height / 2
-    lines.append(
-        f'<text x="{idl_label_x:.1f}" y="{idl_label_y:.1f}"'
-        f' transform="rotate(-90,{idl_label_x:.1f},{idl_label_y:.1f})"'
-        f' font-family="{idl_sty["font-family"]}" font-size="{idl_sty["font-size"]}"'
-        f' fill="{idl_sty["fill"]}" opacity="{idl_sty["opacity"]}"'
-        f' text-anchor="middle">International Date Line</text>'
-    )
+    if date_line_text:
+        # International Date Line label (vertical)
+        idl_label_x = idl_x - 4
+        idl_label_y = margin + map_height / 2
+        lines.append(
+            f'<text x="{idl_label_x:.1f}" y="{idl_label_y:.1f}"'
+            f' transform="rotate(-90,{idl_label_x:.1f},{idl_label_y:.1f})"'
+            f' font-family="{idl_sty["font-family"]}" font-size="{idl_sty["font-size"]}"'
+            f' fill="{idl_sty["fill"]}" opacity="{idl_sty["opacity"]}"'
+            f' text-anchor="middle">{date_line_text}</text>'
+        )
 
     lines.append("</svg>")
     svg_content = "\n".join(lines).encode("utf-8")
@@ -649,6 +651,10 @@ def main() -> None:
         "--cache-dir", default=None, metavar="DIR",
         help="Directory holding cached combined.json "
              "(default: ../misc_local/tmp_geojson relative to this script)",
+    )
+    p.add_argument(
+        "--date-line-text", default=None,
+        help="Text to write for the international date line; pass empty string to disable"
     )
     p.add_argument(
         "--small-threshold-km2", type=float, default=5000.0, metavar="KM2",
@@ -766,7 +772,8 @@ def main() -> None:
         render(
             offset_map, land_union, out_path,
             width=width, total_height=total_height, map_height=map_height, margin=margin,
-            metadata=metadata, highlight_non_integer=args.highlight_non_integer
+            metadata=metadata, highlight_non_integer=args.highlight_non_integer,
+            date_line_text=args.date_line_text,
         )
         return
 
@@ -857,7 +864,8 @@ def main() -> None:
     render(
         offset_map, land_union, out_path,
         width=width, total_height=total_height, map_height=map_height, margin=margin,
-        metadata=metadata, highlight_non_integer=args.highlight_non_integer
+        metadata=metadata, highlight_non_integer=args.highlight_non_integer,
+        date_line_text=args.date_line_text,
     )
 
 
