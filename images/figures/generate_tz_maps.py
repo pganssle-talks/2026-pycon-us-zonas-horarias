@@ -48,10 +48,10 @@ DEFAULT_VERSION = "2026a"
 
 # 4-color NOAA-inspired pastel palette cycling by integer UTC offset
 PALETTE = [
+    "#A8CCA0",  # light sage green
     "#EDD898",  # light cream/tan
     "#F0B898",  # light peach/salmon
     "#A0C8DC",  # light steel blue
-    "#A8CCA0",  # light sage green
 ]
 
 LAT_MIN, LAT_MAX = -60.0, 84.0
