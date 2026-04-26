@@ -113,7 +113,7 @@ def desaturate(hex_color: str, factor: float = 0.85) -> str:
 def lx(lon: float, width: float) -> float:
     return (lon - LON_MIN) / (LON_MAX - LON_MIN) * width
 
-def ly(lat: float, map_height: float, margin: float) -> float:
+def ly(lat: float, map_height: float, margin: float = 0.0) -> float:
     return margin + (LAT_MAX - lat) / (LAT_MAX - LAT_MIN) * map_height
 
 # ── Geometry utils ────────────────────────────────────────────────────────────
@@ -154,8 +154,8 @@ def safe_difference(a, b):
     except Exception:
         return a
 
-_DISPLAY_CLIP = box(LON_MIN, LAT_MIN, 180.0, LAT_MAX)
-_OVERFLOW_CLIP = box(-180.0, LAT_MIN, LON_MIN, LAT_MAX)
+_DISPLAY_CLIP = box(LON_MIN, -90.0, 180.0, 90.0)
+_OVERFLOW_CLIP = box(-180.0, -90.0, LON_MIN, 90.0)
 
 def _wrap_for_display(geom):
     """Split geometry at LON_MIN; shift the [-180°, LON_MIN] strip by +360° to appear on the right."""
@@ -270,9 +270,9 @@ def _process_group(
     display = _replace_small_components(raw_merged, others, threshold_km2, margin_km, nearby_km, simplify_tol)
     return h, raw_merged, display
 
-def _compute_ocean_band(i: int, land_union) -> tuple[float, object]:
+def _compute_ocean_band(i: int, land_union, clip_box) -> tuple[float, object]:
     """Return the ocean portion of the idealized band for integer offset i."""
-    band = MAP_CLIP.intersection(box(i * 15 - 7.5, LAT_MIN, i * 15 + 7.5, LAT_MAX))
+    band = clip_box.intersection(box(i * 15 - 7.5, -90, i * 15 + 7.5, 90))
     return float(i), safe_difference(band, land_union)
 
 # ── Offset calculations ───────────────────────────────────────────────────────
@@ -418,10 +418,7 @@ def render(
     # White background
     lines.append(f'<rect width="{width}" height="{total_height}" fill="white"/>')
 
-    # All map content is clipped to the map viewport
-    lines.append('<g clip-path="url(#mapclip)">')
-
-    # TZ zone fills — solid zone colors for land AND ocean alike.
+    # Background TZ zone fills (including ocean bands) — these extend from edge to edge
     for h in offsets:
         geom = _wrap_for_display(offset_map[h])
         d = geom_to_svg_path(geom, width, map_height, margin)
@@ -438,6 +435,9 @@ def render(
             f' stroke="#334" stroke-width="{BORDER_WIDTH}" stroke-linejoin="round"/>'
         )
 
+    # All map-specific overlays (land, fractional labels) are clipped to the map viewport
+    lines.append('<g clip-path="url(#mapclip)">')
+
     # Dark land overlay — makes land slightly darker than ocean in the same zone.
     if land_geom and not land_geom.is_empty:
         d = geom_to_svg_path(_wrap_for_display(land_geom), width, map_height, margin)
@@ -453,7 +453,7 @@ def render(
             continue
         pt = geom.representative_point()
         px, py = lx(pt.x, width), ly(pt.y, map_height, margin)
-        if not (0 <= px <= width and map_top <= py <= map_bot):
+        if not (0 <= px <= width and margin <= py <= map_bot):
             continue
         bbox = geom.bounds
         bbox_px_width = lx(min(bbox[2], LON_MAX), width) - lx(max(bbox[0], LON_MIN), width)
@@ -468,32 +468,17 @@ def render(
 
     lines.append("</g>")
 
-    # Colored label bars drawn outside the clip so they are always fully visible.
-    # +12 bar is capped at the IDL; a separate -12 bar fills the right sliver.
-    for i in range(-11, 13):
-        x1 = max(0.0, lx(i * 15 - 7.5, width))
-        x2 = idl_x if i == 12 else min(float(width), lx(i * 15 + 7.5, width))
-        if x2 <= x1:
-            continue
-        col = fill_color(float(i)) if not highlight_non_integer else desaturate(fill_color(float(i)))
-        lines.append(f'<rect x="{x1:.1f}" y="0" width="{x2 - x1:.1f}" height="{margin}" fill="{col}"/>')
-        lines.append(f'<rect x="{x1:.1f}" y="{map_bot}" width="{x2 - x1:.1f}" height="{margin}" fill="{col}"/>')
-
-    m12_x1, m12_x2 = idl_x, float(width)
-    if m12_x2 > m12_x1:
-        col_m12 = fill_color(-12.0) if not highlight_non_integer else desaturate(fill_color(-12.0))
-        lines.append(f'<rect x="{m12_x1:.1f}" y="0" width="{m12_x2 - m12_x1:.1f}" height="{margin}" fill="{col_m12}"/>')
-        lines.append(f'<rect x="{m12_x1:.1f}" y="{map_bot}" width="{m12_x2 - m12_x1:.1f}" height="{margin}" fill="{col_m12}"/>')
-
-    # Outer map border drawn over label bars for a clean edge
+    # Outer map border (Sides ONLY - top and bottom are open for bands to flow through)
     lines.append(
-        f'<rect x="0" y="{map_top}" width="{width}" height="{map_height}"'
+        f'<path d="M0,{margin} L0,{map_bot} M{width},{map_bot} L{width},{margin}"'
         f' fill="none" stroke="#334" stroke-width="1.5"/>'
     )
 
-    # Offset labels centered in label bars
-    ty_top = margin // 2 + 5
-    ty_bot = map_bot + margin // 2 + 5
+    # Offset labels centered in the padding areas (directly on background bands)
+    ty_top = margin / 2 + 5
+    ty_bot = map_bot + margin / 2 + 5
+    m12_x1, m12_x2 = idl_x, float(width)
+
     for i in range(-11, 13):
         x1 = max(0.0, lx(i * 15 - 7.5, width))
         x2 = idl_x if i == 12 else min(float(width), lx(i * 15 + 7.5, width))
@@ -525,7 +510,7 @@ def render(
             f' text-anchor="middle">-12</text>'
         )
 
-    # International Date Line label (vertical, just left of IDL)
+    # International Date Line label (vertical)
     idl_label_x = idl_x - 4
     idl_label_y = margin + map_height / 2
     lines.append(
@@ -674,6 +659,10 @@ def main() -> None:
         margin = base_margin
         map_height = base_map_height
 
+    # Calculate latitude delta for margin to extend background bands to the edges
+    lat_margin_delta = (LAT_MAX - LAT_MIN) * margin / map_height
+    BANDS_CLIP = box(-180, LAT_MIN - lat_margin_delta, 180, LAT_MAX + lat_margin_delta)
+
     highlight_sfx = "_highlight" if args.highlight_non_integer else ""
     ext = f".{args.type}"
 
@@ -697,7 +686,7 @@ def main() -> None:
         )
         offset_map: MutableMapping[float, object] = {}
         for i in range(-12, 15):
-            band = MAP_CLIP.intersection(box(i * 15 - 7.5, LAT_MIN, i * 15 + 7.5, LAT_MAX))
+            band = BANDS_CLIP.intersection(box(i * 15 - 7.5, -90, i * 15 + 7.5, 90))
             if not band.is_empty:
                 offset_map[float(i)] = band
 
@@ -779,7 +768,7 @@ def main() -> None:
     print("Merging idealized ocean bands...", file=sys.stderr)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         band_results = list(pool.map(
-            lambda i: _compute_ocean_band(i, display_land_union),
+            lambda i: _compute_ocean_band(i, display_land_union, BANDS_CLIP),
             range(-12, 15),
         ))
     offset_map = dict(actual_offset_map)
