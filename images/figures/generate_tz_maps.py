@@ -45,22 +45,22 @@ DEFAULT_VERSION = "2026a"
 
 # 4-color NOAA-inspired pastel palette cycling by integer UTC offset
 PALETTE = [
-    "#F5E8B0",  # warm yellow
-    "#F0B090",  # salmon
-    "#90B8D0",  # steel blue
-    "#A8C8A0",  # sage green
+    "#EDD898",  # light cream/tan
+    "#F0B898",  # light peach/salmon
+    "#A0C8DC",  # light steel blue
+    "#A8CCA0",  # light sage green
 ]
 
 SVG_WIDTH = 1800
 LAT_MIN, LAT_MAX = -60.0, 84.0
 LON_MIN, LON_MAX = -180.0, 180.0
 SVG_HEIGHT = round(SVG_WIDTH * (LAT_MAX - LAT_MIN) / (LON_MAX - LON_MIN))
-LABEL_MARGIN = 28  # px above/below for offset labels (colored band + bold text)
-TOTAL_HEIGHT = SVG_HEIGHT + 2 * LABEL_MARGIN
+LABEL_MARGIN = 0
+TOTAL_HEIGHT = SVG_HEIGHT
 
-LAND_COLOR = "#aaaaaa"   # medium-light grey; shows slightly darker through the semi-opaque TZ layer
-TZ_FILL_OPACITY = "0.75"  # TZ fill opacity; stroke stays full so borders are bold
-BORDER_WIDTH = "1.5"
+LAND_OVERLAY_OPACITY = "0.12"  # dark overlay on land to make it slightly darker than ocean
+TZ_FILL_OPACITY = "0.92"
+BORDER_WIDTH = "0.6"
 
 MAP_CLIP = box(LON_MIN, LAT_MIN, LON_MAX, LAT_MAX)
 
@@ -202,8 +202,17 @@ def _replace_small_components(
     result = []
     for c in large:
         result.append(c.simplify(simplify_tol, preserve_topology=True) if simplify_tol else c)
-    for c in small:
-        result.append(_bbox_for(c, constraints, margin_km, nearby_km))
+    # One collective bbox for all small components — avoids per-island boxes,
+    # produces a single region (like NOAA's polygon treatment of island groups).
+    # Guard: if components span the anti-meridian or a huge area, use individual bboxes.
+    if small:
+        collective = unary_union(small)
+        cb = collective.bounds  # (minx, miny, maxx, maxy)
+        if cb[2] - cb[0] > 25 or cb[3] - cb[1] > 20:
+            for c in small:
+                result.append(_bbox_for(c, constraints, margin_km, nearby_km))
+        else:
+            result.append(_bbox_for(collective, constraints, margin_km, nearby_km))
 
     return make_valid(unary_union(result))
 
@@ -341,18 +350,11 @@ def render(
             )
     lines.append("</defs>")
 
-    # White background (represents open ocean with no idealized fill — shouldn't be visible)
+    # White background (visible only where no zone fill reaches)
     lines.append(f'<rect width="{SVG_WIDTH}" height="{TOTAL_HEIGHT}" fill="white"/>')
 
-    # Land masses in 20% grey — blends with TZ color at fill-opacity above
-    if land_geom and not land_geom.is_empty:
-        d = geom_to_svg_path(land_geom)
-        if d:
-            lines.append(f'<path d="{d}" fill="{LAND_COLOR}" stroke="none"/>')
-
-    # TZ zones — each covers its actual geojson polygon(s) PLUS the idealized band ocean fill.
-    # fill-opacity leaves the stroke at 100% so offset borders are clearly visible.
-    # In highlight_non_integer mode, integer zones are desaturated so fractional ones pop.
+    # TZ zones at near-full opacity — solid zone colors for land AND ocean alike.
+    # Adjacent zones of different colors create natural visible boundaries.
     for h in offsets:
         geom = offset_map[h]
         d = geom_to_svg_path(geom)
@@ -366,41 +368,44 @@ def render(
             f = fill_color(h)
         lines.append(
             f'<path d="{d}" fill="{f}" fill-opacity="{TZ_FILL_OPACITY}"'
-            f' stroke="#556" stroke-width="{BORDER_WIDTH}" stroke-linejoin="round"/>'
+            f' stroke="#334" stroke-width="{BORDER_WIDTH}" stroke-opacity="0.3" stroke-linejoin="round"/>'
         )
 
-    # Colored label bars — one rectangle per integer offset at top and bottom,
-    # matching the palette color of that band, with bold UTC offset text inside.
-    bot_y = LABEL_MARGIN + SVG_HEIGHT
+    # Dark land overlay — makes land slightly darker than the ocean in the same zone.
+    if land_geom and not land_geom.is_empty:
+        d = geom_to_svg_path(land_geom)
+        if d:
+            lines.append(f'<path d="{d}" fill="#000" fill-opacity="{LAND_OVERLAY_OPACITY}" stroke="none"/>')
+
+    # Vertical divider lines at ideal band boundaries (i * 15 + 7.5 for each i)
+    for i in range(-12, 14):
+        lon = i * 15 + 7.5
+        if LON_MIN < lon < LON_MAX:
+            x = lx(lon)
+            lines.append(
+                f'<line x1="{x:.2f}" y1="0" x2="{x:.2f}" y2="{TOTAL_HEIGHT}"'
+                f' stroke="#445" stroke-width="0.7" opacity="0.6"/>'
+            )
+
+    # Outer map border
+    lines.append(
+        f'<rect x="0" y="0" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
+        f' fill="none" stroke="#445" stroke-width="1"/>'
+    )
+
+    # Offset labels inside the map near the top, centered in each ideal band
     for i in range(-12, 15):
         x1 = max(0.0, lx(i * 15 - 7.5))
         x2 = min(float(SVG_WIDTH), lx(i * 15 + 7.5))
         if x2 <= x1:
             continue
-        col = fill_color(float(i))
         cx = (x1 + x2) / 2
         lbl = offset_label(float(i))
-        ty = LABEL_MARGIN - 7  # vertically centered in margin
-        # Top bar
-        lines.append(f'<rect x="{x1:.2f}" y="0" width="{x2-x1:.2f}" height="{LABEL_MARGIN}" fill="{col}"/>')
         lines.append(
-            f'<text x="{cx:.1f}" y="{ty}"'
-            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#333"'
-            f' text-anchor="middle">{lbl}</text>'
+            f'<text x="{cx:.1f}" y="18"'
+            f' font-family="sans-serif" font-size="12" font-weight="bold" fill="#222"'
+            f' text-anchor="middle" opacity="0.95">{lbl}</text>'
         )
-        # Bottom bar
-        lines.append(f'<rect x="{x1:.2f}" y="{bot_y}" width="{x2-x1:.2f}" height="{LABEL_MARGIN}" fill="{col}"/>')
-        lines.append(
-            f'<text x="{cx:.1f}" y="{bot_y + LABEL_MARGIN - 7}"'
-            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#333"'
-            f' text-anchor="middle">{lbl}</text>'
-        )
-
-    # Map border (drawn after label bars so it sits on top of them)
-    lines.append(
-        f'<rect x="0" y="{LABEL_MARGIN}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
-        f' fill="none" stroke="#445" stroke-width="1"/>'
-    )
 
     # International Date Line label (vertical, near right edge)
     idl_x = lx(180.0) - 4
