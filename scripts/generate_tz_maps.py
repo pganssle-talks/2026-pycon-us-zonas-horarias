@@ -68,10 +68,11 @@ STYLE = {
         "stroke-width": "1.5",
     },
     "label": {
-        "font-family": "'Futura Std, Bold Condensed',Futura,Myriad Pro,sans-serif",
+        "font-family": "Futura Std,Futura,Myriad Pro,sans-serif",
         "font-weight": "bold",
         "fill": "#222",
-        "opacity": "0.8",
+        "font-width": "condensed",
+        "opacity": "1",
         "size_top_bot": 16,
         "size_frac_min": 7,
         "size_frac_max": 13,
@@ -421,6 +422,11 @@ def render(
     txt_sty = STYLE["label"]
     idl_sty = STYLE["idl"]
 
+    if "font-width" in txt_sty:
+        font_width = f'font-stretch="{txt_sty["font-width"]}"'
+    else:
+        font_width = ""
+
     lines: MutableSequence[str] = [
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"',
         f'  width="{width}" height="{total_height}" viewBox="0 0 {width} {total_height}">',
@@ -510,10 +516,11 @@ def render(
         bbox_px_width = lx(min(bbox[2], LON_MAX), width) - lx(max(bbox[0], LON_MIN), width)
         font_size = max(txt_sty["size_frac_min"], min(txt_sty["size_frac_max"], int(bbox_px_width / 5)))
         lbl = frac_label(h)
+
         lines.append(
             f'<text x="{px:.1f}" y="{py:.1f}"'
             f' font-family="{txt_sty["font-family"]}" font-size="{font_size}"'
-            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}" text-anchor="middle"'
+            f' font-weight="{txt_sty["font-weight"]}" {font_width} fill="{txt_sty["fill"]}" text-anchor="middle"'
             f' dominant-baseline="middle" opacity="{txt_sty["opacity"]}">{lbl}</text>'
         )
 
@@ -540,13 +547,13 @@ def render(
         lines.append(
             f'<text x="{cx:.1f}" y="{ty_top}"'
             f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
-            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" {font_width} fill="{txt_sty["fill"]}"'
             f' opacity="{txt_sty["opacity"]}" text-anchor="middle">{lbl}</text>'
         )
         lines.append(
             f'<text x="{cx:.1f}" y="{ty_bot}"'
             f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
-            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" {font_width} fill="{txt_sty["fill"]}"'
             f' opacity="{txt_sty["opacity"]}" text-anchor="middle">{lbl}</text>'
         )
 
@@ -555,13 +562,13 @@ def render(
         lines.append(
             f'<text x="{cx_m12:.1f}" y="{ty_top}"'
             f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
-            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" {font_width} fill="{txt_sty["fill"]}"'
             f' opacity="{txt_sty["opacity"]}" text-anchor="middle">-12</text>'
         )
         lines.append(
             f'<text x="{cx_m12:.1f}" y="{ty_bot}"'
             f' font-family="{txt_sty["font-family"]}" font-size="{txt_sty["size_top_bot"]}"'
-            f' font-weight="{txt_sty["font-weight"]}" fill="{txt_sty["fill"]}"'
+            f' font-weight="{txt_sty["font-weight"]}" {font_width} fill="{txt_sty["fill"]}"'
             f' opacity="{txt_sty["opacity"]}" text-anchor="middle">-12</text>'
         )
 
