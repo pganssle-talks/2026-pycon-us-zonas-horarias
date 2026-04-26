@@ -17,9 +17,11 @@ Modes:
 
 import argparse
 import datetime
+import gzip
 import json
 import math
 import os
+import subprocess
 import sys
 import zipfile
 import io
@@ -52,14 +54,10 @@ PALETTE = [
     "#A8CCA0",  # light sage green
 ]
 
-SVG_WIDTH = 1800
 LAT_MIN, LAT_MAX = -60.0, 84.0
 # Display range: shifted 7.5° east so -11 is the leftmost label and +12 wraps on the right.
 # The 7.5° strip at [-180°, -172.5°] reappears on the right via antimeridian wrapping.
 LON_MIN, LON_MAX = -172.5, 187.5
-SVG_HEIGHT = round(SVG_WIDTH * (LAT_MAX - LAT_MIN) / (LON_MAX - LON_MIN))
-LABEL_MARGIN = 22  # px above and below map for offset label bars
-TOTAL_HEIGHT = SVG_HEIGHT + 2 * LABEL_MARGIN
 
 LAND_OVERLAY_OPACITY = "0.12"  # dark overlay on land to make it slightly darker than ocean
 TZ_FILL_OPACITY = "0.92"
@@ -97,11 +95,11 @@ def desaturate(hex_color: str, factor: float = 0.85) -> str:
 
 # ── Coordinate transforms ─────────────────────────────────────────────────────
 
-def lx(lon: float) -> float:
-    return (lon - LON_MIN) / (LON_MAX - LON_MIN) * SVG_WIDTH
+def lx(lon: float, width: float) -> float:
+    return (lon - LON_MIN) / (LON_MAX - LON_MIN) * width
 
-def ly(lat: float) -> float:
-    return LABEL_MARGIN + (LAT_MAX - lat) / (LAT_MAX - LAT_MIN) * SVG_HEIGHT
+def ly(lat: float, map_height: float, margin: float) -> float:
+    return margin + (LAT_MAX - lat) / (LAT_MAX - LAT_MIN) * map_height
 
 # ── Geometry utils ────────────────────────────────────────────────────────────
 
@@ -157,21 +155,21 @@ def _wrap_for_display(geom):
         return overflow_shifted
     return shapely.make_valid(main.union(overflow_shifted))
 
-def geom_to_svg_path(geom) -> str:
+def geom_to_svg_path(geom, width: float, map_height: float, margin: float) -> str:
     if geom is None or geom.is_empty:
         return ""
 
     def ring(coords) -> str:
         parts = []
         for i, (lon, lat, *_) in enumerate(coords):
-            parts.append(f"{'M' if i == 0 else 'L'}{lx(lon):.2f},{ly(lat):.2f}")
+            parts.append(f"{'M' if i == 0 else 'L'}{lx(lon, width):.2f},{ly(lat, map_height, margin):.2f}")
         parts.append("Z")
         return "".join(parts)
 
     if geom.geom_type == "Polygon":
         return ring(geom.exterior.coords) + "".join(ring(h.coords) for h in geom.interiors)
     if geom.geom_type in ("MultiPolygon", "GeometryCollection"):
-        return "".join(geom_to_svg_path(g) for g in geom.geoms)
+        return "".join(geom_to_svg_path(g, width, map_height, margin) for g in geom.geoms)
     return ""
 
 # ── Small island handling ─────────────────────────────────────────────────────
@@ -351,19 +349,50 @@ def frac_label(h: float) -> str:
     sym = {0.5: "½", 0.75: "¾", 0.25: "¼"}.get(frac, f":{round(frac * 60):02d}")
     return f"{sign}{whole}{sym}"
 
+def _get_tzdata_version() -> str:
+    """Attempt to detect the version of tzdata being used by zoneinfo."""
+    try:
+        import tzdata
+        return tzdata.__version__
+    except ImportError:
+        pass
+    for p in ["/usr/share/zoneinfo/tzdata.zi", "/var/db/zoneinfo/tzdata.zi"]:
+        path = Path(p)
+        if path.exists():
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    first_line = f.readline()
+                    if first_line.startswith("# version "):
+                        return first_line.split()[-1]
+            except Exception:
+                pass
+    return "unknown"
+
 def render(
     offset_map: Mapping,
     land_geom,
     out: Path,
+    width: float,
+    total_height: float,
+    map_height: float,
+    margin: float,
+    metadata: Optional[Mapping] = None,
     highlight_non_integer: bool = False,
 ) -> None:
     offsets = sorted(offset_map)
 
     lines: MutableSequence[str] = [
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"',
-        f'  width="{SVG_WIDTH}" height="{TOTAL_HEIGHT}" viewBox="0 0 {SVG_WIDTH} {TOTAL_HEIGHT}">',
-        "<defs>",
+        f'  width="{width}" height="{total_height}" viewBox="0 0 {width} {total_height}">',
     ]
+
+    if metadata:
+        lines.append("  <desc>")
+        for k, v in metadata.items():
+            lines.append(f"    {k}: {v}")
+        lines.append("  </desc>")
+
+    lines.append("<defs>")
     for h in offsets:
         if is_frac(h):
             pid = pat_id(h)
@@ -377,20 +406,20 @@ def render(
                 f'</pattern>'
             )
 
-    map_top = LABEL_MARGIN
-    map_bot = LABEL_MARGIN + SVG_HEIGHT
-    idl_x = lx(180.0)
+    map_top = margin
+    map_bot = margin + map_height
+    idl_x = lx(180.0, width)
 
     # Clip path so zone fill strokes don't bleed into the label bars
     lines.append(
         f'<clipPath id="mapclip">'
-        f'<rect x="0" y="{map_top}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"/>'
+        f'<rect x="0" y="{map_top}" width="{width}" height="{map_height}"/>'
         f'</clipPath>'
     )
     lines.append("</defs>")
 
     # White background
-    lines.append(f'<rect width="{SVG_WIDTH}" height="{TOTAL_HEIGHT}" fill="white"/>')
+    lines.append(f'<rect width="{width}" height="{total_height}" fill="white"/>')
 
     # All map content is clipped to the map viewport
     lines.append('<g clip-path="url(#mapclip)">')
@@ -398,7 +427,7 @@ def render(
     # TZ zone fills — solid zone colors for land AND ocean alike.
     for h in offsets:
         geom = _wrap_for_display(offset_map[h])
-        d = geom_to_svg_path(geom)
+        d = geom_to_svg_path(geom, width, map_height, margin)
         if not d:
             continue
         if is_frac(h):
@@ -414,7 +443,7 @@ def render(
 
     # Dark land overlay — makes land slightly darker than ocean in the same zone.
     if land_geom and not land_geom.is_empty:
-        d = geom_to_svg_path(_wrap_for_display(land_geom))
+        d = geom_to_svg_path(_wrap_for_display(land_geom), width, map_height, margin)
         if d:
             lines.append(f'<path d="{d}" fill="#000" fill-opacity="{LAND_OVERLAY_OPACITY}" stroke="none"/>')
 
@@ -426,11 +455,11 @@ def render(
         if geom is None or geom.is_empty:
             continue
         pt = geom.representative_point()
-        px, py = lx(pt.x), ly(pt.y)
-        if not (0 <= px <= SVG_WIDTH and map_top <= py <= map_bot):
+        px, py = lx(pt.x, width), ly(pt.y, map_height, margin)
+        if not (0 <= px <= width and map_top <= py <= map_bot):
             continue
         bbox = geom.bounds
-        bbox_px_width = lx(min(bbox[2], LON_MAX)) - lx(max(bbox[0], LON_MIN))
+        bbox_px_width = lx(min(bbox[2], LON_MAX), width) - lx(max(bbox[0], LON_MIN), width)
         font_size = max(7, min(13, int(bbox_px_width / 5)))
         lbl = frac_label(h)
         lines.append(
@@ -445,32 +474,32 @@ def render(
     # Colored label bars drawn outside the clip so they are always fully visible.
     # +12 bar is capped at the IDL; a separate -12 bar fills the right sliver.
     for i in range(-11, 13):
-        x1 = max(0.0, lx(i * 15 - 7.5))
-        x2 = idl_x if i == 12 else min(float(SVG_WIDTH), lx(i * 15 + 7.5))
+        x1 = max(0.0, lx(i * 15 - 7.5, width))
+        x2 = idl_x if i == 12 else min(float(width), lx(i * 15 + 7.5, width))
         if x2 <= x1:
             continue
         col = fill_color(float(i)) if not highlight_non_integer else desaturate(fill_color(float(i)))
-        lines.append(f'<rect x="{x1:.1f}" y="0" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
-        lines.append(f'<rect x="{x1:.1f}" y="{map_bot}" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+        lines.append(f'<rect x="{x1:.1f}" y="0" width="{x2 - x1:.1f}" height="{margin}" fill="{col}"/>')
+        lines.append(f'<rect x="{x1:.1f}" y="{map_bot}" width="{x2 - x1:.1f}" height="{margin}" fill="{col}"/>')
 
-    m12_x1, m12_x2 = idl_x, float(SVG_WIDTH)
+    m12_x1, m12_x2 = idl_x, float(width)
     if m12_x2 > m12_x1:
         col_m12 = fill_color(-12.0) if not highlight_non_integer else desaturate(fill_color(-12.0))
-        lines.append(f'<rect x="{m12_x1:.1f}" y="0" width="{m12_x2 - m12_x1:.1f}" height="{LABEL_MARGIN}" fill="{col_m12}"/>')
-        lines.append(f'<rect x="{m12_x1:.1f}" y="{map_bot}" width="{m12_x2 - m12_x1:.1f}" height="{LABEL_MARGIN}" fill="{col_m12}"/>')
+        lines.append(f'<rect x="{m12_x1:.1f}" y="0" width="{m12_x2 - m12_x1:.1f}" height="{margin}" fill="{col_m12}"/>')
+        lines.append(f'<rect x="{m12_x1:.1f}" y="{map_bot}" width="{m12_x2 - m12_x1:.1f}" height="{margin}" fill="{col_m12}"/>')
 
     # Outer map border drawn over label bars for a clean edge
     lines.append(
-        f'<rect x="0" y="{map_top}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
+        f'<rect x="0" y="{map_top}" width="{width}" height="{map_height}"'
         f' fill="none" stroke="#334" stroke-width="1.5"/>'
     )
 
     # Offset labels centered in label bars
-    ty_top = LABEL_MARGIN // 2 + 5
-    ty_bot = map_bot + LABEL_MARGIN // 2 + 5
+    ty_top = margin // 2 + 5
+    ty_bot = map_bot + margin // 2 + 5
     for i in range(-11, 13):
-        x1 = max(0.0, lx(i * 15 - 7.5))
-        x2 = idl_x if i == 12 else min(float(SVG_WIDTH), lx(i * 15 + 7.5))
+        x1 = max(0.0, lx(i * 15 - 7.5, width))
+        x2 = idl_x if i == 12 else min(float(width), lx(i * 15 + 7.5, width))
         if x2 <= x1:
             continue
         cx = (x1 + x2) / 2
@@ -501,7 +530,7 @@ def render(
 
     # International Date Line label (vertical, just left of IDL)
     idl_label_x = idl_x - 4
-    idl_label_y = (ly(LAT_MIN) + ly(LAT_MAX)) / 2
+    idl_label_y = margin + map_height / 2
     lines.append(
         f'<text x="{idl_label_x:.1f}" y="{idl_label_y:.1f}"'
         f' transform="rotate(-90,{idl_label_x:.1f},{idl_label_y:.1f})"'
@@ -510,7 +539,22 @@ def render(
     )
 
     lines.append("</svg>")
-    out.write_text("\n".join(lines), encoding="utf-8")
+    svg_content = "\n".join(lines).encode("utf-8")
+
+    if out.suffix == ".svgz":
+        with gzip.open(out, "wb") as f:
+            f.write(svg_content)
+    elif out.suffix == ".png":
+        # Render to temporary SVG first, then convert
+        temp_svg = out.with_suffix(".temp.svg")
+        temp_svg.write_bytes(svg_content)
+        try:
+            subprocess.run(["rsvg-convert", "-o", str(out), str(temp_svg)], check=True)
+        finally:
+            if temp_svg.exists():
+                temp_svg.unlink()
+    else:
+        out.write_bytes(svg_content)
     print(f"Written: {out}", file=sys.stderr)
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -523,6 +567,22 @@ def main() -> None:
     p.add_argument(
         "output_dir", nargs="?", default=None,
         help="Output directory (default: directory of this script)",
+    )
+    p.add_argument(
+        "-o", "--output", default=None,
+        help="Manual output filename (overrides automatic naming)",
+    )
+    p.add_argument(
+        "-t", "--type", choices=["svg", "svgz", "png"], default="png",
+        help="Output format (default: svgz)",
+    )
+    p.add_argument(
+        "--width", type=int, default=None,
+        help="Output width in pixels",
+    )
+    p.add_argument(
+        "--height", type=int, default=None,
+        help="Output total height in pixels",
     )
     p.add_argument(
         "--date", default=None, metavar="YYYY-MM-DD",
@@ -583,13 +643,49 @@ def main() -> None:
 
     cache_dir = (
         Path(args.cache_dir) if args.cache_dir
-        else script_dir.parent.parent / "tmp_geojson"
+        else script_dir.parent.parent / "misc_local/tmp_geojson"
     )
 
-    date_sfx = (dt if dt.tzinfo is None else dt.astimezone(datetime.timezone.utc)).strftime(
-        "%Y%m%d"
-    )
+    # ── Dimension Logic ───────────────────────────────────────────────────────
+    # Default constants
+    base_width = 1800.0
+    base_map_height = round(base_width * (LAT_MAX - LAT_MIN) / (LON_MAX - LON_MIN))
+    base_margin = 22.0
+    base_total_height = base_map_height + 2 * base_margin
+
+    if args.width and args.height:
+        width = float(args.width)
+        total_height = float(args.height)
+        # Proportionally scale margin if we are changing size significantly
+        margin = base_margin * (width / base_width)
+        map_height = total_height - 2 * margin
+    elif args.width:
+        width = float(args.width)
+        scale = width / base_width
+        margin = base_margin * scale
+        map_height = base_map_height * scale
+        total_height = map_height + 2 * margin
+    elif args.height:
+        total_height = float(args.height)
+        scale = total_height / base_total_height
+        width = base_width * scale
+        margin = base_margin * scale
+        map_height = base_map_height * scale
+    else:
+        width = base_width
+        total_height = base_total_height
+        margin = base_margin
+        map_height = base_map_height
+
     highlight_sfx = "_highlight" if args.highlight_non_integer else ""
+    ext = f".{args.type}"
+
+    metadata = {
+        "Simulated Date": dt.isoformat(),
+        "Tzdata Version": _get_tzdata_version(),
+        "Boundary Builder Version": args.tz_version,
+        "Options": json.dumps(vars(args)),
+    }
 
     if args.ideal:
         features = load_features(cache_dir, args.tz_version)
@@ -607,9 +703,18 @@ def main() -> None:
             band = MAP_CLIP.intersection(box(i * 15 - 7.5, LAT_MIN, i * 15 + 7.5, LAT_MAX))
             if not band.is_empty:
                 offset_map[float(i)] = band
-        out_path = out_dir / f"tz_map_ideal_{date_sfx}{highlight_sfx}.svg"
+
+        if args.output:
+            out_path = out_dir / args.output
+        else:
+            out_path = out_dir / f"tz_map_ideal{highlight_sfx}{ext}"
+
         print("Rendering SVG...", file=sys.stderr)
-        render(offset_map, land_union, out_path, highlight_non_integer=args.highlight_non_integer)
+        render(
+            offset_map, land_union, out_path,
+            width=width, total_height=total_height, map_height=map_height, margin=margin,
+            metadata=metadata, highlight_non_integer=args.highlight_non_integer
+        )
         return
 
     features = load_features(cache_dir, args.tz_version)
@@ -688,11 +793,18 @@ def main() -> None:
         else:
             offset_map[h] = ocean_fill
 
-    mode_sfx = {"current": "", "standard": "_standard", "dst": "_dst"}[args.mode]
-    out_path = out_dir / f"tz_map{mode_sfx}_{date_sfx}{highlight_sfx}.svg"
+    if args.output:
+        out_path = out_dir / args.output
+    else:
+        mode_sfx = {"current": "", "standard": "_standard", "dst": "_dst"}[args.mode]
+        out_path = out_dir / f"tz_map{mode_sfx}{highlight_sfx}{ext}"
 
     print("Rendering SVG...", file=sys.stderr)
-    render(offset_map, land_union, out_path, highlight_non_integer=args.highlight_non_integer)
+    render(
+        offset_map, land_union, out_path,
+        width=width, total_height=total_height, map_height=map_height, margin=margin,
+        metadata=metadata, highlight_non_integer=args.highlight_non_integer
+    )
 
 
 if __name__ == "__main__":
