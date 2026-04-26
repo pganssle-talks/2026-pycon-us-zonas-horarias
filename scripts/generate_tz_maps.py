@@ -68,11 +68,11 @@ STYLE = {
         "stroke-width": "1.5",
     },
     "label": {
-        "font-family": "Futura,sans-serif",
+        "font-family": "'Futura Std, Bold Condensed',Futura,Myriad Pro,sans-serif",
         "font-weight": "bold",
         "fill": "#222",
         "opacity": "0.8",
-        "size_top_bot": 10,
+        "size_top_bot": 16,
         "size_frac_min": 7,
         "size_frac_max": 13,
     },
@@ -705,7 +705,7 @@ def main() -> None:
     # Default constants
     base_width = 1800.0
     base_map_height = round(base_width * (LAT_MAX - LAT_MIN) / (LON_MAX - LON_MIN))
-    base_margin = 22.0
+    base_margin = 30.0
     base_total_height = base_map_height + 2 * base_margin
 
     if args.width and args.height:
