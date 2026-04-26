@@ -16,6 +16,7 @@ Modes:
 """
 
 import argparse
+import colorsys
 import datetime
 import gzip
 import json
@@ -71,11 +72,23 @@ MAP_CLIP = box(-180.0, LAT_MIN, 180.0, LAT_MAX)
 def _cidx(h: float) -> int:
     return (int(math.floor(h)) + 24) % 4
 
+def adjust_color(hex_color: str, sat_factor: float = 1.0, lum_factor: float = 1.0) -> str:
+    """Adjust saturation and luminance of a hex color."""
+    r, g, b = int(hex_color[1:3], 16) / 255.0, int(hex_color[3:5], 16) / 255.0, int(hex_color[5:7], 16) / 255.0
+    h, l, s = colorsys.rgb_to_hls(r, g, b)
+    s = min(1.0, s * sat_factor)
+    l = min(1.0, l * lum_factor)
+    r, g, b = colorsys.hls_to_rgb(h, l, s)
+    return f"#{round(r*255):02x}{round(g*255):02x}{round(b*255):02x}"
+
 def fill_color(h: float) -> str:
     return PALETTE[_cidx(h)]
 
-def hatch_colors(h: float) -> tuple[str, str]:
-    return PALETTE[_cidx(math.floor(h))], PALETTE[_cidx(math.ceil(h))]
+def hatch_colors(h: float, vivid: bool = False) -> tuple[str, str]:
+    c1, c2 = PALETTE[_cidx(math.floor(h))], PALETTE[_cidx(math.ceil(h))]
+    if vivid:
+        return adjust_color(c1, 3.0, 0.9), adjust_color(c2, 3.0, 0.9)
+    return c1, c2
 
 def is_frac(h: float) -> bool:
     return h % 1.0 != 0.0
@@ -396,7 +409,7 @@ def render(
     for h in offsets:
         if is_frac(h):
             pid = pat_id(h)
-            c1, c2 = hatch_colors(h)
+            c1, c2 = hatch_colors(h, vivid=highlight_non_integer)
             sw = 6
             lines.append(
                 f'<pattern id="{pid}" patternUnits="userSpaceOnUse"'
@@ -433,7 +446,7 @@ def render(
         if is_frac(h):
             f = f"url(#{pat_id(h)})"
         elif highlight_non_integer:
-            f = desaturate(fill_color(h))
+            f = desaturate(fill_color(h), factor=0.92)
         else:
             f = fill_color(h)
         lines.append(
