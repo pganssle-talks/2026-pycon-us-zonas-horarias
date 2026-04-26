@@ -587,6 +587,18 @@ def render(
         temp_svg.write_bytes(svg_content)
         try:
             subprocess.run(["rsvg-convert", "-o", str(out), str(temp_svg)], check=True)
+            # Embed metadata into PNG if mogrify is available
+            if metadata:
+                args = ["mogrify"]
+                for k, v in metadata.items():
+                    # Sanitize key for use in shell/mogrify if needed, but simple strings should work
+                    safe_k = k.replace(" ", "-").lower()
+                    args.extend(["-set", f"comment:{safe_k}", str(v)])
+                args.append(str(out))
+                try:
+                    subprocess.run(args, check=True)
+                except (subprocess.CalledProcessError, FileNotFoundError):
+                    print("Warning: Could not embed metadata into PNG (mogrify failed or not found)", file=sys.stderr)
         finally:
             if temp_svg.exists():
                 temp_svg.unlink()
