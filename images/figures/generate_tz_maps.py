@@ -51,14 +51,14 @@ DEFAULT_VERSION = "2026a"
 
 STYLE = {
     "land": {
-        "fill": "#000",
-        "fill-opacity": "0.12",
-        "stroke": "none",
+        "fill": "#ccc",
+        "fill-opacity": "1",
+        "stroke": "#333",
         "stroke-width": "0.5",
         "stroke-dasharray": "none",
     },
     "zone_band": {
-        "fill-opacity": "0.92",
+        "fill-opacity": "0.62",
         "stroke": "#334",
         "stroke-width": "1.8",
         "stroke-linejoin": "round",
@@ -68,7 +68,7 @@ STYLE = {
         "stroke-width": "1.5",
     },
     "label": {
-        "font-family": "sans-serif",
+        "font-family": "Futura,sans-serif",
         "font-weight": "bold",
         "fill": "#222",
         "opacity": "0.8",
@@ -460,6 +460,19 @@ def render(
     # White background
     lines.append(f'<rect width="{width}" height="{total_height}" fill="white"/>')
 
+    # Dark land overlay — moved here to be below other layers.
+    # It makes land slightly darker than ocean by darkening the background before colors are applied.
+    if land_geom and not land_geom.is_empty:
+        d = geom_to_svg_path(_wrap_for_display(land_geom), width, map_height, margin)
+        if d:
+            lines.append('<g clip-path="url(#mapclip)">')
+            lines.append(
+                f'<path d="{d}" fill="{l_sty["fill"]}" fill-opacity="{l_sty["fill-opacity"]}"'
+                f' stroke="{l_sty["stroke"]}" stroke-width="{l_sty["stroke-width"]}"'
+                f' stroke-dasharray="{l_sty["stroke-dasharray"]}"/>'
+            )
+            lines.append('</g>')
+
     # Background TZ zone fills (including ocean bands) — these extend from edge to edge
     for h in offsets:
         geom = _wrap_for_display(offset_map[h])
@@ -478,18 +491,8 @@ def render(
             f' stroke-linejoin="{z_sty["stroke-linejoin"]}"/>'
         )
 
-    # All map-specific overlays (land, fractional labels) are clipped to the map viewport
+    # All map-specific overlays (fractional labels) are clipped to the map viewport
     lines.append('<g clip-path="url(#mapclip)">')
-
-    # Dark land overlay — makes land slightly darker than ocean in the same zone.
-    if land_geom and not land_geom.is_empty:
-        d = geom_to_svg_path(_wrap_for_display(land_geom), width, map_height, margin)
-        if d:
-            lines.append(
-                f'<path d="{d}" fill="{l_sty["fill"]}" fill-opacity="{l_sty["fill-opacity"]}"'
-                f' stroke="{l_sty["stroke"]}" stroke-width="{l_sty["stroke-width"]}"'
-                f' stroke-dasharray="{l_sty["stroke-dasharray"]}"/>'
-            )
 
     # Labels for fractional zones placed at their representative point inside the map
     for h in offsets:
