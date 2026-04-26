@@ -59,7 +59,7 @@ STYLE = {
     },
     "zone_band": {
         "fill-opacity": "0.62",
-        "stroke": "#334",
+        "stroke": "#172554",
         "stroke-width": "1.8",
         "stroke-linejoin": "round",
     },
@@ -70,8 +70,8 @@ STYLE = {
     "label": {
         "font-family": "Futura Std,Futura,Myriad Pro,sans-serif",
         "font-weight": "bold",
-        "fill": "#222",
         "font-width": "condensed",
+        "fill": "#172554",
         "opacity": "1",
         "size_top_bot": 16,
         "size_frac_min": 7,
