@@ -67,6 +67,8 @@ BORDER_WIDTH = "1.8"  # TZ zone border width
 # Geometry clip uses the full ±180° geographic range; display wraps via lx().
 MAP_CLIP = box(-180.0, LAT_MIN, 180.0, LAT_MAX)
 
+_HOUR: datetime.timedelta = datetime.timedelta(hours=1)
+_ZERO_TD: datetime.timedelta = datetime.timedelta(0)
 # ── Color helpers ─────────────────────────────────────────────────────────────
 
 def _cidx(h: float) -> int:
@@ -275,26 +277,13 @@ def _compute_ocean_band(i: int, land_union) -> tuple[float, object]:
 
 # ── Offset calculations ───────────────────────────────────────────────────────
 
-def _utc(dt: datetime.datetime) -> datetime.datetime:
-    if dt.tzinfo is None:
-        return dt.replace(tzinfo=datetime.timezone.utc)
-    return dt.astimezone(datetime.timezone.utc)
+def current_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> float | None:
+    return zi.utcoffset(dt) / _HOUR
 
-def current_offset(name: str, dt: datetime.datetime) -> Optional[float]:
-    try:
-        zi = zoneinfo.ZoneInfo(name)
-        return _utc(dt).astimezone(zi).utcoffset().total_seconds() / 3600
-    except Exception:
-        return None
-
-def standard_offset(name: str, dt: datetime.datetime) -> Optional[float]:
-    try:
-        zi = zoneinfo.ZoneInfo(name)
-        local = _utc(dt).astimezone(zi)
-        dst = local.dst() or datetime.timedelta(0)
-        return (local.utcoffset() - dst).total_seconds() / 3600
-    except Exception:
-        return None
+def standard_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> Optional[float]:
+    local = dt.astimezone(zi)
+    dst = local.dst() or _ZERO_TD
+    return (local.utcoffset() - dst) / _HOUR
 
 def _dst_day_offsets(max_days: float = 183.0, min_days: float = 7.0):
     """Yield day deltas in binary-subdivision order: +max, -max, +mid, -mid, ..."""
@@ -311,24 +300,19 @@ def _dst_day_offsets(max_days: float = 183.0, min_days: float = 7.0):
         queue.append((lo, mid))
         queue.append((mid, hi))
 
-def dst_offset(name: str, dt: datetime.datetime) -> Optional[float]:
+def dst_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> Optional[float]:
     """Return the DST (summer) UTC offset, searching ±6 months if not currently in DST."""
-    try:
-        zi = zoneinfo.ZoneInfo(name)
-        utc_aware = _utc(dt)
-        local = utc_aware.astimezone(zi)
-        if (local.dst() or datetime.timedelta(0)).total_seconds() != 0:
-            return local.utcoffset().total_seconds() / 3600
-        for delta in _dst_day_offsets():
-            check = (utc_aware + datetime.timedelta(days=delta)).astimezone(zi)
-            if (check.dst() or datetime.timedelta(0)).total_seconds() != 0:
-                return check.utcoffset().total_seconds() / 3600
-        dst_now = local.dst() or datetime.timedelta(0)
-        return (local.utcoffset() - dst_now).total_seconds() / 3600
-    except Exception:
-        return None
+    local = dt.astimezone(zi)
+    if (local.dst() or datetime.timedelta(0)) != _ZERO_TD:
+        return local.utcoffset() / _HOUR
+    for delta in _dst_day_offsets():
+        check = dt + datetime.timedelta(days=delta)
+        if (check.dst() or datetime.timedelta(0)) != _ZERO_TD:
+            return check.utcoffset() / _HOUR
+    dst_now = local.dst() or datetime.timedelta(0)
+    return (local.utcoffset() - dst_now) / _HOUR
 
-# ── GeoJSON ───────────────────────────────────────────────────────────────────
+    # ── GeoJSON ───────────────────────────────────────────────────────────────────
 
 def load_features(cache_dir: Path, version: str) -> Sequence:
     combined = cache_dir / "combined.json"
@@ -650,9 +634,9 @@ def main() -> None:
 
     dt: datetime.datetime
     if args.date:
-        dt = datetime.datetime.fromisoformat(args.date)
+        dt = datetime.datetime.fromisoformat(args.date).astimezone()
     else:
-        dt = datetime.datetime.now(datetime.timezone.utc)
+        dt = datetime.datetime.now().astimezone()
 
     cache_dir = (
         Path(args.cache_dir) if args.cache_dir
@@ -742,7 +726,8 @@ def main() -> None:
     # DST mode can do 100+ zoneinfo lookups per zone; this is the dominant cost there.
     def _process_feature(feat: Mapping) -> Optional[tuple[float, object]]:
         name = feat["properties"]["tzid"]
-        h = get_off(name, dt)
+        zi = zoneinfo.ZoneInfo(name)
+        h = get_off(zi, dt)
         if h is None:
             return None
         return h, make_valid(shape(feat["geometry"]))
