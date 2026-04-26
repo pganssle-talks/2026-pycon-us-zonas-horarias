@@ -32,6 +32,7 @@ from typing import Optional
 
 import requests
 import shapely
+from shapely.affinity import translate
 from shapely.geometry import shape, MultiPolygon, box
 from shapely.ops import unary_union
 
@@ -53,16 +54,19 @@ PALETTE = [
 
 SVG_WIDTH = 1800
 LAT_MIN, LAT_MAX = -60.0, 84.0
-LON_MIN, LON_MAX = -180.0, 180.0
+# Display range: shifted 7.5° east so -11 is the leftmost label and +12 wraps on the right.
+# The 7.5° strip at [-180°, -172.5°] reappears on the right via antimeridian wrapping.
+LON_MIN, LON_MAX = -172.5, 187.5
 SVG_HEIGHT = round(SVG_WIDTH * (LAT_MAX - LAT_MIN) / (LON_MAX - LON_MIN))
-LABEL_MARGIN = 0
-TOTAL_HEIGHT = SVG_HEIGHT
+LABEL_MARGIN = 22  # px above and below map for offset label bars
+TOTAL_HEIGHT = SVG_HEIGHT + 2 * LABEL_MARGIN
 
 LAND_OVERLAY_OPACITY = "0.12"  # dark overlay on land to make it slightly darker than ocean
 TZ_FILL_OPACITY = "0.92"
-BORDER_WIDTH = "0.6"
+BORDER_WIDTH = "2.5"  # thick TZ zone borders
 
-MAP_CLIP = box(LON_MIN, LAT_MIN, LON_MAX, LAT_MAX)
+# Geometry clip uses the full ±180° geographic range; display wraps via lx().
+MAP_CLIP = box(-180.0, LAT_MIN, 180.0, LAT_MAX)
 
 # ── Color helpers ─────────────────────────────────────────────────────────────
 
@@ -136,6 +140,22 @@ def safe_difference(a, b):
         return shapely.set_precision(a, gs).difference(shapely.set_precision(b, gs))
     except Exception:
         return a
+
+_DISPLAY_CLIP = box(LON_MIN, LAT_MIN, 180.0, LAT_MAX)
+_OVERFLOW_CLIP = box(-180.0, LAT_MIN, LON_MIN, LAT_MAX)
+
+def _wrap_for_display(geom):
+    """Split geometry at LON_MIN; shift the [-180°, LON_MIN] strip by +360° to appear on the right."""
+    if geom is None or geom.is_empty:
+        return geom
+    main = geom.intersection(_DISPLAY_CLIP)
+    overflow = geom.intersection(_OVERFLOW_CLIP)
+    if overflow.is_empty:
+        return main
+    overflow_shifted = translate(overflow, xoff=360.0)
+    if main.is_empty:
+        return overflow_shifted
+    return shapely.make_valid(main.union(overflow_shifted))
 
 def geom_to_svg_path(geom) -> str:
     if geom is None or geom.is_empty:
@@ -350,13 +370,26 @@ def render(
             )
     lines.append("</defs>")
 
-    # White background (visible only where no zone fill reaches)
+    map_top = LABEL_MARGIN
+    map_bot = LABEL_MARGIN + SVG_HEIGHT
+
+    # White background
     lines.append(f'<rect width="{SVG_WIDTH}" height="{TOTAL_HEIGHT}" fill="white"/>')
 
-    # TZ zones at near-full opacity — solid zone colors for land AND ocean alike.
-    # Adjacent zones of different colors create natural visible boundaries.
+    # Colored label bars at top and bottom — one rect per integer band
+    for i in range(-12, 15):
+        x1 = max(0.0, lx(i * 15 - 7.5))
+        x2 = min(float(SVG_WIDTH), lx(i * 15 + 7.5))
+        if x2 <= x1:
+            continue
+        col = fill_color(float(i)) if not highlight_non_integer else desaturate(fill_color(float(i)))
+        lines.append(f'<rect x="{x1:.1f}" y="0" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+        lines.append(f'<rect x="{x1:.1f}" y="{map_bot}" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+
+    # TZ zone fills — solid zone colors for land AND ocean alike.
+    # BORDER_WIDTH-thick stroke shows TZ boundaries; no separate gridlines.
     for h in offsets:
-        geom = offset_map[h]
+        geom = _wrap_for_display(offset_map[h])
         d = geom_to_svg_path(geom)
         if not d:
             continue
@@ -368,32 +401,24 @@ def render(
             f = fill_color(h)
         lines.append(
             f'<path d="{d}" fill="{f}" fill-opacity="{TZ_FILL_OPACITY}"'
-            f' stroke="#334" stroke-width="{BORDER_WIDTH}" stroke-opacity="0.3" stroke-linejoin="round"/>'
+            f' stroke="#334" stroke-width="{BORDER_WIDTH}" stroke-linejoin="round"/>'
         )
 
     # Dark land overlay — makes land slightly darker than the ocean in the same zone.
     if land_geom and not land_geom.is_empty:
-        d = geom_to_svg_path(land_geom)
+        d = geom_to_svg_path(_wrap_for_display(land_geom))
         if d:
             lines.append(f'<path d="{d}" fill="#000" fill-opacity="{LAND_OVERLAY_OPACITY}" stroke="none"/>')
 
-    # Vertical divider lines at ideal band boundaries (i * 15 + 7.5 for each i)
-    for i in range(-12, 14):
-        lon = i * 15 + 7.5
-        if LON_MIN < lon < LON_MAX:
-            x = lx(lon)
-            lines.append(
-                f'<line x1="{x:.2f}" y1="0" x2="{x:.2f}" y2="{TOTAL_HEIGHT}"'
-                f' stroke="#445" stroke-width="0.7" opacity="0.6"/>'
-            )
-
-    # Outer map border
+    # Outer map border (on top of everything so it's clean)
     lines.append(
-        f'<rect x="0" y="0" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
-        f' fill="none" stroke="#445" stroke-width="1"/>'
+        f'<rect x="0" y="{map_top}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
+        f' fill="none" stroke="#334" stroke-width="1.5"/>'
     )
 
-    # Offset labels inside the map near the top, centered in each ideal band
+    # Offset labels centered in top and bottom label bars
+    ty_top = LABEL_MARGIN // 2 + 5
+    ty_bot = map_bot + LABEL_MARGIN // 2 + 5
     for i in range(-12, 15):
         x1 = max(0.0, lx(i * 15 - 7.5))
         x2 = min(float(SVG_WIDTH), lx(i * 15 + 7.5))
@@ -402,12 +427,17 @@ def render(
         cx = (x1 + x2) / 2
         lbl = offset_label(float(i))
         lines.append(
-            f'<text x="{cx:.1f}" y="18"'
-            f' font-family="sans-serif" font-size="12" font-weight="bold" fill="#222"'
-            f' text-anchor="middle" opacity="0.95">{lbl}</text>'
+            f'<text x="{cx:.1f}" y="{ty_top}"'
+            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
+            f' text-anchor="middle">{lbl}</text>'
+        )
+        lines.append(
+            f'<text x="{cx:.1f}" y="{ty_bot}"'
+            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
+            f' text-anchor="middle">{lbl}</text>'
         )
 
-    # International Date Line label (vertical, near right edge)
+    # International Date Line label (vertical, near right edge, inside map area)
     idl_x = lx(180.0) - 4
     idl_y = (ly(LAT_MIN) + ly(LAT_MAX)) / 2
     lines.append(
@@ -500,7 +530,16 @@ def main() -> None:
     highlight_sfx = "_highlight" if args.highlight_non_integer else ""
 
     if args.ideal:
-        print("Building idealized longitude bands...", file=sys.stderr)
+        features = load_features(cache_dir, args.tz_version)
+        print("Building idealized longitude bands and land silhouette...", file=sys.stderr)
+        workers = os.cpu_count() or 1
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            all_geoms = list(pool.map(
+                lambda feat: make_valid(shape(feat["geometry"])), features
+            ))
+        land_union = shapely.make_valid(
+            unary_union(all_geoms).intersection(MAP_CLIP)
+        )
         offset_map: MutableMapping[float, object] = {}
         for i in range(-12, 15):
             band = MAP_CLIP.intersection(box(i * 15 - 7.5, LAT_MIN, i * 15 + 7.5, LAT_MAX))
@@ -508,7 +547,7 @@ def main() -> None:
                 offset_map[float(i)] = band
         out_path = out_dir / f"tz_map_ideal_{date_sfx}{highlight_sfx}.svg"
         print("Rendering SVG...", file=sys.stderr)
-        render(offset_map, None, out_path, highlight_non_integer=args.highlight_non_integer)
+        render(offset_map, land_union, out_path, highlight_non_integer=args.highlight_non_integer)
         return
 
     features = load_features(cache_dir, args.tz_version)
