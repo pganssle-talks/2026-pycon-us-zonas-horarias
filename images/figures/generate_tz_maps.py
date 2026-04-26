@@ -63,7 +63,7 @@ TOTAL_HEIGHT = SVG_HEIGHT + 2 * LABEL_MARGIN
 
 LAND_OVERLAY_OPACITY = "0.12"  # dark overlay on land to make it slightly darker than ocean
 TZ_FILL_OPACITY = "0.92"
-BORDER_WIDTH = "2.5"  # thick TZ zone borders
+BORDER_WIDTH = "1.8"  # TZ zone border width
 
 # Geometry clip uses the full ±180° geographic range; display wraps via lx().
 MAP_CLIP = box(-180.0, LAT_MIN, 180.0, LAT_MAX)
@@ -343,6 +343,14 @@ def offset_label(h: float) -> str:
         return f"{sign}{abs(whole)}:{mins:02d}"
     return f"{sign}{abs(whole)}" if whole else "0"
 
+def frac_label(h: float) -> str:
+    """Format fractional UTC offset with Unicode fraction symbols: +3½, -9½, +5¾"""
+    sign = "+" if h > 0 else ("-" if h < 0 else "")
+    whole = abs(int(h))  # truncation toward zero
+    frac = round(abs(h) % 1.0, 10)
+    sym = {0.5: "½", 0.75: "¾", 0.25: "¼"}.get(frac, f":{round(frac * 60):02d}")
+    return f"{sign}{whole}{sym}"
+
 def render(
     offset_map: Mapping,
     land_geom,
@@ -368,26 +376,26 @@ def render(
                 f'<rect x="{sw}" y="0" width="{sw}" height="{sw*2}" fill="{c2}"/>'
                 f'</pattern>'
             )
-    lines.append("</defs>")
 
     map_top = LABEL_MARGIN
     map_bot = LABEL_MARGIN + SVG_HEIGHT
+    idl_x = lx(180.0)
+
+    # Clip path so zone fill strokes don't bleed into the label bars
+    lines.append(
+        f'<clipPath id="mapclip">'
+        f'<rect x="0" y="{map_top}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"/>'
+        f'</clipPath>'
+    )
+    lines.append("</defs>")
 
     # White background
     lines.append(f'<rect width="{SVG_WIDTH}" height="{TOTAL_HEIGHT}" fill="white"/>')
 
-    # Colored label bars at top and bottom — one rect per integer band
-    for i in range(-12, 15):
-        x1 = max(0.0, lx(i * 15 - 7.5))
-        x2 = min(float(SVG_WIDTH), lx(i * 15 + 7.5))
-        if x2 <= x1:
-            continue
-        col = fill_color(float(i)) if not highlight_non_integer else desaturate(fill_color(float(i)))
-        lines.append(f'<rect x="{x1:.1f}" y="0" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
-        lines.append(f'<rect x="{x1:.1f}" y="{map_bot}" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+    # All map content is clipped to the map viewport
+    lines.append('<g clip-path="url(#mapclip)">')
 
     # TZ zone fills — solid zone colors for land AND ocean alike.
-    # BORDER_WIDTH-thick stroke shows TZ boundaries; no separate gridlines.
     for h in offsets:
         geom = _wrap_for_display(offset_map[h])
         d = geom_to_svg_path(geom)
@@ -404,24 +412,65 @@ def render(
             f' stroke="#334" stroke-width="{BORDER_WIDTH}" stroke-linejoin="round"/>'
         )
 
-    # Dark land overlay — makes land slightly darker than the ocean in the same zone.
+    # Dark land overlay — makes land slightly darker than ocean in the same zone.
     if land_geom and not land_geom.is_empty:
         d = geom_to_svg_path(_wrap_for_display(land_geom))
         if d:
             lines.append(f'<path d="{d}" fill="#000" fill-opacity="{LAND_OVERLAY_OPACITY}" stroke="none"/>')
 
-    # Outer map border (on top of everything so it's clean)
+    # Labels for fractional zones placed at their representative point inside the map
+    for h in offsets:
+        if not is_frac(h):
+            continue
+        geom = _wrap_for_display(offset_map[h])
+        if geom is None or geom.is_empty:
+            continue
+        pt = geom.representative_point()
+        px, py = lx(pt.x), ly(pt.y)
+        if not (0 <= px <= SVG_WIDTH and map_top <= py <= map_bot):
+            continue
+        bbox = geom.bounds
+        bbox_px_width = lx(min(bbox[2], LON_MAX)) - lx(max(bbox[0], LON_MIN))
+        font_size = max(7, min(13, int(bbox_px_width / 5)))
+        lbl = frac_label(h)
+        lines.append(
+            f'<text x="{px:.1f}" y="{py:.1f}"'
+            f' font-family="sans-serif" font-size="{font_size}"'
+            f' font-weight="bold" fill="#222" text-anchor="middle"'
+            f' dominant-baseline="middle" opacity="0.8">{lbl}</text>'
+        )
+
+    lines.append("</g>")
+
+    # Colored label bars drawn outside the clip so they are always fully visible.
+    # +12 bar is capped at the IDL; a separate -12 bar fills the right sliver.
+    for i in range(-11, 13):
+        x1 = max(0.0, lx(i * 15 - 7.5))
+        x2 = idl_x if i == 12 else min(float(SVG_WIDTH), lx(i * 15 + 7.5))
+        if x2 <= x1:
+            continue
+        col = fill_color(float(i)) if not highlight_non_integer else desaturate(fill_color(float(i)))
+        lines.append(f'<rect x="{x1:.1f}" y="0" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+        lines.append(f'<rect x="{x1:.1f}" y="{map_bot}" width="{x2 - x1:.1f}" height="{LABEL_MARGIN}" fill="{col}"/>')
+
+    m12_x1, m12_x2 = idl_x, float(SVG_WIDTH)
+    if m12_x2 > m12_x1:
+        col_m12 = fill_color(-12.0) if not highlight_non_integer else desaturate(fill_color(-12.0))
+        lines.append(f'<rect x="{m12_x1:.1f}" y="0" width="{m12_x2 - m12_x1:.1f}" height="{LABEL_MARGIN}" fill="{col_m12}"/>')
+        lines.append(f'<rect x="{m12_x1:.1f}" y="{map_bot}" width="{m12_x2 - m12_x1:.1f}" height="{LABEL_MARGIN}" fill="{col_m12}"/>')
+
+    # Outer map border drawn over label bars for a clean edge
     lines.append(
         f'<rect x="0" y="{map_top}" width="{SVG_WIDTH}" height="{SVG_HEIGHT}"'
         f' fill="none" stroke="#334" stroke-width="1.5"/>'
     )
 
-    # Offset labels centered in top and bottom label bars
+    # Offset labels centered in label bars
     ty_top = LABEL_MARGIN // 2 + 5
     ty_bot = map_bot + LABEL_MARGIN // 2 + 5
-    for i in range(-12, 15):
+    for i in range(-11, 13):
         x1 = max(0.0, lx(i * 15 - 7.5))
-        x2 = min(float(SVG_WIDTH), lx(i * 15 + 7.5))
+        x2 = idl_x if i == 12 else min(float(SVG_WIDTH), lx(i * 15 + 7.5))
         if x2 <= x1:
             continue
         cx = (x1 + x2) / 2
@@ -437,12 +486,25 @@ def render(
             f' text-anchor="middle">{lbl}</text>'
         )
 
-    # International Date Line label (vertical, near right edge, inside map area)
-    idl_x = lx(180.0) - 4
-    idl_y = (ly(LAT_MIN) + ly(LAT_MAX)) / 2
+    if m12_x2 > m12_x1:
+        cx_m12 = (m12_x1 + m12_x2) / 2
+        lines.append(
+            f'<text x="{cx_m12:.1f}" y="{ty_top}"'
+            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
+            f' text-anchor="middle">-12</text>'
+        )
+        lines.append(
+            f'<text x="{cx_m12:.1f}" y="{ty_bot}"'
+            f' font-family="sans-serif" font-size="10" font-weight="bold" fill="#222"'
+            f' text-anchor="middle">-12</text>'
+        )
+
+    # International Date Line label (vertical, just left of IDL)
+    idl_label_x = idl_x - 4
+    idl_label_y = (ly(LAT_MIN) + ly(LAT_MAX)) / 2
     lines.append(
-        f'<text x="{idl_x:.1f}" y="{idl_y:.1f}"'
-        f' transform="rotate(-90,{idl_x:.1f},{idl_y:.1f})"'
+        f'<text x="{idl_label_x:.1f}" y="{idl_label_y:.1f}"'
+        f' transform="rotate(-90,{idl_label_x:.1f},{idl_label_y:.1f})"'
         f' font-family="sans-serif" font-size="9" fill="#445" opacity="0.6"'
         f' text-anchor="middle">International Date Line</text>'
     )
@@ -599,17 +661,22 @@ def main() -> None:
             raw_offset_map[h] = raw_merged
             actual_offset_map[h] = display_merged
 
-    # Land union uses the raw (unsimplified) geometries so coastlines stay sharp.
+    # Raw land union (from unsimplified geometries) is used only for the dark land overlay.
+    # Display land union (from simplified+boxed geometries) is used for ocean band subtraction
+    # so that the ocean fill matches the displayed TZ fill without seams at coastlines.
     print("Computing land/defined-area union...", file=sys.stderr)
     land_union = shapely.make_valid(
         unary_union(list(raw_offset_map.values())).intersection(MAP_CLIP)
+    )
+    display_land_union = shapely.make_valid(
+        unary_union(list(actual_offset_map.values())).intersection(MAP_CLIP)
     )
 
     # Phase 3 — compute ocean fills for all 27 integer bands in parallel, then merge.
     print("Merging idealized ocean bands...", file=sys.stderr)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         band_results = list(pool.map(
-            lambda i: _compute_ocean_band(i, land_union),
+            lambda i: _compute_ocean_band(i, display_land_union),
             range(-12, 15),
         ))
     offset_map = dict(actual_offset_map)
