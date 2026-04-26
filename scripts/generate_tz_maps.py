@@ -648,7 +648,7 @@ def main() -> None:
     p.add_argument(
         "--cache-dir", default=None, metavar="DIR",
         help="Directory holding cached combined.json "
-             "(default: ../../misc_local/tmp_geojson relative to this script)",
+             "(default: ../misc_local/tmp_geojson relative to this script)",
     )
     p.add_argument(
         "--small-threshold-km2", type=float, default=5000.0, metavar="KM2",
@@ -680,8 +680,8 @@ def main() -> None:
     )
     args = p.parse_args()
 
-    script_dir = Path(__file__).resolve().parent
-    out_dir = Path(args.output_dir) if args.output_dir else script_dir
+    script_dir = Path(__file__).resolve()
+    out_dir = Path(args.output_dir) if args.output_dir else (script_dir / "figures")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     dt: datetime.datetime
