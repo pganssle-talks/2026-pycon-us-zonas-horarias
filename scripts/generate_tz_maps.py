@@ -109,20 +109,30 @@ _OVERFLOW_CLIP = box(-180.0, -90.0, LON_MIN, 90.0)
 
 # ── Color helpers ─────────────────────────────────────────────────────────────
 
+
 def _cidx(h: float) -> int:
     return (int(math.floor(h)) + 24) % 4
 
-def adjust_color(hex_color: str, sat_factor: float = 1.0, lum_factor: float = 1.0) -> str:
+
+def adjust_color(
+    hex_color: str, sat_factor: float = 1.0, lum_factor: float = 1.0
+) -> str:
     """Adjust saturation and luminance of a hex color."""
-    r, g, b = int(hex_color[1:3], 16) / 255.0, int(hex_color[3:5], 16) / 255.0, int(hex_color[5:7], 16) / 255.0
+    r, g, b = (
+        int(hex_color[1:3], 16) / 255.0,
+        int(hex_color[3:5], 16) / 255.0,
+        int(hex_color[5:7], 16) / 255.0,
+    )
     h, l, s = colorsys.rgb_to_hls(r, g, b)
     s = min(1.0, s * sat_factor)
     l = min(1.0, l * lum_factor)
     r, g, b = colorsys.hls_to_rgb(h, l, s)
     return f"#{round(r*255):02x}{round(g*255):02x}{round(b*255):02x}"
 
+
 def fill_color(h: float) -> str:
     return PALETTE[_cidx(h)]
+
 
 def hatch_colors(h: float, vivid: bool = False) -> tuple[str, str]:
     c1, c2 = PALETTE[_cidx(math.floor(h))], PALETTE[_cidx(math.ceil(h))]
@@ -130,12 +140,15 @@ def hatch_colors(h: float, vivid: bool = False) -> tuple[str, str]:
         return adjust_color(c1, 3.0, 0.9), adjust_color(c2, 3.0, 0.9)
     return c1, c2
 
+
 def is_frac(h: float) -> bool:
     return h % 1.0 != 0.0
+
 
 def pat_id(h: float) -> str:
     s = "p" if h >= 0 else "n"
     return f"hatch_{s}{abs(h):.2f}".replace(".", "_")
+
 
 def desaturate(hex_color: str, factor: float = 0.85) -> str:
     """Mix hex_color toward its luminance grey by factor (1.0 = full grey)."""
@@ -146,21 +159,27 @@ def desaturate(hex_color: str, factor: float = 0.85) -> str:
     b2 = round(b + (lum - b) * factor)
     return f"#{r2:02x}{g2:02x}{b2:02x}"
 
+
 # ── Coordinate transforms ─────────────────────────────────────────────────────
+
 
 def lx(lon: float, width: float) -> float:
     return (lon - LON_MIN) / (LON_MAX - LON_MIN) * width
 
+
 def ly(lat: float, map_height: float, margin: float = 0.0) -> float:
     return margin + (LAT_MAX - lat) / (LAT_MAX - LAT_MIN) * map_height
 
+
 # ── Geometry utils ────────────────────────────────────────────────────────────
+
 
 def area_km2(geom) -> float:
     """Estimate area using Shapely's planar area scaled by a latitude correction."""
     b = geom.bounds
     cy = (b[1] + b[3]) / 2
     return geom.area * 111.0 * 111.0 * math.cos(math.radians(cy))
+
 
 def dist_km(a, b) -> float:
     """Approximate great-circle distance between representative points."""
@@ -169,11 +188,16 @@ def dist_km(a, b) -> float:
     lat1, lon1 = math.radians(p1.y), math.radians(p1.x)
     lat2, lon2 = math.radians(p2.y), math.radians(p2.x)
     dlat, dlon = lat2 - lat1, lon2 - lon1
-    s = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    s = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
     return 6371.0 * 2 * math.asin(math.sqrt(s))
+
 
 def make_valid(geom):
     return shapely.make_valid(geom)
+
 
 def safe_difference(a, b):
     """difference(a, b) with fallbacks for GEOS topology failures."""
@@ -192,8 +216,10 @@ def safe_difference(a, b):
     except Exception:
         return a
 
+
 _DISPLAY_CLIP = box(LON_MIN, -90.0, 180.0, 90.0)
 _OVERFLOW_CLIP = box(-180.0, -90.0, LON_MIN, 90.0)
+
 
 def _wrap_for_display(geom):
     """Split geometry at LON_MIN; shift the [-180°, LON_MIN] strip by +360° to appear on the right."""
@@ -208,6 +234,7 @@ def _wrap_for_display(geom):
         return overflow_shifted
     return shapely.make_valid(main.union(overflow_shifted))
 
+
 def geom_to_svg_path(geom, width: float, map_height: float, margin: float) -> str:
     if geom is None or geom.is_empty:
         return ""
@@ -215,17 +242,25 @@ def geom_to_svg_path(geom, width: float, map_height: float, margin: float) -> st
     def ring(coords) -> str:
         parts = []
         for i, (lon, lat, *_) in enumerate(coords):
-            parts.append(f"{'M' if i == 0 else 'L'}{lx(lon, width):.2f},{ly(lat, map_height, margin):.2f}")
+            parts.append(
+                f"{'M' if i == 0 else 'L'}{lx(lon, width):.2f},{ly(lat, map_height, margin):.2f}"
+            )
         parts.append("Z")
         return "".join(parts)
 
     if geom.geom_type == "Polygon":
-        return ring(geom.exterior.coords) + "".join(ring(h.coords) for h in geom.interiors)
+        return ring(geom.exterior.coords) + "".join(
+            ring(h.coords) for h in geom.interiors
+        )
     if geom.geom_type in ("MultiPolygon", "GeometryCollection"):
-        return "".join(geom_to_svg_path(g, width, map_height, margin) for g in geom.geoms)
+        return "".join(
+            geom_to_svg_path(g, width, map_height, margin) for g in geom.geoms
+        )
     return ""
 
+
 # ── Small island handling ─────────────────────────────────────────────────────
+
 
 def _bbox_for(poly, constraints: Sequence, margin_km: float, nearby_km: float):
     """Return a padded bounding box for a small polygon."""
@@ -234,6 +269,7 @@ def _bbox_for(poly, constraints: Sequence, margin_km: float, nearby_km: float):
     m_deg = m / 111.0
     b = poly.bounds
     return box(b[0] - m_deg, b[1] - m_deg, b[2] + m_deg, b[3] + m_deg)
+
 
 def _replace_small_components(
     geom,
@@ -254,7 +290,9 @@ def _replace_small_components(
     if geom.geom_type == "Polygon":
         components = [geom]
     elif geom.geom_type in ("MultiPolygon", "GeometryCollection"):
-        components = [g for g in geom.geoms if g.geom_type == "Polygon" and not g.is_empty]
+        components = [
+            g for g in geom.geoms if g.geom_type == "Polygon" and not g.is_empty
+        ]
     else:
         return geom
 
@@ -272,7 +310,9 @@ def _replace_small_components(
 
     result = []
     for c in large:
-        result.append(c.simplify(simplify_tol, preserve_topology=True) if simplify_tol else c)
+        result.append(
+            c.simplify(simplify_tol, preserve_topology=True) if simplify_tol else c
+        )
     # One collective bbox for all small components — avoids per-island boxes,
     # produces a single region (like NOAA's polygon treatment of island groups).
     # Guard: if components span the anti-meridian or a huge area, use individual bboxes.
@@ -286,6 +326,7 @@ def _replace_small_components(
             result.append(_bbox_for(collective, constraints, margin_km, nearby_km))
 
     return make_valid(unary_union(result))
+
 
 def _process_group(
     h: float,
@@ -305,23 +346,30 @@ def _process_group(
     others = [g for g in all_geoms if id(g) not in geom_ids]
 
     raw_merged = make_valid(unary_union(geoms)).intersection(MAP_CLIP)
-    display = _replace_small_components(raw_merged, others, threshold_km2, margin_km, nearby_km, simplify_tol)
+    display = _replace_small_components(
+        raw_merged, others, threshold_km2, margin_km, nearby_km, simplify_tol
+    )
     return h, raw_merged, display
+
 
 def _compute_ocean_band(i: int, land_union, clip_box) -> tuple[float, object]:
     """Return the ocean portion of the idealized band for integer offset i."""
     band = clip_box.intersection(box(i * 15 - 7.5, -90, i * 15 + 7.5, 90))
     return float(i), safe_difference(band, land_union)
 
+
 # ── Offset calculations ───────────────────────────────────────────────────────
+
 
 def current_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> float | None:
     return zi.utcoffset(dt) / _HOUR
+
 
 def standard_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> Optional[float]:
     local = dt.astimezone(zi)
     dst = local.dst() or _ZERO_TD
     return (local.utcoffset() - dst) / _HOUR
+
 
 def _dst_day_offsets(max_days: float = 183.0, min_days: float = 7.0):
     """Yield day deltas in binary-subdivision order: +max, -max, +mid, -mid, ..."""
@@ -338,6 +386,7 @@ def _dst_day_offsets(max_days: float = 183.0, min_days: float = 7.0):
         queue.append((lo, mid))
         queue.append((mid, hi))
 
+
 def dst_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> Optional[float]:
     """Return the DST (summer) UTC offset, searching ±6 months if not currently in DST."""
     local = dt.astimezone(zi)
@@ -351,6 +400,7 @@ def dst_offset(zi: zoneinfo.ZoneInfo, dt: datetime.datetime) -> Optional[float]:
     return (local.utcoffset() - dst_now) / _HOUR
 
     # ── GeoJSON ───────────────────────────────────────────────────────────────────
+
 
 def load_features(cache_dir: Path, version: str) -> Sequence:
     combined = cache_dir / "combined.json"
@@ -366,7 +416,9 @@ def load_features(cache_dir: Path, version: str) -> Sequence:
     with open(combined, encoding="utf-8") as f:
         return json.load(f)["features"]
 
+
 # ── SVG rendering ─────────────────────────────────────────────────────────────
+
 
 def offset_label(h: float) -> str:
     whole = int(h)
@@ -376,6 +428,7 @@ def offset_label(h: float) -> str:
         return f"{sign}{abs(whole)}:{mins:02d}"
     return f"{sign}{abs(whole)}" if whole else "0"
 
+
 def frac_label(h: float) -> str:
     """Format fractional UTC offset with Unicode fraction symbols: +3½, -9½, +5¾"""
     sign = "+" if h > 0 else ("-" if h < 0 else "")
@@ -384,10 +437,12 @@ def frac_label(h: float) -> str:
     sym = {0.5: "½", 0.75: "¾", 0.25: "¼"}.get(frac, f":{round(frac * 60):02d}")
     return f"{sign}{whole}{sym}"
 
+
 def _get_tzdata_version() -> str:
     """Attempt to detect the version of tzdata being used by zoneinfo."""
     try:
         import tzdata
+
         return tzdata.__version__
     except ImportError:
         pass
@@ -402,6 +457,7 @@ def _get_tzdata_version() -> str:
             except Exception:
                 pass
     return "unknown"
+
 
 def render(
     offset_map: Mapping,
@@ -449,7 +505,7 @@ def render(
                 f' width="{sw*2}" height="{sw*2}" patternTransform="rotate(45)">'
                 f'<rect x="0" y="0" width="{sw}" height="{sw*2}" fill="{c1}"/>'
                 f'<rect x="{sw}" y="0" width="{sw}" height="{sw*2}" fill="{c2}"/>'
-                f'</pattern>'
+                f"</pattern>"
             )
 
     map_top = margin
@@ -460,7 +516,7 @@ def render(
     lines.append(
         f'<clipPath id="mapclip">'
         f'<rect x="0" y="{map_top}" width="{width}" height="{map_height}"/>'
-        f'</clipPath>'
+        f"</clipPath>"
     )
     lines.append("</defs>")
 
@@ -478,7 +534,7 @@ def render(
                 f' stroke="{l_sty["stroke"]}" stroke-width="{l_sty["stroke-width"]}"'
                 f' stroke-dasharray="{l_sty["stroke-dasharray"]}"/>'
             )
-            lines.append('</g>')
+            lines.append("</g>")
 
     # Background TZ zone fills (including ocean bands) — these extend from edge to edge
     for h in offsets:
@@ -513,8 +569,13 @@ def render(
         if not (0 <= px <= width and margin <= py <= map_bot):
             continue
         bbox = geom.bounds
-        bbox_px_width = lx(min(bbox[2], LON_MAX), width) - lx(max(bbox[0], LON_MIN), width)
-        font_size = max(txt_sty["size_frac_min"], min(txt_sty["size_frac_max"], int(bbox_px_width / 5)))
+        bbox_px_width = lx(min(bbox[2], LON_MAX), width) - lx(
+            max(bbox[0], LON_MIN), width
+        )
+        font_size = max(
+            txt_sty["size_frac_min"],
+            min(txt_sty["size_frac_max"], int(bbox_px_width / 5)),
+        )
         lbl = frac_label(h)
 
         lines.append(
@@ -607,7 +668,10 @@ def render(
                 try:
                     subprocess.run(args, check=True)
                 except (subprocess.CalledProcessError, FileNotFoundError):
-                    print("Warning: Could not embed metadata into PNG (mogrify failed or not found)", file=sys.stderr)
+                    print(
+                        "Warning: Could not embed metadata into PNG (mogrify failed or not found)",
+                        file=sys.stderr,
+                    )
         finally:
             if temp_svg.exists():
                 temp_svg.unlink()
@@ -615,7 +679,9 @@ def render(
         out.write_bytes(svg_content)
     print(f"Written: {out}", file=sys.stderr)
 
+
 # ── Main ──────────────────────────────────────────────────────────────────────
+
 
 def main() -> None:
     p = argparse.ArgumentParser(
@@ -623,72 +689,109 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     p.add_argument(
-        "output_dir", nargs="?", default=None,
+        "output_dir",
+        nargs="?",
+        default=None,
         help="Output directory (default: directory of this script)",
     )
     p.add_argument(
-        "-o", "--output", default=None,
+        "-o",
+        "--output",
+        default=None,
         help="Manual output filename (overrides automatic naming)",
     )
     p.add_argument(
-        "-t", "--type", choices=["svg", "svgz", "png"], default="png",
+        "-t",
+        "--type",
+        choices=["svg", "svgz", "png"],
+        default="png",
         help="Output format (default: svgz)",
     )
     p.add_argument(
-        "--width", type=int, default=None,
+        "--width",
+        type=int,
+        default=None,
         help="Output width in pixels",
     )
     p.add_argument(
-        "--height", type=int, default=None,
+        "--height",
+        type=int,
+        default=None,
         help="Output total height in pixels",
     )
     p.add_argument(
-        "--date", default=None, metavar="YYYY-MM-DD",
+        "--date",
+        default=None,
+        metavar="YYYY-MM-DD",
         help="Reference date in UTC (default: today)",
     )
     p.add_argument(
-        "--mode", choices=["current", "standard", "dst"], default="current",
+        "--mode",
+        choices=["current", "standard", "dst"],
+        default="current",
         help="Offset mode (default: current)",
     )
     p.add_argument(
-        "--version", default=DEFAULT_VERSION, dest="tz_version", metavar="VER",
+        "--version",
+        default=DEFAULT_VERSION,
+        dest="tz_version",
+        metavar="VER",
         help=f"timezone-boundary-builder release version (default: {DEFAULT_VERSION})",
     )
     p.add_argument(
-        "--cache-dir", default=None, metavar="DIR",
+        "--cache-dir",
+        default=None,
+        metavar="DIR",
         help="Directory holding cached combined.json "
-             "(default: ../misc_local/tmp_geojson relative to this script)",
+        "(default: ../misc_local/tmp_geojson relative to this script)",
     )
     p.add_argument(
-        "--date-line-text", default=None,
-        help="Text to write for the international date line; pass empty string to disable"
+        "--date-line-text",
+        default=None,
+        help="Text to write for the international date line; pass empty string to disable",
     )
     p.add_argument(
-        "--small-threshold-km2", type=float, default=5000.0, metavar="KM2",
+        "--small-threshold-km2",
+        type=float,
+        default=5000.0,
+        metavar="KM2",
         help="Disconnected components smaller than this area get a bounding box (default: 5000)",
     )
     p.add_argument(
-        "--island-margin-km", type=float, default=100.0, metavar="KM",
+        "--island-margin-km",
+        type=float,
+        default=100.0,
+        metavar="KM",
         help="Bounding box margin for small islands in km (default: 100)",
     )
     p.add_argument(
-        "--nearby-km", type=float, default=200.0, metavar="KM",
+        "--nearby-km",
+        type=float,
+        default=200.0,
+        metavar="KM",
         help="If nearest other region is closer than this, use half that as margin (default: 200)",
     )
     p.add_argument(
-        "--simplify", type=float, default=0.05, metavar="DEG",
+        "--simplify",
+        type=float,
+        default=0.05,
+        metavar="DEG",
         help="Geometry simplification tolerance in degrees (default: 0.05 ≈ 5 km)",
     )
     p.add_argument(
-        "--no-simplify", action="store_true",
+        "--no-simplify",
+        action="store_true",
         help="Disable geometry simplification",
     )
     p.add_argument(
-        "--ideal", action="store_true",
+        "--ideal",
+        action="store_true",
         help="Use only idealized longitude bands (ignore geojson zone data)",
     )
     p.add_argument(
-        "--highlight-non-integer", action="store_true", dest="highlight_non_integer",
+        "--highlight-non-integer",
+        action="store_true",
+        dest="highlight_non_integer",
         help="Desaturate integer-offset zones so fractional offsets stand out",
     )
     args = p.parse_args()
@@ -704,7 +807,8 @@ def main() -> None:
         dt = datetime.datetime.now().astimezone()
 
     cache_dir = (
-        Path(args.cache_dir) if args.cache_dir
+        Path(args.cache_dir)
+        if args.cache_dir
         else script_dir.parent.parent / "misc_local/tmp_geojson"
     )
 
@@ -755,15 +859,15 @@ def main() -> None:
 
     if args.ideal:
         features = load_features(cache_dir, args.tz_version)
-        print("Building idealized longitude bands and land silhouette...", file=sys.stderr)
+        print(
+            "Building idealized longitude bands and land silhouette...", file=sys.stderr
+        )
         workers = os.cpu_count() or 1
         with ThreadPoolExecutor(max_workers=workers) as pool:
-            all_geoms = list(pool.map(
-                lambda feat: make_valid(shape(feat["geometry"])), features
-            ))
-        land_union = shapely.make_valid(
-            unary_union(all_geoms).intersection(MAP_CLIP)
-        )
+            all_geoms = list(
+                pool.map(lambda feat: make_valid(shape(feat["geometry"])), features)
+            )
+        land_union = shapely.make_valid(unary_union(all_geoms).intersection(MAP_CLIP))
         offset_map: MutableMapping[float, object] = {}
         for i in range(-12, 15):
             band = BANDS_CLIP.intersection(box(i * 15 - 7.5, -90, i * 15 + 7.5, 90))
@@ -777,18 +881,26 @@ def main() -> None:
 
         print("Rendering SVG...", file=sys.stderr)
         render(
-            offset_map, land_union, out_path,
-            width=width, total_height=total_height, map_height=map_height, margin=margin,
-            metadata=metadata, highlight_non_integer=args.highlight_non_integer,
+            offset_map,
+            land_union,
+            out_path,
+            width=width,
+            total_height=total_height,
+            map_height=map_height,
+            margin=margin,
+            metadata=metadata,
+            highlight_non_integer=args.highlight_non_integer,
             date_line_text=args.date_line_text,
         )
         return
 
     features = load_features(cache_dir, args.tz_version)
 
-    get_off = {"current": current_offset, "standard": standard_offset, "dst": dst_offset}[
-        args.mode
-    ]
+    get_off = {
+        "current": current_offset,
+        "standard": standard_offset,
+        "dst": dst_offset,
+    }[args.mode]
     simplify_tol = None if args.no_simplify else args.simplify
     workers = os.cpu_count() or 1
 
@@ -823,9 +935,13 @@ def main() -> None:
         futures = {
             pool.submit(
                 _process_group,
-                h, geoms, all_geoms_flat,
-                args.small_threshold_km2, args.island_margin_km,
-                args.nearby_km, simplify_tol,
+                h,
+                geoms,
+                all_geoms_flat,
+                args.small_threshold_km2,
+                args.island_margin_km,
+                args.nearby_km,
+                simplify_tol,
             ): h
             for h, geoms in groups.items()
         }
@@ -848,10 +964,12 @@ def main() -> None:
     # Phase 3 — compute ocean fills for all 27 integer bands in parallel, then merge.
     print("Merging idealized ocean bands...", file=sys.stderr)
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        band_results = list(pool.map(
-            lambda i: _compute_ocean_band(i, display_land_union, BANDS_CLIP),
-            range(-12, 15),
-        ))
+        band_results = list(
+            pool.map(
+                lambda i: _compute_ocean_band(i, display_land_union, BANDS_CLIP),
+                range(-12, 15),
+            )
+        )
     offset_map = dict(actual_offset_map)
     for h, ocean_fill in band_results:
         if ocean_fill.is_empty:
@@ -869,9 +987,15 @@ def main() -> None:
 
     print("Rendering SVG...", file=sys.stderr)
     render(
-        offset_map, land_union, out_path,
-        width=width, total_height=total_height, map_height=map_height, margin=margin,
-        metadata=metadata, highlight_non_integer=args.highlight_non_integer,
+        offset_map,
+        land_union,
+        out_path,
+        width=width,
+        total_height=total_height,
+        map_height=map_height,
+        margin=margin,
+        metadata=metadata,
+        highlight_non_integer=args.highlight_non_integer,
         date_line_text=args.date_line_text,
     )
 
