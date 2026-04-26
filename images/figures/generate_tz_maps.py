@@ -599,7 +599,7 @@ def main() -> None:
     p.add_argument(
         "--cache-dir", default=None, metavar="DIR",
         help="Directory holding cached combined.json "
-             "(default: ../../tmp_geojson relative to this script)",
+             "(default: ../../misc_local/tmp_geojson relative to this script)",
     )
     p.add_argument(
         "--small-threshold-km2", type=float, default=5000.0, metavar="KM2",
