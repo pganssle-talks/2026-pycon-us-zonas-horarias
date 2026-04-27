@@ -774,7 +774,7 @@ span.pytest-warning-count {
 
 .reveal pre {
     display: inline-block;
-    width: auto;
+    /* width: auto; */
 }
 
 .reveal pre code
