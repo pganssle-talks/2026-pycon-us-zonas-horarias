@@ -25,7 +25,7 @@
 @font-face {
     font-family: 'Lato';
     src: url('../fonts/Lato/fonts/Lato-Regular.eot');
-    src: url('../fonts/Lato/fonts/Lato-Regular.eot?#iefix') format('embedded-opentype'), 
+    src: url('../fonts/Lato/fonts/Lato-Regular.eot?#iefix') format('embedded-opentype'),
          url('../fonts/Lato/fonts/Lato-Regular.woff2') format('woff2'),
          url('../fonts/Lato/fonts/Lato-Regular.woff') format('woff'),
          url('../fonts/Lato/fonts/Lato-Regular.ttf') format('truetype');
