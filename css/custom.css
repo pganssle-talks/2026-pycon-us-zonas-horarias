@@ -114,6 +114,11 @@ body {
   padding-bottom: 2em !important;
 }
 
+/* This allows wrapper containers to fill the slide */
+.reveal section.present {
+    height: 100%;
+}
+
 div.centered-container {
     display: flex;
     height: 100%;
