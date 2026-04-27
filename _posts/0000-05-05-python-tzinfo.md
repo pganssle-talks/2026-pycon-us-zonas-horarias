@@ -5,9 +5,7 @@
 * La información se proporciona en función del objeto `datetime`:
     * `tzname`: El nombre (normalmente abreviado) de la zona horaria para el `datetime` indicado.
     * `utcoffset`: El desplazamiento respecto a UTC para ese `datetime`.
-    * <span class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">`dst`: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora)</span><span class="fragment nospace-fragment" data-fragment-index="1" style="color: #b70000"><strike>`dst`: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora)</strike></span>
-
-<!-- TODO: Use an emphasis transition here rather than two fragments -->
+    * <span class="fragment strike highlight-red" data-fragment-index="1">`dst`: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora)</span>
 
 Notes:
 
