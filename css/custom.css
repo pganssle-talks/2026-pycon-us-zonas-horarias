@@ -80,7 +80,7 @@ body {
 
 .reveal {
   font-family: "Lato", sans-serif;
-  font-size: 32px;
+  font-size: 3dvh;
   font-weight: normal;
   color: #000; }
 
@@ -168,17 +168,17 @@ div.left-container {
   word-wrap: break-word; }
 
 .reveal h1 {
-  font-size: 1.8em; 
+  font-size: 1.6em;
   margin-bottom: 0.5em;
   }
 
 .reveal h2 {
-  font-size: 1.6em;
+  font-size: 1.4em;
   margin-bottom: 0.5em;
 }
 
 .reveal h3 {
-  font-size: 1.4em; }
+  font-size: 1.3em; }
 
 .reveal h4 {
   font-size: 1.2em; }
