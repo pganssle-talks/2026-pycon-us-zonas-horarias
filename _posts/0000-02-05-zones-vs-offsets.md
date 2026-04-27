@@ -1,11 +1,16 @@
+<div class="bullet-container">
+
 # Introducción
+
+<div class="bullets-with-header">
 
 ## UTC
 
 - Zona horaria de referencia
 - Cambia a casi un segundo por segundo (¿qué son unos segundos intercalares entre amigos?)
-<br/>
-<br/>
+
+</div>
+<div class="bullets-with-header">
 
 ## Zonas horarias vs. desplazamientos <!-- .element: class="fragment" data-fragment-index="1" -->
 
@@ -20,6 +25,11 @@
         </ul>
     </li>
 </ul>
+
+</div>
+
+<div class="small-spacer"></div>
+</div>
 
 Notes:
 
