@@ -128,8 +128,40 @@ div.centered-container {
     align-items: center;
 }
 
+
 div.left-container {
     text-align: left;
+}
+
+div.bullet-container
+{
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-grow: 1;
+    height: 100%;
+
+    & h1, h2, h3, h4, h5, h6 {
+        text-align: left;
+    }
+
+    & ul > li {
+        margin-top: 0.25em;
+        margin-bottom: 0.25em;
+    }
+
+    & ul,ol > li:not(:last-child) > ul,ol >li :last-child {
+        margin-bottom: 0.7em;
+    }
+
+    & ul > li > ul >li :not(:last-child) {
+        margin-bottom: 0em;
+    }
+
+    div.bullets-with-header {
+        /* Placeholder for if we need to style these */
+    }
 }
 
 /*********************************************
