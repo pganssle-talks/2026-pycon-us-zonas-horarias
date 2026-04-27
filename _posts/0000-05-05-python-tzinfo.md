@@ -1,3 +1,7 @@
+<div class="bullet-container">
+
+<div class="bullets-with-header">
+
 # El modelo de zonas horarias de Python: `tzinfo`
 
 * Las zonas horarias se definen mediante subclases de `tzinfo`.
@@ -6,6 +10,9 @@
     * `tzname`: El nombre (normalmente abreviado) de la zona horaria para el `datetime` indicado.
     * `utcoffset`: El desplazamiento respecto a UTC para ese `datetime`.
     * <span class="fragment strike highlight-red" data-fragment-index="1">`dst`: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora)</span>
+
+</div>
+</div>
 
 Notes:
 

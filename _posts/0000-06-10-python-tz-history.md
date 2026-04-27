@@ -1,8 +1,15 @@
+<div class="bullet-container">
+
+<div class="bullets-with-header">
+
 # Historia de las zonas horarias en Python
 
 Cuando `datetime` se estrenó en [Python 2.3](https://docs.python.org/3/whatsnew/2.3.html#date-time-type), no había zonas horarias concretas en la biblioteca estándar.
+</div>
 
 <div class="small-spacer"></div>
+
+<div class="medium-code">
 
 ```python
 from dateutil import relativedelta as rd  # Trampita...
@@ -31,6 +38,11 @@ class ET(tzinfo):
 
         return dst_start <= dt.replace(tzinfo=None) < dst_end
 ```
+</div>
+
+<div class="small-spacer"></div>
+
+</div>
 
 Notes:
 
@@ -38,16 +50,26 @@ Bueno, e históricamente, eso fue todo lo que tenías en Python. En Python dos p
 
 --
 
+<div class="bullet-container">
+
+<div class="bullets-with-header">
+
 # Historia de las zonas horarias en Python: Zonas concretas
 
 - UTC / Desplazamientos fijos <span class="fragment" style="color: green" data-fragment-index="1">✔ Añadidos en 3.2</span>
 - Hora local
 - Zonas horarias de IANA
 
+</div>
+
 <p style="text-align: center">
 <img src="images/nuevo_en_3.2.png" alt="What's new in Python 3.2 excerpt"
      class="fragment" data-fragment-index="1" />
 </p>
+
+<div class="small-spacer"></div>
+
+</div>
 
 Notes:
 
@@ -91,9 +113,17 @@ print(dt_after)    # ¡Ay no!
 
 --
 
+<div class="bullet-container">
+
+<div class="bullets-with-header">
+
 # Horas ambiguas
 
 Las horas ambiguas son aquellas en las que la misma "hora de reloj" se repite, como durante una transición de horario de verano (DST) a estándar (STD).
+
+</div>
+
+<div class="medium-code">
 
 ```python
 from dateutil import tz
@@ -107,13 +137,19 @@ for i in range(4):
 ```
 
 <pre>
+<tt>
 2004-10-31 00:30:00-04:00 | EDT |  No ambigua
 2004-10-31 01:30:00-04:00 | EDT |  Ambigua
 2004-10-31 01:30:00-05:00 | EST |  Ambigua
 2004-10-31 02:30:00-05:00 | EST |  No ambigua
+</tt>
 </pre>
 
+</div>
+
 ¡Pueden existir datetimes en una zona que se diferencian solo por su desplazamiento!
+
+</div>
 
 Notes:
 
@@ -127,10 +163,18 @@ Y esto es un problema fundamental, un defecto que había en la interfaz de `tzin
 
 --
 
+<div class="bullet-container">
+
+<div class="small-spacer"></div>
+<div class="bullets-with-header">
+
 # Horas imaginarias
 
 El complemento de las horas ambiguas son las horas imaginarias: horas de reloj que no existen en una zona determinada, como sucede durante una transición de horario estándar (STD) a verano (DST).
 
+</div>
+
+<div class="medium-code">
 
 ```python
 dt1 = datetime(2004, 4, 4, 6, 30, tzinfo=timezone.utc)
@@ -140,12 +184,20 @@ for i in range(3):
 ```
 
 <pre>
+<tt>
 2004-04-04 01:30:00-05:00 | EST
 2004-04-04 03:30:00-04:00 | EDT
 2004-04-04 04:30:00-04:00 | EDT
+</tt>
 </pre>
 
+</div>
+
 ¡Fijaos en que falta la hora `2004-04-04 02:30:00`!
+
+<div class="small-spacer"></div>
+
+</div>
 
 Notes:
 

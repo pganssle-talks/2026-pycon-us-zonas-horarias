@@ -1,5 +1,8 @@
 # ¿Por qué narices necesitamos zonas horarias?
 
+<div class="left-container">
+<div class="bullet-container medium-code">
+
 ```python
 from dateutil import rrule as rr
 from datetime import datetime, timezone
@@ -13,7 +16,9 @@ NYC = ZoneInfo("America/New_York")
 for dt in horas_de_cerrar:
     print(dt.replace(tzinfo=NYC))
 ```
-<pre style="margin-top: 0.5em">
+
+<pre>
+<tt>
 
 2023-03-08 17:00:00-05:00
 2023-03-09 17:00:00-05:00
@@ -21,7 +26,10 @@ for dt in horas_de_cerrar:
 2023-03-13 17:00:00<b>-04:00</b>
 2023-03-14 17:00:00-04:00
 
+</tt>
 </pre>
+
+<div class="small-spacer"></div>
 
 ```python
 # Obtener fin de jornada en UTC
@@ -29,7 +37,8 @@ for dt in horas_de_cerrar:
     print(dt.replace(tzinfo=NYC).astimezone(timezone.utc))
 ```
 
-<pre style="margin-top: 0.5em">
+<pre>
+<tt>
 
 2023-03-08 22:00:00+00:00
 2023-03-09 22:00:00+00:00
@@ -37,7 +46,11 @@ for dt in horas_de_cerrar:
 2023-03-13 <b>21:00:00</b>+00:00
 2023-03-14 21:00:00+00:00
 
+</tt>
 </pre>
+
+</div>
+</div>
 
 Notes:
 
@@ -51,8 +64,10 @@ Si quisieras hacerlo en UTC, tendrías que hacer algo como: "Sí, vale, pues el 
 
 --
 
-<div style="font-size: 3rem;">
+<div class="centered-container splash">
+<p>
 Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, hay que almacenar el tiempo local, porque el mapeo entre UTC y el tiempo local <em>no es estable</em>.
+</p>
 </div>
 
 Notes:
