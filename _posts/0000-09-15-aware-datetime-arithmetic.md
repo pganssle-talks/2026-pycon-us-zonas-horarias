@@ -23,7 +23,7 @@ Dado que hay una transición entre `dt1` y `dt2`, hay dos opciones:
 
 Notes:
 
-And there is an analogous problem with arithmetic, right? Because when you're going over a daylight saving time transition, you can either have wall time semantics, where you say, "Just give me the same time tomorrow" (if you're adding 24 hours), or you could say, "Give me what time it is after 24 hours have elapsed" like in absolute time in UTC. And these may be two different values.
+Y además de la comparación, hay un problema análogo con la aritmética. Porque imagínate que quieres añadir veinticuatro horas a un `datetime` justo antes de una transición de horario de verano. Puedes optar por la semántica de la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían, por ejemplo, veintitrés horas de tiempo real. O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas", lo que supone una hora de diferencia respecto al caso anterior.
 
 --
 
@@ -61,9 +61,9 @@ Cuando se restan dos `datetime`s, el comportamiento es diferente entre los casos
 
 Notes:
 
-And there's a sort of similar dichotomy here, where `datetime` really likes to use wall time semantics. So when you're adding a `timedelta`, it says, "Oh, that's a same-zone operation, so we'll use wall times." And if you're subtracting two datetimes, if they're in the same zone, we'll use wall time semantics.
+Y la dicotomía es la misma que con la comparación, ya que a `datetime` le gusta mucho la semántica de la hora de reloj. Así que, si añades un `timedelta`, Python dice: "Vale, esta es una operación dentro de la misma zona, así que usemos horas de reloj". Y si estás restando `datetime`s y están en la misma zona, también usa la semántica de la hora de reloj.
 
-And if they're in different zones, again, it doesn't make sense to use wall time semantics, so we'll switch to absolute time. And I have a blog post that goes into detail about why this isn't as crazy as it sounds, but unfortunately, most people really, really, really don't think that should be the case — they are constantly reporting it as a bug.
+Pero si están en zonas diferentes, de nuevo no tiene sentido usar la semántica de hora de reloj, así que se usa tiempo absoluto. Tengo un artículo en mi blog que profundiza en por qué esto no es tan descabellado como parece; pero, aunque sea razonable, la gente no cree en absoluto que debería ser así y no paran de enviar «bug reports» diciendo que los cálculos están mal.
 
 --
 
@@ -86,4 +86,4 @@ def restar_absoluto(dt1: datetime, dt2: datetime) -> timedelta:
 
 Notes:
 
-So what I recommend is that you define some little helper functions like this that just take your operands and convert them to UTC before doing any operations on it, and then you can get absolute time semantics regardless of whether they're same zone or different zone or whatever.
+Por desgracia, a estas alturas ya no es algo que podamos cambiar, así que lo que os recomiendo es que definas algunas funciones auxiliares como las que tengo aquí, que tomen tus operandos y los conviertan a UTC antes de hacer las operaciones, para que así no importe si están en la misma zona o no.
