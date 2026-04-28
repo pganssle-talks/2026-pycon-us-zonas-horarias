@@ -1,4 +1,8 @@
+<div class="bullet-container big-code code-indented">
+
 # Semántica de aritmética con datetimes conscientes
+
+<div class="bullets-with-header">
 
 Un problema análogo a la semántica de comparación es que sumar tiempo tras una transición de DST no está bien definida:
 
@@ -7,25 +11,33 @@ Un problema análogo a la semántica de comparación es que sumar tiempo tras un
 >>> dt1 = datetime(2020, 3, 7, 13, tzinfo=NYC)
 >>> dt2 = d1 + timedelta(days=1)
 ```
+</div>
 
-<br/>
-<br/>
+<div class="bullets-with-header">
 
 Dado que hay una transición entre `dt1` y `dt2`, hay dos opciones:
 
 ```python
->>> print(sumar_reloj(dt1, timedelta(days=1)))  # Siguiente día del calendario a la misma hora
+>>> # Siguiente día del calendario a la misma hora
+>>> print(sumar_reloj(dt1, timedelta(days=1)))
 2020-03-08 13:00-04:00
 
->>> print(sumar_absoluto(dt1, timedelta(days=1)))  # 24 horas transcurridas después de dt1
+>>> # 24 horas transcurridas después de dt1
+>>> print(sumar_absoluto(dt1, timedelta(days=1)))
 2020-03-08 12:00-04:00
 ```
+
+</div>
+<div class="small-spacer"></div>
+</div>
 
 Notes:
 
 Y además de la comparación, hay un problema análogo con la aritmética. Porque imagínate que quieres añadir veinticuatro horas a un `datetime` justo antes de una transición de horario de verano. Puedes optar por la semántica de la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían, por ejemplo, veintitrés horas de tiempo real. O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas", lo que supone una hora de diferencia respecto al caso anterior.
 
 --
+
+<div class="bullet-container medium-code code-indented">
 
 # Semántica de aritmética con datetimes conscientes en Python
 
@@ -57,7 +69,12 @@ Cuando se restan dos `datetime`s, el comportamiento es diferente entre los casos
 23:00:00
 ```
 
-*Consultad mi artículo de blog (en inglés) ["Semantics of timezone-aware datetime arithmetic"](https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html) para un análisis más exhaustivo.*
+<div class="footnote">
+
+Consultad mi artículo de blog (en inglés) ["Semantics of timezone-aware datetime arithmetic"](https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html) para un análisis más exhaustivo.
+</div>
+
+</div>
 
 Notes:
 
@@ -67,9 +84,16 @@ Pero si están en zonas diferentes, de nuevo no tiene sentido usar la semántica
 
 --
 
+<div class="bullet-container big-code code-indented">
+<div class="bullets-with-header">
+
 # Cómo usar `zoneinfo`: Semántica del tiempo absoluto
 
+<div class="small-spacer"></div>
+
 La semántica de hora de reloj de Python puede sorprender a muchos usuarios; para utilizar deliberadamente la semántica del tiempo absoluto, primero hay que convertir a UTC:
+
+<div class="small-spacer"></div>
 
 ```python
 def sumar_absoluto(dt: datetime, td: timedelta) -> datetime:
@@ -83,6 +107,9 @@ def restar_absoluto(dt1: datetime, dt2: datetime) -> timedelta:
 
     return dt1 - dt2
 ```
+
+</div>
+</div>
 
 Notes:
 
