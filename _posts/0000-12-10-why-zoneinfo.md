@@ -1,4 +1,20 @@
+<style>
+div.bullet-container.smaller-margins {
+    ul {
+        margin-bottom: 0;
+    }
+
+    pre.code-wrapper {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+</style>
+<div class="bullet-container medium-code code-indented smaller-margins">
+
 # ¿Por qué usar `zoneinfo`?
+
+<div class="small-spacer"></div>
 
 - Es la única librería de zonas horarias con soporte para fechas posteriores a 2038 y para el formato "slim" de `tzdata`.
 
@@ -27,6 +43,8 @@ dateutil: mean: 7.95 µs ± 642.62 ns; min: 7.44 µs (k=5, N=50000)
 ```
 
 Gracias a su implementación en C, `zoneinfo` es más rápida que `pytz` y `dateutil` en todas las métricas de rendimiento.
+
+</div>
 
 Notes:
 
