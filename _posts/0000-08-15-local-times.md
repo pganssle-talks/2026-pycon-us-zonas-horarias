@@ -1,3 +1,5 @@
+<div class="bullet-container medium-code">
+
 # Zonas horarias concretas: hora local
 
 - UTC / Desplazamientos fijos <span class="fragment" style="color: green" data-fragment-index="1">✔ Añadidos en 3.2</span>
@@ -5,6 +7,8 @@
 - Zonas horarias de IANA <span class="fragment" style="color: red" data-fragment-index="1">✘ (en Python 3.8)</span>
 
 A partir de Python 3.2, los `datetime`s naífs ya se consideran hora local del sistema, y puedes adjuntarles un desplazamiento fijo para conseguir información sobre la zona horaria:
+
+<div class="small-spacer"></div>
 
 ```python
 >>> print(datetime(2023, 11, 4, 12).astimezone())
@@ -16,7 +20,7 @@ A partir de Python 3.2, los `datetime`s naífs ya se consideran hora local del s
 2023-11-05 12:00:00-05:00
 ```
 
-<br/>
+<div class="small-spacer"></div>
 
 Configurar el atributo `fold` en un `datetime` naíf funciona:
 
@@ -27,7 +31,14 @@ Configurar el atributo `fold` en un `datetime` naíf funciona:
 2023-11-05 01:00:00-05:00
 ```
 
+<div class="small-spacer"></div>
+
+<div class="footnote">
+
 Para más información, mirad mis posts de blog (en inglés): [Why naïve times are local times](https://blog.ganssle.io/articles/2022/04/naive-local-datetimes.html) y [Stop using utcnow and utcfromtimestamp](https://blog.ganssle.io/articles/2019/11/utcnow.html)
+</p>
+
+</div>
 
 Notes:
 
