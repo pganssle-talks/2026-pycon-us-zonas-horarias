@@ -1,3 +1,5 @@
+<div class="bullet-container medium-code">
+
 # Migrar de `pytz`
 
 Si tienes una interfaz pública que devuelve zonas de `pytz` (o `datetime`s con zonas de `pytz` adjuntadas), migrar fuera de `pytz` implicará un **cambio disruptivo (*breaking change*)**:
@@ -13,8 +15,6 @@ def sesenta_dias_despues(dt: datetime) -> datetime:
     non_normalized_dt = dt + timedelta(days=60)
     return dt.tzinfo.normalize(non_normalized_dt)
 ```
-
-<br/>
 
 
 ```python
@@ -35,11 +35,15 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
 ```
 
+</div>
+
 Notes:
 
 Si vas a migrar de `pytz`, y tienes alguna interfaz orientada al público que devuelva sus zonas horarias, hay que ser consciente de que cambiar a `ZoneInfo` supondrá un *breaking change* (un cambio disruptivo). Básicamente, porque tus usuarios pueden esperar que los objetos que devuelves tengan los métodos `localize` y `normalize` u otras interfaces exclusivas de `pytz`, lo cual podría daros algún que otro problema.
 
 --
+
+<div class="bullet-container">
 
 # `pytz-deprecation-shim`
 
@@ -73,7 +77,13 @@ https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html
 'PDT'
 ```
 
-**Cuidado:** Hay algunos cambios en la semántica de aritmética; consultad la [guía de migración](https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html).
+<div class="footnote warning centered-container" style="font-size: 0.9em; height: unset;">
+
+⚠️ **Cuidado:** Hay algunos cambios en la semántica de aritmética; consultad la [guía de migración](https://pytz-deprecation-shim.readthedocs.io/en/latest/migration.html). ⚠️
+
+</div>
+
+</div>
 
 Notes:
 
