@@ -677,9 +677,17 @@ img.sbitem {
 
 span.footnote,
 p.footnote,
-figcaption.footnote, {
-    font-size: 0.7em;
+figcaption.footnote,
+div.footnote {
+    font-size: 0.9em;
     font-style: italic;
+}
+
+div.footnote {
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Separate two unrelated blocks of code so the backgrounds don't merge */
