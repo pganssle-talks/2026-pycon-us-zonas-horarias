@@ -1,3 +1,7 @@
+<div class="bullet-container medium-code">
+
+<div class="bullets-with-header">
+
 # Un caso curioso...
 
 ```python
@@ -8,14 +12,18 @@
 >>> y = datetime.fromtimestamp(ts, LON)
 >>> z = datetime.fromtimestamp(ts, ZoneInfo.no_cache("Europe/London"))
 ```
-<br/>
+
+
+<div class="small-spacer" style="height: 0.5em"></div>
+
 
 ```python
 >>> x == y
 False
 ```
 <fragment/>
-<br/>
+
+<div class="small-spacer"></div>
 
 
 ```python
@@ -23,13 +31,19 @@ False
 True
 ```
 <fragment/>
-<br/>
+
+<div class="small-spacer"></div>
 
 ```python
 >>> y == z
 True
 ```
 <fragment/>
+
+</div>
+</div>
+<div class="small-spacer"></div>
+</div>
 
 Notes:
 
@@ -39,9 +53,15 @@ Y más raro aún, si creo una nueva instancia del objeto que representa la zona 
 
 --
 
+<div class="bullet-container big-code">
+
 # Pista
 
+<div class="centered-container" style="height: unset; padding-bottom:unset; font-size: 1.5em; font-style: italic">
+
 ¡`2007-03-25 01:00:00` en Londres es imaginario!
+
+</div>
 
 ```python
 >>> print(x)                                # x (LON)
@@ -55,6 +75,10 @@ Y más raro aún, si creo una nueva instancia del objeto que representa la zona 
 2007-03-25 00:00:00+00:00
 ```
 
+
+<div class="small-spacer"></div>
+</div>
+
 Notes:
 
 Y mi primera pista de cómo debuggearlo fue cuando me di cuenta de que esta hora en realidad no existía, era una hora imaginaria.
@@ -64,6 +88,8 @@ Así que Y y Z no pueden representar el `datetime` original que teníamos; no pu
 Y lo que pasa aquí es que X se convierte a una hora real en UTC, y luego de vuelta a la hora equivalente en Londres.
 
 --
+
+<div class="bullets-container">
 
 # ¿Qué significa la igualdad?
 
@@ -107,7 +133,7 @@ Y lo que pasa aquí es que X se convierte a una hora real en UTC, y luego de vue
 </ol>
 </div>
 
-<div style="border: 1px solid; padding-left: 5px; padding-right: 5px; background: #fff; align-items: flex-start">
+<div style="border: 1px solid; background: #fff; align-items: flex-start; margin-left: 1em;">
 <div class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">
 <u>Horas de reloj:</u><br/>
 <tt>
@@ -127,19 +153,22 @@ Y lo que pasa aquí es que X se convierte a una hora real en UTC, y luego de vue
 </div>
 </div>
 
-## Otra pista <!-- .element: class="fragment" data-fragment-index="2" -->
+<div class="bullets-with-header fragment big-code" data-fragment-index="2">
+
+## Otra pista
 
 ```python
 >>> x.tzinfo is y.tzinfo
 True
 ```
-<!-- .element: class="fragment" data-fragment-index="2" -->
 
 ```python
 >>> x.tzinfo is z.tzinfo
 False
 ```
-<!-- .element: class="fragment" data-fragment-index="2" -->
+
+</div>
+</div>
 
 Notes:
 
@@ -153,6 +182,8 @@ Y la otra pista que necesitamos para explicar por qué ocurre esto es que X e Y 
 
 --
 
+<div class="bullet-container">
+
 # Semántica de comparación de datetimes conscientes
 
 1. Cuando dos `datetime`s están en la *misma zona*, solo se compara la parte naíf (semántica de hora de reloj).
@@ -161,8 +192,9 @@ Y la otra pista que necesitamos para explicar por qué ocurre esto es que X e Y 
 
 3. Dos `datetime`s solo se consideran en la "misma zona" si `dt1.tzinfo is dt2.tzinfo`.
 
-<br/>
-<br/>
+<div class="small-spacer"></div>
+
+<div class="centered-container" style="height: unset">
 
 ## Misterio resuelto: <!-- .element: class="fragment" data-fragment-index="1" -->
 
@@ -196,6 +228,9 @@ Y la otra pista que necesitamos para explicar por qué ocurre esto es que X e Y 
 
 </div>
 
+</div>
+</div>
+
 Notes:
 
 La semántica real de comparación de `datetime` es que cuando dos `datetime`s están en la misma zona, usará la semántica de la hora de reloj, pero cuando están en zonas diferentes, no tiene sentido comparar sus horas de reloj, ¿cierto? ¿A quién le importa una comparación entre las partes naíf de zonas diferentes?
@@ -205,6 +240,8 @@ Así que primero tienes que convertirlos a UTC. La clave final de nuestro mister
 Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la semántica de hora de reloj, para `x == z` tenemos la semántica de tiempo absoluto, y para `y == z`, otra vez tenemos la semántica de hora de reloj, aunque para la última no hace ninguna diferencia porque ambas dan el mismo resultado.
 
 --
+
+<div class="bullet-container medium-code">
 
 # `zoneinfo`: Comportamiento de la caché
 
@@ -234,7 +271,13 @@ Las llamadas al constructor por defecto con argumentos idénticos tienen garanti
    1 day, 0:00:00
    ```
 
+<div class="footnote">
+
 Consultad el [PEP 615](https://www.python.org/dev/peps/pep-0615/) y [la documentación](https://docs.python.org/3/library/zoneinfo.html) para más información de la que jamás querríais saber sobre cómo trabajar con esta caché.
+
+</div>
+
+</div>
 
 Notes:
 
