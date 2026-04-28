@@ -6,6 +6,14 @@
 - `Asia/Kathmandu` (+05:45)
 - `Africa/Monrovia` (+00:44:30) (Antes de 1979)
 
+Notes:
+
+TODO: For non-integer offsets, show idealized time zone map, then actual time zone map, then add highlights on the non-integer zones.
+
+Vale, ya tenemos claros los conceptos básicos, así que hemos llegado a la parte obligatoria de cualquier charla sobre zonas horarias: esa en la que el ponente os cuenta las aberraciones estrafalarias que la gente ha perpetrado con su medición del tiempo local.
+
+Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja. Podéis ver que en Australia, Nepal o la India hay zonas con desplazamientos que son múltiplos de quince minutos, y en los datos históricos incluso puedes encontrar zonas como la de Liberia con desplazamientos que ni siquiera eran de minutos enteros.
+
 --
 
 ## Cambio de desplazamiento sin cambio de estatus DST
@@ -40,15 +48,17 @@ TODO: Add examples of base offset change
 
 Notes:
 
-Now that we've got the basics down, let's move into the mandatory part of any time zone talk where the presenter tells you about all the weird and scandalous stuff people get up to with their local timekeeping.
+Además, puede ser que tengas un cuñado que crea que el desplazamiento del UTC solo cambia debido al horario de verano o que el estatus DST solo cambia cuando cambia el desplazamiento... ¡pero ninguna de las dos cosas es cierta!
 
-You may have a friend — it's OK, I know you are asking for a friend — who thinks that there are only 24 time zones, and that they are all 1-hour increments away from UTC, but if you go to Australia or India, you'll find time zones that are at half-hour offsets, and if you go to Nepal, you'll find they even have one with a 15-minute offset. And if you look at historical data, like in Liberia before 1979, there are offsets that aren't even a whole number of *minutes* away from UTC.
+De vez en cuando, una localidad quiere cambiar su desplazamiento estándar sin introducir un cambio biannual, como... (TODO: Add examples)
 
-Your friend may also think that the only time that the only time UTC offsets will change is during a daylight saving time change and vice versa — that the offset always changes when DST status changes, but in Portugal in 1992, they decided they didn't want to be on Western European Time anymore, but they wanted to join the UTC+1 time zone, Central European Time, so they decided they wanted to shift their base offset by 1 hour, and they decided to do this when Daylight Saving Time was schedule to end *anyway*, so that basically DST ended, but the clocks didn't change. This is very convenient for humans, but it also breaks anyone whose code relies on Daylight Saving Time transitions always corresponding to a change in offset.
+O al revés, ha habido ejemplos de cambio de estatus DST sin cambio de desplazamiento del UTC. Por ejemplo, en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, cambiando su desplazamiento una hora. Por comodidad para las personas, este cambio se hizo saltándose un cambio de horario: hicieron la transición al horario de verano y, cuando se acabó el verano, los relojes no cambiaron, pero la interpretación cambió de 'horario de verano de Europa Occidental' a 'horario estándar de Europa Central'. Muy conveniente para humanos, pero te romperá el código si estás asumiendo que una transición de estatus DST siempre viene acompañada de un cambio en el reloj.
 
-As an aside, in 1996 they decided that having the sun set after midnight in the summer was not a good idea, so they did
+Y este año esta lección será relevante para la Columbia Británica, porque han adoptado el "horario de verano permanente", y creo que se va a modelar como un cambio de estatus DST este noviembre sin cambio de horario.
 
-OK, so now we know that base offsets can change, but you may think that a zone either has DST or it doesn't, and if it does it will just have two transitions per year, one going forward and one going back, right?
+De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior, con la misma forma de transicionar, pero al revés. No sé qué augura esto para la Columbia Británica.
+
+Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, pero seguramente o una zona tiene horario de verano o no lo tiene, ¿no? O sea, o hay dos transiciones al año o cero, ¿cierto?
 
 [2m 15s; T: 4:00]
 
@@ -75,9 +85,11 @@ OK, so now we know that base offsets can change, but you may think that a zone e
 
 Notes:
 
-Not so fast — In Morocco in most years since 2012, there have been *two* daylight saving time transitions. For example here in 2012 they went on to summer time in April, then in July they went back to standard time for 1 month, then back onto summer time. Seems like a kind of weird thing to do until you realize that Morocco is a majority Muslim country, and in 2012 this month was the month of Ramadan, when Muslims aren't supposed to eat anything before sundown. All of a sudden that extra hour before sunset isn't looking too good, so they just go back to standard time.
+Por supuesto que no. En Marruecos, durante el periodo entre dos mil doce y dos mil dieciocho, ha habido dos transiciones de DST al año. Por ejemplo, en dos mil doce cambiaron al horario de verano en abril, pero en julio volvieron al horario estándar durante un mes y después regresaron al horario de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes de la puesta del sol.
 
-OK, so we know there can be all kinds of weird stuff around daylight saving time transitions, but at least we can feel confident that these things always happen at like 2 in the morning, we're never going to see some discontinuity in the middle of the day, right?
+De repente, esa hora que sobra antes del anochecer ya no te hace tanta gracia, así que cancelaron el horario de verano. Hoy eso no ocurre porque han adoptado el horario de verano permanente, excepto durante el Ramadán; entonces su zona horaria parece más normal, salvo por la extraña brevedad de su horario de verano.
+
+Pues nada, ya sabemos que la gente es muy rara con sus transiciones DST, pero seguro que este tipo de cosa solo pasa a las tantas de la madrugada o algo así, y nunca vamos a ver algo raro sucediendo a mitad del día, ¿cierto?
 
 [1m; T: 5m]
 
@@ -105,9 +117,9 @@ Tambien Samoa en 29 Enero 2011
 
 Notes:
 
-Alas, even this is not true — in 1994, Kiribati (prounounced kee-ree-bahs), which is an island nation in the South Pacific, decided that they wanted to be on the other side of the international dateline. Presumably this was something to do with aligning their timekeeping more closely with one of their trading partners or something, but the upshot of it was that they decided that they were going to just not have a December 31st in 1994. They would just go December 30th 11:159 then one minute later Happy New Year!
+Por desgracia, ni esto es verdad. En mil novecientos noventa y cuatro, en Kiribati (que se pronuncia 'kiribas'), un país del Pacífico Sur, decidieron que querían estar al otro lado de la línea internacional de cambio de fecha. Se supone que esto tiene que ver con alinear su medición de tiempo con sus socios comerciales o algo así; eso da igual; lo importante es que, para realizar este cambio, se saltaron el treinta y uno de diciembre. Así que eran las once y cincuenta y nueve de la noche del treinta de diciembre de mil novecientos noventa y cuatro y, un minuto después... ¡feliz año nuevo!
 
-And you may so, "Oh well that's just something that happens in the far past, it was the 90s, we were inventing programming languages and watching Seinfeld, that couldn't happen *today*, could it? But just a bit over a decade ago, the same thing happened in Samoa in 2011.
+Y quizá digas: 'Pues esto era una cosa de la antigüedad. Eran los noventa, estábamos repartiendo direcciones de IPv4 a mansalva y viendo **Friends**; claro que eso no podría pasar hoy, ¿no?'. Pero hace solo quince años, en dos mil once, lo mismo ocurrió en Samoa.
 
 [1m 15s; T: 6m15s]
 
@@ -137,10 +149,9 @@ And you may so, "Oh well that's just something that happens in the far past, it 
 
 Notes: 
 
-And historically, some places have gone the other way as well. In Kwajalein Atoll in 1969, there were two September 30ths!
+Y, históricamente, ha habido sitios que han ido en la dirección contraria también. En el atolón de Kwajalein, en mil novecientos sesenta y nueve, ¡el treinta de septiembre pasó dos veces!
 
-OK so maybe you say, "Ok, daylight saving time transitions can happen at any time, and there can be millions of them, and any sort of chaos can happen about offset changes, but at least I can count on one thing — if I know someone's location, I know what time zone they're in." But I think you can see where this is going...
-
+Entonces sí, seguro que hemos llegado al fondo del asunto. Estamos convencidos de que las transiciones de horario pueden ocurrir en cualquier época del año, a cualquier hora del día, millones de veces al año... de acuerdo. Pero seguramente puedo contar con una cosa: que si sé la ubicación de alguien, sé la zona que se aplica. Aunque imagino que podéis vaticinar lo que viene...
 
 [15s; T: 6m30s]
 
@@ -155,7 +166,9 @@ OK so maybe you say, "Ok, daylight saving time transitions can happen at any tim
 
 Notes:
 
-In China, they decided it would be a great idea for there to be one time zone for the entire country. This is normally a country that would span 3 or 4 time zones, but administratively I guess it's easier to use UTC+8 everywhere, which I guess is great in Beijing, but in Xinjiang (pronounced: shin-jee-ang) which is far to the West, the sun rises at around 4:30AM, which is not great, so while the trains and the post offices and government offices all use UTC+8, the locals effectively observe UTC+6. And according to Wikipedia, the main difference of who chooses which time zone is whether you are part of the Uyghyur (pronounced: wee-gurr) minority or Han majority, so in a sense this is actually a racial time zone, so I suppose if you know someone's location and their ethnicity then you can know their time zone....
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+
+De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario (contra el que, por cierto, se ve que el gobierno chino ha estado perpetrando una limpieza étnica). Así que esta es una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
 [1m15s; 7m45s]
 
@@ -169,6 +182,8 @@ In China, they decided it would be a great idea for there to be one time zone fo
 
 Notes:
 
-In China, they decided it would be a great idea for there to be one time zone for the entire country. This is normally a country that would span 3 or 4 time zones, but administratively I guess it's easier to use UTC+8 everywhere, which I guess is great in Beijing, but in Xinjiang (pronounced: shin-jee-ang) which is far to the West, the sun rises at around 4:30AM, which is not great, so while the trains and the post offices and government offices all use UTC+8, the locals effectively observe UTC+6. And according to Wikipedia, the main difference of who chooses which time zone is whether you are part of the Uyghyur (pronounced: wee-gurr) minority or Han majority, so in a sense this is actually a racial time zone, so I suppose if you know someone's location and their ethnicity then you can know their time zone....
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+
+De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario (contra el que, por cierto, se ve que el gobierno chino ha estado perpetrando una limpieza étnica). Así que esta es una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
 [1m15s; 7m45s]

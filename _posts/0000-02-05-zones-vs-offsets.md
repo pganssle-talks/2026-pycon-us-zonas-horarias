@@ -23,16 +23,16 @@
 
 Notes:
 
-We can start out easy, with UTC. UTC is the reference time zone, it's the 0 against which offsets are measured. It is mostly monotonic — which is to say that it doesn't have daylight saving time. It still has leap seconds, which is infuriating, since leap seconds don't belong in civil time *at all*, much less in the reference time zone, but there has recently been talk of ending the practice of leap seconds, so hopefully, going forward, UTC will actually record 1 second per second of elapsed time.
+Empecemos por lo fácil, aclarando qué es el UTC. El UTC es la zona horaria de referencia; es el cero respecto al cual se miden los desplazamientos.
 
-Another concept that is important to know is the difference between time zones and offsets.
+Debería ser un reloj que avance de manera monótona y lineal, pero parece que los comités de estándares nos odian, así que existen los segundos intercalares — o mejor dicho, existían, porque se ha hablado de que van a dejar de añadirlos al UTC, lo cual es lo correcto, porque los segundos intercalares no tienen cabida alguna en el tiempo civil.
 
-UTC-6 is an offset. It means that you should add 6 hours to the local time to get a time in UTC.
+Otro concepto importante es conocer la diferencia entre zonas horarias y desplazamientos. "UTC menos seis" es un desplazamiento (u *offset*). Significa que, para obtener la hora local, hay que restar seis horas al UTC.
 
-`America/Chicago` is a time zone - it's the set of rules for what offsets and abbreviations apply in a given region as a function of time. In this case, Chicago is the largest city in the region that observes these rules, which is why the zone is called that.
+"America/Chicago" es una zona horaria (también llamada huso horario). Es un conjunto de reglas que determinan cómo varían los desplazamientos en función del tiempo, normalmente asociados a una región del mundo. En este caso, la zona se llama "America/Chicago" porque Chicago es la ciudad más grande que sigue este conjunto de reglas.
 
-`CST` is a highly context-dependent abbreviation referring to an offset. In Chicago, it means Central Standard Time, which is UTC-6, but if you're in Cuba, it means UTC-5, and if you're in China, it means UTC+8.
+Y quizás hayáis visto algo como "CST". "CST" es una abreviatura que depende totalmente del contexto en el que se encuentre. En Chicago significa *Central Standard Time*, que es UTC-6. Pero si estás en Cuba, significa UTC-5, y en China significa *China Standard Time*, que es UTC+8.
 
-Word of advice: never rely on these 3-letter abbreviations. Don't try to parse them into a specific time zone if you can avoid it, don't rely on them meaning a specific thing, and don't even rely on every zone having an associated 3-letter abbreviation.
+Un consejo: nunca confiéis en estas abreviaturas de tres letras. No intentéis parsearlas para obtener una zona horaria específica si podéis evitarlo. No deis por hecho que tengan un significado único y ni siquiera asumáis que todas las zonas tienen una abreviatura asociada.
 
 [1m 15s; T: 1m 45s]

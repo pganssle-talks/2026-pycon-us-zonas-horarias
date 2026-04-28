@@ -11,6 +11,10 @@
 
 Notes:
 
-So now that we've established that you actually need to *ugh* understand the abstractions you are working with, let's get into some of the details of how it works in Python.
+Ya que hemos establecido que en realidad hace falta *ugh* entender las abstracciones con las que trabajas, vamos a bucear más en los detalles de cómo funciona en Python.
 
-Python's time zone model is based around an abstract base class `tzinfo`. The idea is that each time zone object provides three functions that take the `datetime` as an argument. There's `tzname`, which gives the name of the zone at the given datetime, `utcoffset`, which does most of the heavy lifting here, this gives the offset that applies at the relevant datetime, and then `dst`, which gives you the difference between the current offset and standard time. I think basically every time I've seen someone use the `dst` method it was something that I would consider a mistake, so basically never use that last one.
+El modelo de zonas horarias de Python se centra en una clase base abstracta que se llama `tzinfo`. La idea es que cada objeto que representa una zona horaria proporciona tres funciones que toman el `datetime` como argumento.
+
+Tienes `tzname`, que da el nombre de la zona para el `datetime` indicado, y `utcoffset`, que es la que de verdad tira del carro; esa función da el desplazamiento respecto al UTC que se aplica al `datetime`.
+
+Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. La verdad es que creo que cada vez que he visto a alguien usar este método ha sido un error de algún tipo, así que, por favor, ¡ni lo toquéis!

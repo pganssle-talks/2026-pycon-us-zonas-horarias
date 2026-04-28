@@ -34,7 +34,7 @@ class ET(tzinfo):
 
 Notes:
 
-All right, so historically, that was pretty much what you got in Python. In Python 2.3 they said, "Here is an interface, but we don't want to deal with implementing rules for you." You're supposed to figure out according to your business logic what's the best way to represent time zones, and you're maybe supposed to do something like this, where you have a class that represents Eastern Time and it has its set of rules.
+Bueno, e históricamente, eso fue todo lo que tenías en Python. En Python dos punto tres, dijeron: "Aquí tienes una interfaz, pero no queremos encargarnos de implementar las reglas por ti". Se suponía que debías averiguar por tu cuenta, según tu lógica de negocio, cuál sería el mejor método para representar tus zonas horarias, y quizá se esperaba que hicieras algo así: una clase con las reglas que representen la hora del Este.
 
 --
 
@@ -51,11 +51,11 @@ All right, so historically, that was pretty much what you got in Python. In Pyth
 
 Notes:
 
-But if you think about it, there's really only three kinds of time zones that the vast majority of people want to look at.
+Pero si lo pensáis un poco, la verdad es que solo hay tres tipos de zona horaria que la inmensa mayoría de la gente quiere.
 
-One is UTC or fixed offsets thereof, the other is local time, which is like whatever time it is on your laptop or something, and the third one is the IANA time zone database, which is basically that America/Chicago, America/New_York kind of thing.
+Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o sea, que la hora sea la de tu portátil u ordenador; y el tercero es una zona de la base de datos de IANA, por ejemplo America/Chicago o America/New_York, ese tipo de cosas.
 
-And the first one is actually like super easy, because that just returns a fixed `timedelta`. So that was added early on in 3.2. But these other two, it turns out to be a little bit trickier.
+Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
 
 --
 
@@ -117,13 +117,13 @@ for i in range(4):
 
 Notes:
 
-And to explain why, I have to have a little digression and talk about ambiguous times.
+Y para explicaros por qué, tengo que irme un poco por las ramas para hablar sobre las horas ambiguas.
 
-Ambiguous times are times where the same wall time occurs twice, so like when you set your clock back one hour, right? It'll be 1:59, and then one minute later you go back one hour and then it's 1:59 again about an hour later, right?
+Las horas ambiguas son momentos en los que la misma hora de reloj se marca dos veces; por ejemplo, cuando toca atrasar el reloj una hora. Son las una y cincuenta y nueve y, un minuto después, se echa la hora para atrás y vuelve a ser la una; así que cada minuto entre la una y las dos se marca dos veces.
 
-And you'll notice that in this list here I have two 1:30s, and their main difference is the offset. That's what differentiates those two times on the timeline. But if you recall, `datetime`'s model is that the `tzinfo` time zone object just takes as its argument the naïve portion of the `datetime`, so it's actually impossible to disambiguate these two things because they are differentiated only by the *output* of those functions.
+Y fijaos en que en esta lista que tengo aquí hay dos una y media, y la diferencia principal es el desplazamiento. Es esto lo que marca la diferencia entre los dos `datetime`s en la línea temporal. Pero si os acordáis, el modelo de `datetime` es que un `tzinfo` toma como argumento solo la parte naíf del `datetime`, así que en realidad es imposible distinguir entre estas dos cosas, ¡ya que se diferencian solo por la salida de estas funciones!
 
-And this is a fundamental problem, a flaw that existed in the `tzinfo` interface at the time.
+Y esto es un problema fundamental, un defecto que había en la interfaz de `tzinfo` en aquella época.
 
 --
 
@@ -145,10 +145,10 @@ for i in range(3):
 2004-04-04 04:30:00-04:00 | EDT
 </pre>
 
-¡Fijaos en la falta de `2004-04-04 02:30:00`!
+¡Fijaos en que falta la hora `2004-04-04 02:30:00`!
 
 Notes:
 
-And then there's the complement of this, which is a lot easier to solve, which is called imaginary times. And these are basically times that don't exist in a given time zone, like when you jump forward an hour, any time in that gap doesn't correspond to a real time.
+Y además hay otro problema, el complemento de las horas ambiguas, que llamamos horas imaginarias. Estas son básicamente horas que no existen en una zona horaria, por ejemplo cuando toca adelantar el reloj una hora: cualquier hora en ese hueco no corresponderá a un tiempo real, a una hora que haya pasado o vaya a pasar.
 
-This one's easier to deal with because these times just don't exist rather than being unrepresentable, but also in that case what offset are you supposed to use for the offset? It's undefined.
+Y es más fácil lidiar con esto porque estos tiempos simplemente no existen, en lugar de ser irrepresentables, pero aun así, como detalle de implementación, es importante saber qué desplazamiento deben devolver tus funciones de `tzinfo`, algo que será indefinido para las horas imaginarias.
