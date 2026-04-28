@@ -1,3 +1,7 @@
+<div class="bullet-container">
+
+<div class="bullets-with-header">
+
 # Fuente de datos: Zonas horarias de IANA
 
 - Proporciona información sobre zonas horarias históricas.
@@ -6,8 +10,11 @@
 - Fuente de datos para `dateutil` y `pytz`.
 - 2-21 versiones al año (9 de promedio).
 
-<div style="text-align: center">
+</div>
+
+<div class="centered-container">
 <img src="images/all_zones.png" alt="Mapa de zonas horarias de IANA"/>
+</div>
 </div>
 
 Notes:
@@ -20,12 +27,18 @@ Es de software libre y bastantes sistemas operativos lo incluyen, pero el proble
 
 --
 
+<div class="bullet-container">
+
 # PEP 615: Soporte para la base de datos de zonas horarias de IANA en la biblioteca estándar
 
-<div style="text-align:center">
+<div class="small-spacer"></div>
+
+<div class="centered-container" style="height: unset; padding-bottom: unset;">
+
 <img 
-    style="max-height:45vh"
     src="images/zoneinfo-documentation.png"
+    class="screenshot"
+    style="max-height: 40dvh"
     alt="Captura de pantalla de la documentación de zoneinfo en Python 3.9."/>
 </div>
 
@@ -37,6 +50,7 @@ Es de software libre y bastantes sistemas operativos lo incluyen, pero el proble
 
 - También proporcionamos el paquete `tzdata` en PyPI: un paquete "first party" de solo datos como fallback.
 
+</div>
 
 Notes:
 
@@ -44,7 +58,11 @@ Decidimos resolver este dilema covertiendolo en una situación de "traer sus pro
 
 --
 
+<div class="bullet-container medium-code">
+
 # Cómo usar `zoneinfo`
+
+<div class="bullets-with-header">
 
 ## Backport (3.6+)
 
@@ -54,7 +72,10 @@ try:
 except ImportError:
     import zoneinfo
 ```
-<br/>
+
+</div>
+
+<div class="bullets-with-header">
 
 ## Construir datetimes conscientes (aware)
 
@@ -66,7 +87,10 @@ except ImportError:
 >>> print(datetime.now(ZoneInfo("America/Chicago")))
 2020-11-12 19:46:21.211438-06:00
 ```
-<br/>
+
+</div>
+
+<div class="bullets-with-header">
 
 ## Convertir entre zonas
 
@@ -74,6 +98,10 @@ except ImportError:
 >>> print(dt.astimezone(ZoneInfo("Europe/Paris")))
 2020-11-13 02:00:00+01:00
 ```
+
+</div>
+<div class="small-spacer"></div>
+</div>
 
 Notes:
 
