@@ -310,7 +310,7 @@ div.bullet-container
   display: block;
   position: relative;
   width: 95%;
-  margin: auto;
+  /* margin: auto; */
   text-align: left;
   font-size: 0.55em;
   font-family: monospace;
