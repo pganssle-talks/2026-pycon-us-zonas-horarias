@@ -549,6 +549,14 @@ div.gallery > div.gallery-item > img.screenshot {
   color: #000;
 }
 
+.reveal.hide-right-arrow .controls .navigate-right,
+.reveal.hide-right-arrow .controls button.navigate-right,
+.reveal.hide-right-arrow .controls .navigate-right.enabled,
+body.hide-right-arrow .controls .navigate-right,
+.reveal:has(section.present .hide-right-arrow) .controls .navigate-right {
+  display: none !important;
+}
+
 /*********************************************
  * PROGRESS BAR
  *********************************************/
