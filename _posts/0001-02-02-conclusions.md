@@ -1,3 +1,5 @@
+<!-- .slide: data-state="hide-right-arrow" -->
+
 <div class="bullet-container code-indented">
 
 # Resumen
@@ -45,6 +47,8 @@ Y para cálculos, otra vez preguntaos cuál semántica será mejor: ¿te importa
 Y finalmente, tengo un bonus, que no tiene que ver mucho con zonas horarias pero es un «tip» que no se descubre fácilmente y es muy útil. Si quieres saber cuántas veces cabe una unidad en un periodo de tiempo, en vez de usar `total_seconds` e intentar dividir por el número de segundos de la unidad, puedes dividir directamente por un `timedelta` que represente la unidad. Es por eso que no hay un `total_minutes` ni `total_hours` u otros métodos en `timedelta`: incluso `total_seconds` fue un error, porque el Core Dev que lo añadió no sabía este tip.
 
 --
+
+<!-- .slide: data-state="hide-right-arrow" -->
 
 <div class="centered-container">
 

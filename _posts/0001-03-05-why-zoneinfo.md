@@ -1,3 +1,5 @@
+<!-- .slide: data-visibility="uncounted" -->
+
 <style>
 div.bullet-container.smaller-margins {
     ul {

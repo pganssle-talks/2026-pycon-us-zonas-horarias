@@ -1,3 +1,5 @@
+<!-- .slide: data-visibility="uncounted" -->
+
 <div class="bullet-container medium-code">
 
 # Migrar de `pytz`
@@ -42,6 +44,8 @@ Notes:
 Si vas a migrar de `pytz`, y tienes alguna interfaz orientada al público que devuelva sus zonas horarias, hay que ser consciente de que cambiar a `ZoneInfo` supondrá un *breaking change* (un cambio disruptivo). Básicamente, porque tus usuarios pueden esperar que los objetos que devuelves tengan los métodos `localize` y `normalize` u otras interfaces exclusivas de `pytz`, lo cual podría daros algún que otro problema.
 
 --
+
+<!-- .slide: data-visibility="uncounted" -->
 
 <div class="bullet-container">
 
