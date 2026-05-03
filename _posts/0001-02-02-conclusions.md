@@ -42,7 +42,7 @@ Sé que normalmente la gente prefiere cuando rematas con un resumen con unos «t
 
 Así que en vez de reglas simples, os presento unas preguntas que os podéis hacer. Podéis preguntaros, "¿Qué quiero representar?". Si es un evento en el pasado como un log, o algo en el futuro que no depende del reloj humano como la llegada de un asteroide o algo así, probablemente puedes usar UTC o timestamps. En otros casos, tienes que usar la hora local de alguna zona.
 
-Y para cálculos, otra vez preguntaos cuál semántica será mejor: ¿te importa la cantidad del tiempo, o te importa cálculos en un calendario? Si quieres "la misma hora en siete días", usas tiempo del reloj. Si quieres saber "cuántos segundos han pasado entre estos `datetime`s", usas tiempo absoluto.
+Y para cálculos, otra vez preguntaos cuál semántica será mejor: ¿te importa la cantidad del tiempo, o te importan los cálculos en un calendario? Si quieres "la misma hora en siete días", usas tiempo del reloj. Si quieres saber "cuántos segundos han pasado entre estos `datetime`s", usas tiempo absoluto.
 
 Y finalmente, tengo un bonus, que no tiene que ver mucho con zonas horarias pero es un «tip» que no se descubre fácilmente y es muy útil. Si quieres saber cuántas veces cabe una unidad en un periodo de tiempo, en vez de usar `total_seconds` e intentar dividir por el número de segundos de la unidad, puedes dividir directamente por un `timedelta` que represente la unidad. Es por eso que no hay un `total_minutes` ni `total_hours` u otros métodos en `timedelta`: incluso `total_seconds` fue un error, porque el Core Dev que lo añadió no sabía este tip.
 
