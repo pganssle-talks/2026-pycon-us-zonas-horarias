@@ -42,13 +42,13 @@ for dt in horas_de_cerrar:
 
 Notes:
 
-Vale, así que ya os he dado un poco de miedo, y quizás te preguntes: ¿por qué tenemos que trabajar con zonas horarias en absoluto? ¿No podemos usar UTC para todo?
+Vale, así que ya os he dado un poco de miedo, y quizás os preguntéis: ¿por qué tenemos que trabajar con zonas horarias en absoluto? ¿No podemos usar UTC para todo?
 
 Y la respuesta es que no, no puedes, porque el UTC no es una abstracción natural para la mayor parte del mundo. Porque la gente organiza sus vidas según las horas en que el sol está en lo más alto, y en muchas ubicaciones les gusta el horario de verano.
 
-Entonces, en el mundo real, si quieres hacer algo como generar varios `datetime`s que representen el fin de jornada en Nueva York, es jarto conveniente poder decir: "Oye, aquí tienes una regla que representa cada día del lunes al viernes a las cinco de la tarde", y entonces le adjuntas una zona horaria para Nueva York y ya está. Y puedes ver que el desplazamiento de UTC cambia entre menos cinco y menos cuatro sin problemas en algún punto de tu secuencia.
+Entonces, en el mundo real, si quieres representar las horas que se marcan en el reloj de pared, hay que utilizar una abstracción que capture el tiempo como se observa.
 
-Si quisieras hacerlo en UTC, tendrías que hacer algo como: "Sí, vale, pues el fin de jornada a veces es a las diez UTC pero a veces a las nueve". ¿Y cuándo ocurre esta pequeña transición? No lo sé, puede ser que haga falta un conjunto de normas para cuando eso ocurra... pero eso describe una zona horaria, ¿cierto?
+Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hacerlo con una regla que gira en torno al hora de reloj, con un mapeo entre la hora local y UTC, para capturar fácilmente cosas como la transición de horario de verano.
 
 --
 
@@ -60,9 +60,13 @@ Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, h
 
 Notes:
 
-Y puedes pensar: "Pues sí, seguro que tenemos que manejar zonas horarias cuando estamos lidiando con humanos, pero ¿al menos podemos almacenarlo todo en UTC para no tener que pensar en ello?".
+Y podéis pensar: "Pues sí, seguro que tenemos que manejar zonas horarias cuando estamos lidiando con humanos, pero ¿al menos podemos almacenar los `datetimes` en UTC para no tener que pensar en ello?".
 
-Y siento ser otra vez el portador de malas noticias, pero tampoco puedes hacer eso, porque no funciona cuando lo que te importa es la hora de reloj. Imagínate que tienes una reunión en el Líbano a las dos, y todo está programado en torno a las dos, porque el almuerzo es a las doce y todo eso. Si metes esta reunión en tu base de datos como UTC y —como ha pasado en realidad— cambian la fecha de la transición de DST con solo tres días de antelación, de repente no puedes traducir el UTC de vuelta a la hora local; el valor que has almacenado ya no corresponde con las dos, ahora corresponde con la una o las tres, porque el mapeo entre el UTC y la hora local no es estable.
+Y siento ser otra vez el portador de malas noticias, pero tampoco puedes hacer eso, porque no funciona cuando lo que te importa es la hora de reloj.
+
+El problema es que el mapeo entre la hora local y UTC no es estable, entonces para fechas en el futuro, si alacenas el `datetime` en UTC y el mapeo cambia (como ocurre muy frecuentemente, y a menudo con muy poca antelación), habrás perdido información sobre lo que te importaba: la hora *local*.
+
+Si tienes una reunión a la una en algún lugar, no te importa la hora en UTC, y si tu desplazamiento para la fecha indicada cambia, seguro que quieres mantener la hora original, así que si lo que te importa es la hora en una zona indicada, tienes que almacenar *esa hora*.
 
 Lo que eso quiere decir es que lo que tenéis que buscar es la abstracción que más se parezca al concepto que queréis representar.
 

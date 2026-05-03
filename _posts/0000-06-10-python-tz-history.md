@@ -75,7 +75,7 @@ Notes:
 
 Pero si lo pensáis un poco, la verdad es que solo hay tres tipos de zona horaria que la inmensa mayoría de la gente quiere.
 
-Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o sea, que la hora sea la de tu portátil u ordenador; y el tercero es una zona de la base de datos de IANA, por ejemplo America/Chicago o America/New_York, ese tipo de cosas.
+Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o sea, la hora de tu sistema; y el tercero es una zona de la base de datos de IANA, por ejemplo America/Chicago o America/New_York, ese tipo de cosas.
 
 Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
 

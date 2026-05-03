@@ -33,7 +33,7 @@ Notes:
 
 Vale, ya tenemos claros los conceptos básicos, así que hemos llegado a la parte obligatoria de cualquier charla sobre zonas horarias: esa en la que el ponente os cuenta las aberraciones estrafalarias que la gente ha perpetrado con su medición del tiempo local.
 
-Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja. Podéis ver que en Australia, Nepal o la India hay zonas con desplazamientos que son múltiplos de quince minutos, y en los datos históricos incluso puedes encontrar zonas como la de Liberia con desplazamientos que ni siquiera eran de minutos enteros.
+Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja, como así. Podéis ver que en Australia, Nepal o la India hay zonas con desplazamientos que son múltiplos de media hora, quince minutos, y en los datos históricos hay zonas con desplazamientos que ni siquiera eran de minutos enteros.
 
 --
 
@@ -41,7 +41,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
 
 <div class="bullets-with-header">
 
-## Cambio de desplazamiento sin cambio de estatus DST
+## Cambio de desplazamiento sin cambio de estatus de horario de verano
 
 <ul>
     <li>
@@ -60,7 +60,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
 </div>
 <div class="bullets-with-header">
 
-## Cambio de estatus DST sin cambio de desplazamiento
+## Cambio de estatus de horario de verano sin cambio de desplazamiento
 
 <ul>
     <li>
@@ -90,7 +90,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
 
 Notes:
 
-Además, puede ser que tengas un cuñado que crea que el desplazamiento del UTC solo cambia debido al horario de verano o que el estatus DST solo cambia cuando cambia el desplazamiento... ¡pero ninguna de las dos cosas es cierta!
+Además, puede ser que tengas un cuñado que crea que el desplazamiento del UTC solo cambia debido al horario de verano o que el estatus de horario de verano solo cambia cuando cambia el desplazamiento... ¡pero ninguna de las dos cosas es cierta!
 
 De vez en cuando, una localidad quiere cambiar su desplazamiento estándar sin introducir un cambio bianual, como hizo Venezuela en dos mil siete al retrasar sus relojes media hora, o Singapur en mil novecientos ochenta y dos, al adelantar su hora estándar media hora para alinearse con Malasia.
 
@@ -134,7 +134,7 @@ Notes:
 
 Por supuesto que no. En Marruecos, durante el periodo entre dos mil doce y dos mil dieciocho, ha habido dos transiciones de DST al año. Por ejemplo, en dos mil doce cambiaron al horario de verano en abril, pero en julio volvieron al horario estándar durante un mes y después regresaron al horario de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes de la puesta del sol.
 
-De repente, esa hora que sobra antes del anochecer ya no te hace tanta gracia, así que cancelaron el horario de verano. Hoy eso no ocurre porque han adoptado el horario de verano permanente, excepto durante el Ramadán; entonces su zona horaria parece más normal, salvo por la extraña brevedad de su horario de verano.
+De repente, esa hora que sobra antes del anochecer ya no te hace tanta gracia, ¿no? Así que cancelaron el horario de verano. Hoy eso ya no ocurre porque han adoptado el horario de verano permanente, excepto durante el Ramadán; entonces su zona horaria parece más normal, salvo por la extraña brevedad de su horario de verano.
 
 Pues nada, ya sabemos que la gente es muy rara con sus transiciones DST, pero seguro que este tipo de cosa solo pasa a las tantas de la madrugada o algo así, y nunca vamos a ver algo raro sucediendo a mitad del día, ¿cierto?
 
@@ -217,7 +217,7 @@ Y quizá digas: 'Pues esto era una cosa de la antigüedad. Eran los noventa, est
 
 Notes: 
 
-Y, históricamente, ha habido sitios que han ido en la dirección contraria también. En el atolón de Kwajalein, en mil novecientos sesenta y nueve, ¡el treinta de septiembre pasó dos veces!
+E, históricamente, ha habido sitios que han ido en la dirección contraria también. En el atolón de Kwajalein, en mil novecientos sesenta y nueve, ¡el treinta de septiembre pasó dos veces!
 
 Entonces sí, seguro que hemos llegado al fondo del asunto. Estamos convencidos de que las transiciones de horario pueden ocurrir en cualquier época del año, a cualquier hora del día, millones de veces al año... de acuerdo. Pero seguramente puedo contar con una cosa: que si sé la ubicación de alguien, sé la zona que se aplica. Aunque imagino que podéis vaticinar lo que viene...
 

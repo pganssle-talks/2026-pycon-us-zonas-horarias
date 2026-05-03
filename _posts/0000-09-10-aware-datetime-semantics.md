@@ -47,9 +47,9 @@ True
 
 Notes:
 
-Y para ilustrar eso, pensaba hablaros de este «bug report» que llegó a `dateutil` hace años y años, y que fue muy divertido de debuggear. Alguien dijo: "Vale, esta fecha, el veinticinco de marzo a la una de la madrugada en Londres — si creo este objeto, lo convierto en un timestamp y luego lo vuelvo a convertir en `datetime` —básicamente pasándolo a UTC y viceversa— los `datetime`s no evalúan como iguales". Un poco chungo, ¿no?
+Y para ilustrar eso, pensaba hablaros de este «bug report» que llegó a `dateutil` hace años y años, y que fue muy divertido de debuggear. Alguien dijo: "Vale, esta fecha, el veinticinco de marzo a la una de la madrugada en Londres — si creo este objeto, lo convierto en un timestamp y luego lo vuelvo a convertir en `datetime` —básicamente pasándolo a UTC y de nuevo a la zona original— los `datetime`s no evalúan como iguales". Un poco chungo, ¿no?
 
-Y más raro aún, si creo una nueva instancia del objeto que representa la zona horaria de Londres y lo uso para crear mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos cosas que evaluaban como iguales a X, evalúan como iguales entre sí! Así que tienen una relación no transitiva, lo cual es rarísimo, ¿cierto?
+Y más raro aún, si creo una nueva instancia del objeto que representa la zona horaria de Londres y lo uso para crear mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos cosas sí evalúan como iguales entre sí! Así que tienen una relación no transitiva, lo cual es rarísimo, ¿cierto?
 
 --
 
