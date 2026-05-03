@@ -13,7 +13,7 @@ img.tzmap {
 <img src="images/figures/tz_map_standard_highlight.png" class="splash tzmap fragment fade-in nospace-fragment"  data-fragment-index="2"/>
 
 <div class="small-spacer"></div>
-<div class="fragment bullet-container" style="width: 100%" data-fragment-index="2">
+<div class="fragment bullet-container" style="width: 100%" data-fragment-index="1">
 
 <div class="bullets-with-header">
 
