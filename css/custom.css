@@ -730,6 +730,17 @@ table.alignment-table tr {
     font-weight: bold;
 }
 
+/* Custom class to bold fragments ONLY while they are the active step */
+.reveal .slides > section .fragment.highlight-current-bold, .fragment.highlight-current-bold {
+    font-weight: inherit;
+    visibility: inherit;
+    opacity: inherit;
+}
+
+.reveal .slides > section .fragment.highlight-current-bold.current-fragment, .fragment.highlight-current-bold.current-fragment {
+    font-weight: bold;
+}
+
 /* Custom class for fragments that disappear */
 
 .disappearing-fragment.fragment.fade-out.visible {
