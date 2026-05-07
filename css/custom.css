@@ -858,6 +858,11 @@ span.pytest-warning-count {
     line-height: 1.1;
 }
 
+.reveal tt {
+    /* Don't collapse spaces in <tt> blocks */
+    white-space:pre;
+}
+
 code.hljs, tt.hljs {
     display: inline-block;
     min-width: 60%;
