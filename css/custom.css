@@ -778,6 +778,12 @@ table.alignment-table tr {
     stroke-dasharray: 5, 5;
 }
 
+/* Custom class that performs no visual transition (useful for clearing "current" highlights) */
+.reveal .slides > section .fragment.do-nothing, .fragment.do-nothing {
+    visibility: inherit;
+    opacity: inherit;
+}
+
 /* Custom class for fragments that disappear */
 
 .disappearing-fragment.fragment.fade-out.visible {
