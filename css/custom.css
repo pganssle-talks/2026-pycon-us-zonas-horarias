@@ -753,6 +753,31 @@ table.alignment-table tr {
     color: #1b91ff;
 }
 
+/* Custom classes for dashed stroke/outline highlight */
+.reveal .slides > section .fragment.highlight-dashed, .fragment.highlight-dashed {
+    visibility: inherit;
+    opacity: inherit;
+}
+
+.reveal .slides > section .fragment.highlight-dashed.visible, .fragment.highlight-dashed.visible {
+    outline: 4pt dashed;
+    stroke: currentColor;
+    stroke-width: 4pt;
+    stroke-dasharray: 5, 5;
+}
+
+.reveal .slides > section .fragment.highlight-current-dashed, .fragment.highlight-current-dashed {
+    visibility: inherit;
+    opacity: inherit;
+}
+
+.reveal .slides > section .fragment.highlight-current-dashed.current-fragment, .fragment.highlight-current-dashed.current-fragment {
+    outline: 4pt dashed;
+    stroke: currentColor;
+    stroke-width: 4pt;
+    stroke-dasharray: 5, 5;
+}
+
 /* Custom class for fragments that disappear */
 
 .disappearing-fragment.fragment.fade-out.visible {
