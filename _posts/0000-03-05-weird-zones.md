@@ -92,11 +92,13 @@ Notes:
 
 Además, puede ser que tengas un cuñado que crea que el desplazamiento del UTC solo cambia debido al horario de verano o que el estatus de horario de verano solo cambia cuando cambia el desplazamiento... ¡pero ninguna de las dos cosas es cierta!
 
-De vez en cuando, una localidad quiere cambiar su desplazamiento estándar sin introducir un cambio bianual, como hizo Venezuela en dos mil siete al retrasar sus relojes media hora, o Singapur en mil novecientos ochenta y dos, al adelantar su hora estándar media hora para alinearse con Malasia.
+De vez en cuando, una localidad quiere cambiar su desplazamiento estándar, como hizo Venezuela en dos mil siete o Singapur, que adelantó su hora estándar media hora para alinearse con Malasia.
 
-O al revés, ha habido ejemplos de cambio de estatus DST sin cambio de desplazamiento del UTC. Por ejemplo, en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, cambiando su desplazamiento una hora. Por comodidad para las personas, este cambio se hizo saltándose un cambio de horario: hicieron la transición al horario de verano y, cuando se acabó el verano, los relojes no cambiaron, pero la interpretación cambió de 'horario de verano de Europa Occidental' a 'horario estándar de Europa Central'. Muy conveniente para humanos, pero te romperá el código si estás asumiendo que una transición de estatus DST siempre viene acompañada de un cambio en el reloj.
+O al revés, ha habido ejemplos de cambio de estatus de horario de verano sin cambio de desplazamiento del UTC.
 
-Y este año esta lección será relevante para la Columbia Británica, porque han adoptado el "horario de verano permanente", y creo que se va a modelar como un cambio de estatus DST este noviembre sin cambio de horario.
+Por ejemplo, en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, cambiando su desplazamiento una hora. Por comodidad para las personas, este cambio se hizo saltándose un cambio de horario: hicieron la transición al horario de verano y, cuando se acabó el verano, los relojes no cambiaron, pero la interpretación cambió de 'horario de verano de Europa Occidental' a 'horario estándar de Europa Central'. Muy conveniente para humanos, pero te romperá el código si estás asumiendo que horario de verano no va a terminar sin cambio del reloj.
+
+Y este año esta lección será relevante para la Columbia Británica, porque han adoptado el "horario de verano permanente", y creo que se va a modelar de la misma manera — el horario de verano va a terminar este noviembre sin atrasar los relojes.
 
 De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior, con la misma forma de transicionar, pero al revés. No sé qué augura esto para la Columbia Británica.
 
@@ -177,6 +179,9 @@ Notes:
 
 Por desgracia, ni esto es verdad. En mil novecientos noventa y cuatro, en Kiribati (que se pronuncia 'kiribas'), un país del Pacífico Sur, decidieron que querían estar al otro lado de la línea internacional de cambio de fecha. Se supone que esto tiene que ver con alinear su medición de tiempo con sus socios comerciales o algo así; eso da igual; lo importante es que, para realizar este cambio, se saltaron el treinta y uno de diciembre. Así que eran las once y cincuenta y nueve de la noche del treinta de diciembre de mil novecientos noventa y cuatro y, un minuto después... ¡feliz año nuevo!
 
+
+SKIP THIS PART:
+
 Y quizá digas: 'Pues esto era una cosa de la antigüedad. Eran los noventa, estábamos repartiendo direcciones de IPv4 a mansalva y viendo **Friends**; claro que eso no podría pasar hoy, ¿no?'. Pero hace solo quince años, en dos mil once, lo mismo ocurrió en Samoa.
 
 [1m 15s; T: 6m15s]
@@ -240,9 +245,9 @@ img.china_map {
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín en que es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
 
-De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario (contra el que, por cierto, se ve que el gobierno chino ha estado perpetrando una limpieza étnica). Así que esta es una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
+De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
 [1m15s; 7m45s]
 
@@ -256,8 +261,8 @@ De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín en que es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
 
-De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario (contra el que, por cierto, se ve que el gobierno chino ha estado perpetrando una limpieza étnica). Así que esta es una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
+De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
 [1m15s; 7m45s]

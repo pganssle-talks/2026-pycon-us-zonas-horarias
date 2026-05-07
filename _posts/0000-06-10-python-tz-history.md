@@ -155,9 +155,9 @@ Notes:
 
 Y para explicaros por qué, tengo que irme un poco por las ramas para hablar sobre las horas ambiguas.
 
-Las horas ambiguas son momentos en los que la misma hora de reloj se marca dos veces; por ejemplo, cuando toca atrasar el reloj una hora. Son las una y cincuenta y nueve y, un minuto después, se echa la hora para atrás y vuelve a ser la una; así que cada minuto entre la una y las dos se marca dos veces.
+Las horas ambiguas son momentos en los que la misma hora de reloj se marca dos veces; por ejemplo, cuando toca atrasar el reloj. Si se echa la hora para atrás a las dos, cada minuto entre la una y las dose se marca dos veces.
 
-Y fijaos en que en esta lista que tengo aquí hay dos una y media, y la diferencia principal es el desplazamiento. Es esto lo que marca la diferencia entre los dos `datetime`s en la línea temporal. Pero si os acordáis, el modelo de `datetime` es que un `tzinfo` toma como argumento solo la parte naíf del `datetime`, así que en realidad es imposible distinguir entre estas dos cosas, ¡ya que se diferencian solo por la salida de estas funciones!
+Y fijaos en que en esta lista que tengo aquí hay dos una y media, y la diferencia principal es el desplazamiento. Pero si os acordáis, el modelo de `datetime` es que el desplazamiento es la *salida* del método `utcoffset`, no puede formar parte de la entrada, así que en realidad es imposible distinguir entre estas dos cosas.
 
 Y esto es un problema fundamental, un defecto que había en la interfaz de `tzinfo` en aquella época.
 
