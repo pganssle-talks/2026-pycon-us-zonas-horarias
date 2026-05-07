@@ -741,6 +741,18 @@ table.alignment-table tr {
     font-weight: bold;
 }
 
+/* Custom class to both bold and color the active fragment blue */
+.reveal .slides > section .fragment.highlight-current-fragment, .fragment.highlight-current-fragment {
+    font-weight: inherit;
+    visibility: inherit;
+    opacity: inherit;
+}
+
+.reveal .slides > section .fragment.highlight-current-fragment.current-fragment, .fragment.highlight-current-fragment.current-fragment {
+    font-weight: bold;
+    color: #1b91ff;
+}
+
 /* Custom class for fragments that disappear */
 
 .disappearing-fragment.fragment.fade-out.visible {
