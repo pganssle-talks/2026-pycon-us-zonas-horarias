@@ -33,18 +33,16 @@
 
 Notes:
 
-Empecemos por lo fácil, aclarando qué es el UTC, lo cual voy a mencionar mucho en esta charla. El UTC es la zona horaria de referencia; es el cero respecto al cual se miden los desplazamientos.
+Empecemos por lo fácil, aclarando qué es el UTC, que mencionaré muchas veces en esta charla. El UTC es la zona de referencia; es el cero respecto al cual se miden los desplazamientos.
 
-Debería ser un reloj que avance de manera monótona y lineal, pero parece que los comités de estándares nos odian, así que han puesto segundos intercalares.
+Debería ser un reloj que avance de manera monótona y lineal, pero los comités de estándares parecen odiarnos, así que han puesto segundos intercalares. Entonces, aunque es mejor que una zona con cambios de horario, el UTC tampoco está libre de complicaciones.
 
-Otro concepto importante es conocer la diferencia entre zonas horarias y desplazamientos. "UTC menos seis" es un desplazamiento (u *offset*). Significa que, para obtener la hora local, hay que restar seis horas al UTC.
+⏭️ Otro concepto importante es la diferencia entre zonas horarias y desplazamientos. "UTC menos seis" es un desplazamiento (u *offset*). Significa que, para obtener la hora local, hay que restar seis horas al UTC.
 
-"America/Chicago" es una zona horaria (también llamada huso horario). Es un conjunto de reglas que determinan cómo varían los desplazamientos en función del tiempo, y normalmente están asociados a una región del mundo.
+"America/Chicago" es una zona horaria, un conjunto de reglas que nos dicen cómo varían los desplazamientos en función del tiempo, y normalmente están asociadas a una región del mundo.
 
-En la base de datos de IANA, esta zona se llama "America/Chicago" porque Chicago es la ciudad más grande que sigue este conjunto de reglas, y esa es la norma que el proyecto usa para nombrar las zonas, pero tu no debes mostrar esos nombres a tus usuarios.
+Y quizás hayáis visto algo como "CST". "CST" es una abreviatura que depende totalmente del contexto. En Chicago significa *Central Standard Time*, que es UTC-6. Pero si estás en Cuba, es UTC-5, y en China es *China Standard Time*, que es UTC+8.
 
-Y quizás hayáis visto algo como "CST". "CST" es una abreviatura que depende totalmente del contexto en el que se encuentre. En Chicago significa *Central Standard Time*, que es UTC-6. Pero si estás en Cuba, significa UTC-5, y en China significa *China Standard Time*, que es UTC+8.
+Un consejo: nunca confiéis en estas abreviaturas. No intentéis obtener una zona horaria específica de ellas; no deis por hecho que tengan un significado único y ni siquiera podéis asumir que todas las zonas tengan una abreviatura asociada.
 
-Un consejo: nunca confiéis en estas abreviaturas de tres letras. No intentéis parsearlas para obtener una zona horaria específica y no deis por hecho que tengan un significado único y ni siquiera podéis asumir que todas las zonas tienen una abreviatura asociada.
-
-[1m 15s; T: 2m]
+[1m 30s; T: 2m15s]
