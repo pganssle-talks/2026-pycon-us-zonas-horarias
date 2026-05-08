@@ -1,4 +1,5 @@
 <!-- .slide: data-state="hide-right-arrow" -->
+<!-- .slide: data-visibility="hidden" -->
 
 <div class="bullet-container code-indented">
 
