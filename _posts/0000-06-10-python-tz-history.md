@@ -139,8 +139,8 @@ for i in range(4):
 <pre>
 <tt>
 2004-10-31 00:30:00-04:00 | EDT |  No ambigua
-2004-10-31 01:30:00-04:00 | EDT |  Ambigua
-2004-10-31 01:30:00-05:00 | EST |  Ambigua
+<span class="fragment highlight-current-fragment" data-fragment-index="1">2004-10-31 01:30:00-04:00 | EDT |  Ambigua</span>
+<span class="fragment highlight-current-fragment" data-fragment-index="1">2004-10-31 01:30:00-05:00 | EST |  Ambigua</span>
 2004-10-31 02:30:00-05:00 | EST |  No ambigua
 </tt>
 </pre>
