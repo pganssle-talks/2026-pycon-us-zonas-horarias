@@ -70,6 +70,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
         <li><tt>WEST (+1 DST) → CET (+1 STD) 1992-09-27</tt><br/></li>
     </ul>
     </li>
+<!--
     <li>
     Colombia Británica, 2026?
     <ul>
@@ -77,6 +78,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
         <li><tt>PDT (-7 DST) -> "-07"  (-7 STD)  2026-11-01</tt></li>
     </ul>
     </li>
+-->
     <li>
     Portugal, 1996
     <ul>
