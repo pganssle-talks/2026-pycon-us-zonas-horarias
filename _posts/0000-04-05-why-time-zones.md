@@ -54,11 +54,117 @@ Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hac
 
 --
 
-<div class="centered-container splash">
-<img src="images/egipto_noticias.png"/>
-<p style="font-size: 1.25em;">
+<style>
+.egypt-panel {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 0.5em 1.5em;
+  width: 95%;
+  margin: 0 auto;
+}
+.egypt-panel .egypt-date {
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #333;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #666;
+}
+.egypt-panel .egypt-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em 0.25em;
+}
+.egypt-panel .dt-convert {
+  font-family: monospace;
+  font-size: 0.72em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+}
+.egypt-panel .tz-arrow-wrap {
+  position: relative;
+  width: 100%;
+  height: 3.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.egypt-panel .tz-arrow-wrap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 3px;
+  height: calc(100% - 15px);
+  background: rgba(0, 0, 0, 0.6);
+}
+.egypt-panel .tz-arrow-wrap::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid rgba(0, 0, 0, 0.6);
+}
+.egypt-panel .tz-label {
+  position: relative;
+  z-index: 1;
+  background: var(--r-background-color, #fff);
+  border: 1px solid #999;
+  border-radius: 0.25em;
+  padding: 0.05em 0.5em;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+.egypt-panel .egypt-cell img {
+  max-width: 100%;
+  object-fit: contain;
+  padding: 0.5em;
+}
+</style>
+
+<div class="bullet-container">
+<div class="bullets-with-header">
+<div class="egypt-panel">
+  <div class="egypt-date">01 Julio 2016</div>
+  <div class="egypt-date">04 Julio 2016</div>
+  <div class="egypt-date">09 Julio 2016</div>
+  <div class="egypt-cell">
+    <div class="dt-convert">
+      <span>2016-07-09 <span class="fragment highlight-current-fragment" data-fragment-index="1">13:00:00 EEST</span></span>
+      <div class="tz-arrow-wrap"><span class="tz-label">Africa/Cairo</span></div>
+      <span>2016-07-09 10:00:00 UTC</span>
+    </div>
+  </div>
+  <div class="egypt-cell">
+    <img
+        src="images/egipto_noticias.png"
+        alt="Egipto canceló el horario de verano tres días antes de su entrada en vigor"/>
+  </div>
+  <div class="egypt-cell">
+    <div class="dt-convert">
+      <span>2016-07-09 10:00:00 UTC</span>
+      <div class="tz-arrow-wrap"><span class="tz-label">Africa/Cairo</span></div>
+      <span>2016-07-09 <span class="fragment highlight-current-fragment" data-fragment-index="1">14:00:00 EET</span></span>
+    </div>
+  </div>
+</div>
+<div class="small-spacer"></div>
+<p style="font-size: 1.25em; text-align: center; margin-top: 0.75em;">
 Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, hay que almacenar el tiempo local, porque el mapeo entre UTC y el tiempo local <em>no es estable</em>.
 </p>
+</div>
+
 </div>
 
 Notes:
