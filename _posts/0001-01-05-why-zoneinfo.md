@@ -1,5 +1,3 @@
-<!-- .slide: data-visibility="uncounted" -->
-
 <style>
 div.bullet-container.smaller-margins {
     ul {
@@ -18,9 +16,60 @@ div.bullet-container.smaller-margins {
 
 <div class="small-spacer"></div>
 
-- Es la única librería de zonas horarias con soporte para fechas posteriores a 2038 y para el formato "slim" de `tzdata`.
+Es la única librería de zonas horarias con soporte para fechas posteriores a 2038 y para el formato "slim" de `tzdata`.
 
-- ¡Es muy **rápida**! (cifras de los benchmarks de `backports.zoneinfo`):
+```python
+>>> for i in range(5):
+...     dt = datetime(2037, 6, 1) + timedelta(days=183) * i
+...
+...     print_comparison(
+...         pytz.timezone("America/Los_Angeles").localize(dt),
+...         dt.replace(tzinfo=ZoneInfo("America/Los_Angeles"))
+...     )
+...     print()
+```
+
+<pre>
+<tt>
+
+pytz:          2037-06-01     PDT  -07:00
+zoneinfo:      2037-06-01     PDT  -07:00
+
+pytz:          2037-12-01     PST  -08:00
+zoneinfo:      2037-12-01     PST  -08:00
+
+<span class="fragment custom highlight-current-fragment" data-fragment-index="1">pytz:          2038-06-02     PST  -08:00</span>
+<span class="fragment custom highlight-current-fragment" data-fragment-index="1">zoneinfo:      2038-06-02     PDT  -07:00</span>
+
+pytz:          2038-12-02     PST  -08:00
+zoneinfo:      2038-12-02     PST  -08:00
+
+<span class="fragment custom highlight-current-fragment" data-fragment-index="1">pytz:          2039-06-03     PST  -08:00</span>
+<span class="fragment custom highlight-current-fragment" data-fragment-index="1">zoneinfo:      2039-06-03     PDT  -07:00</span>
+</tt>
+</pre>
+
+</div>
+
+</div>
+
+Notes:
+
+Vale, ya os he asustado un poco con la complejidad de migrar a `ZoneInfo`, y no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo. Por eso, quiero daros otros motivos de peso.
+
+Lo más importante es que `pytz` no soporta el nuevo formato de los datos de IANA, y el formato antiguo no admite timestamps de más de treinta y dos bits. Así que para fechas posteriores a dos mil treinta y ocho, deja de funcionar; las transiciones simplemente se detienen.
+
+Pero algo más urgente es que algunas distros ya usan un formato "slim" que aprovecha una nueva capacidad en el nuevo formato de usar reglas en lugar de listas de transiciones. Como `pytz` tampoco lo soporta, en muchos sitios, como en los Estados Unidos, si usas los datos del sistema, `pytz` ya falla hoy mismo.
+
+[1m15s; T: 28m15s]
+
+--
+
+<div class="bullet-container medium-code code-indented smaller-margins">
+
+# ¿Por qué usar `zoneinfo`?
+
+¡Es muy **rápida**! (cifras de los benchmarks de `backports.zoneinfo`):
 
 ```
 Ejecutando el constructor en la zona America/New_York
@@ -50,10 +99,6 @@ Gracias a su implementación en C, `zoneinfo` es más rápida que `pytz` y `date
 
 Notes:
 
-Vale, ya os he asustado un poco con la complejidad de migrar a `ZoneInfo`, y no quiero dar por sentado que, simplemente por el hecho de estar en la biblioteca estándar, vais a querer usarlo. Por eso, quiero daros otros motivos de peso.
+Y además de ser más preciso, `ZoneInfo` es increíblemente rápido porque está escrito en C, mientras que `pytz` y `dateutil` están hechos en Python. En prácticamente todos los benchmarks que he pasado, `ZoneInfo` ha sido mucho más rápido que las otras dos, así que no tenéis que sacrificar rendimiento para empezar a usarlo.
 
-El primero es que cada zona de IANA contiene su información en dos formatos: la versión uno y la versión tres (o superior), por temas de compatibilidad. `pytz` no soporta la versión tres, lo cual normalmente no es un problema, pero la versión antigua no puede representar **timestamps** de más de treinta y dos bits. Así que `pytz` va a fallar para fechas más allá de dos mil treinta y ocho; las transiciones, simplemente, se detienen.
-
-Pero algo incluso más urgente es que la versión tres introdujo la capacidad de representar zonas no solo como una lista de transiciones, sino como una lista más una regla para cuando la zona ya es estable. Existe una versión "slim" de `tzdata` que algunas distribuciones de Linux ya incluyen, en la que las listas de transiciones terminan en el pasado. Si intentáis usar los archivos del sistema con `pytz`, las transiciones van a estar mal hoy mismo en muchas zonas de lugares como los Estados Unidos.
-
-Y además de ser más preciso, `ZoneInfo` es increíblemente rápido porque está escrito en C, mientras que `pytz` y `dateutil` están hechos en Python. En prácticamente todos los **benchmarks** que he pasado, `ZoneInfo` ha sido mucho más rápido que las otras dos, así que no tenéis que sacrificar rendimiento para empezar a usarlo.
+[25s; T: 28m40s]
