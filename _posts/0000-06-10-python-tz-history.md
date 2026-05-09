@@ -159,11 +159,11 @@ Notes:
 
 Y para explicaros por qué, tengo que irme un poco por las ramas para hablar sobre las horas ambiguas.
 
-Las horas ambiguas son momentos en los que la misma hora de reloj se marca dos veces; por ejemplo, cuando toca atrasar el reloj. Si se echa la hora para atrás a las dos, cada minuto entre la una y las dose se marca dos veces.
+Las horas ambiguas son momentos en los que la misma hora se marca dos veces; por ejemplo, cuando toca atrasar el reloj. Si se retrasa la hora a las dos, cada minuto entre la una y las dos pasa dos veces.
 
-Y fijaos en que en esta lista que tengo aquí hay dos una y media, y la diferencia principal es el desplazamiento. Pero si os acordáis, el modelo de `datetime` es que el desplazamiento es la *salida* del método `utcoffset`, no puede formar parte de la entrada, así que en realidad es imposible distinguir entre estas dos cosas.
+Fijaos en que en esta lista que tengo aquí la "una y media" aparece dos veces, y la diferencia principal es el desplazamiento. Pero si os acordáis, el modelo de `datetime` es que el desplazamiento es la *salida* del método `utcoffset`, no puede formar parte de la entrada, así que en realidad es imposible distinguir entre estas dos situaciones.
 
-Y esto es un problema fundamental, un defecto que había en la interfaz de `tzinfo` en aquella época.
+Y esto es un problema fundamental, un defecto que tenía la interfaz de `tzinfo` en aquella época.
 
 [1m15s; T: 13m30s]
 
@@ -207,8 +207,8 @@ for i in range(3):
 
 Notes:
 
-Y además hay otro problema, el complemento de las horas ambiguas, que llamamos horas imaginarias. Estas son básicamente horas que no existen en una zona horaria, por ejemplo cuando toca adelantar el reloj una hora: cualquier hora en ese hueco no corresponderá a un tiempo real, a una hora que haya pasado o vaya a pasar.
+Y además hay otro problema, el complemento de las horas ambiguas, que llamamos horas imaginarias. Estas son básicamente horas que no existen en una zona horaria; por ejemplo, cuando toca adelantar el reloj: cualquier hora en ese hueco no corresponderá a un momento real.
 
-Y es más fácil lidiar con esto porque estos tiempos simplemente no existen, en lugar de ser irrepresentables, pero aun así, como detalle de implementación, es importante saber qué desplazamiento deben devolver tus funciones de `tzinfo`, algo que será indefinido para las horas imaginarias.
+Lidiar con esto es más fácil porque estos tiempos simplemente no existen, pero aun así, como detalle de implementación, es importante saber qué desplazamiento deben devolver tus funciones de `tzinfo`.
 
 [15s; 13m45s]
