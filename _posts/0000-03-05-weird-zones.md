@@ -139,13 +139,13 @@ Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, per
 
 Notes:
 
-Por supuesto que no. En Marruecos, durante el periodo entre dos mil doce y dos mil dieciocho, ha habido dos transiciones de DST al año.
+Por supuesto que no. En Marruecos, durante el periodo entre dos mil doce y dos mil dieciocho, ha habido dos transiciones de hora al año.
 
-Por ejemplo, en dos mil doce cambiaron ⏭️ al horario de verano en abril, pero en julio ⏭️ volvieron al horario estándar durante un mes y después ⏭️ regresaron al horario de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ⏭️ ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes de la puesta del sol.
+Por ejemplo, en dos mil doce cambiaron ⏭️ al horario de verano en abril, pero en julio ⏭️ volvieron al horario estándar durante un mes y después ⏭️ regresaron al horario de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ⏭️ ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes del anochecer.
 
-De repente, esa hora que sobra antes del anochecer ya no te hace tanta gracia, ¿no? Así que cancelaron el horario de verano. Hoy eso ya no ocurre porque han adoptado el horario de verano permanente, excepto durante el Ramadán; entonces su zona horaria parece más normal, salvo por la extraña brevedad de su horario de verano.
+De repente, esa hora que sobra antes de la puesta del sol ya no te hace tanta gracia, ¿no? Así que suspendían el horario de verano. Hoy eso ya no ocurre porque han adoptado el horario de verano permanente, excepto durante el Ramadán; entonces su zona horaria parece más normal, salvo por la extraña brevedad de su horario de verano.
 
-Pues nada, ya sabemos que la gente es muy rara con sus transiciones DST, pero seguro que este tipo de cosa solo pasa a las tantas de la madrugada o algo así, y nunca vamos a ver algo raro sucediendo a mitad del día, ¿cierto?
+Pues nada, ya sabemos que la gente es muy rara con sus transiciones de hora, pero seguro que este tipo de cosa solo pasa a las tantas de la madrugada o algo así, y nunca vamos a ver algo raro sucediendo a mitad del día, ¿cierto?
 
 [1m; T: 5m]
 
