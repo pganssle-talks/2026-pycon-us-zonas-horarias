@@ -99,13 +99,13 @@ Notes:
 
 Además, puede ser que tu cuñado crea que el desplazamiento del UTC solo cambia debido al horario de verano y viceversa — que el desplazamiento solo cambia cuando cambia el estatus de horario de verano.
 
-Pero de vez en cuando hay localidades que cambian su desplazamiento por motivos ajenos a los cambios estacionales, como ocurrió cuando Venezuela cambió su hora estándar o cuando Singapur quiso alinear su zona horaria con la de Malasia.
+⏭️ Pero de vez en cuando hay localidades que cambian su desplazamiento por motivos ajenos a los cambios estacionales, como ocurrió cuando Venezuela cambió su hora estándar o cuando Singapur quiso alinear su zona horaria con la de Malasia.
 
-Y en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, adelantando su desplazamiento estándar una hora.
+⏭️ Y en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, adelantando su desplazamiento estándar una hora.
 
-Así que cuando su horario de verano iba a acabar, simplemente no cambiaron los relojes, sino que cambiaron la interpretación de su zona horaria a 'horario estándar'. Lo cual es muy conveniente para los humanos, pero te romperá el código si asumes que el horario de verano no va a terminar sin un cambio de desplazamiento.
+Así que cuando su horario de verano iba a acabar, simplemente no cambiaron los relojes, sino que cambiaron la interpretación de su zona horaria a 'horario estándar'.⏭️ Lo cual es muy conveniente para los humanos, pero te romperá el código si asumes que el horario de verano no va a terminar sin un cambio de desplazamiento.
 
-De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior, con la misma forma de transicionar, pero al revés.
+⏭️ De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior,  con la misma forma de transicionar, pero al revés.
 
 Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, pero seguramente o una zona tiene horario de verano o no lo tiene, ¿no? O sea, o hay dos transiciones al año o cero, ¿cierto?
 
@@ -139,7 +139,9 @@ Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, per
 
 Notes:
 
-Por supuesto que no. En Marruecos, durante el periodo entre dos mil doce y dos mil dieciocho, ha habido dos transiciones de DST al año. Por ejemplo, en dos mil doce cambiaron al horario de verano en abril, pero en julio volvieron al horario estándar durante un mes y después regresaron al horario de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes de la puesta del sol.
+Por supuesto que no. En Marruecos, durante el periodo entre dos mil doce y dos mil dieciocho, ha habido dos transiciones de DST al año.
+
+Por ejemplo, en dos mil doce cambiaron ⏭️ al horario de verano en abril, pero en julio ⏭️ volvieron al horario estándar durante un mes y después ⏭️ regresaron al horario de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ⏭️ ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes de la puesta del sol.
 
 De repente, esa hora que sobra antes del anochecer ya no te hace tanta gracia, ¿no? Así que cancelaron el horario de verano. Hoy eso ya no ocurre porque han adoptado el horario de verano permanente, excepto durante el Ramadán; entonces su zona horaria parece más normal, salvo por la extraña brevedad de su horario de verano.
 
@@ -260,7 +262,7 @@ img.china_map {
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, ⏭️ los locales tienden a observar el UTC más seis, pero no todos los locales.
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
