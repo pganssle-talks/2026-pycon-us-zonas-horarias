@@ -42,33 +42,38 @@ for dt in horas_de_cerrar:
 
 Notes:
 
-Vale, así que ya os he dado un poco de miedo, y quizás os preguntéis: ¿por qué tenemos que trabajar con zonas horarias en absoluto? ¿No podemos usar UTC para todo?
+Vale, ya os he metido un poco de miedo, y quizás os preguntéis: ¿por qué tenemos que pelearnos con las zonas horarias? ¿No podemos usar UTC para todo?
 
-Y la respuesta es que no, no puedes, porque el UTC no es una abstracción natural para la mayor parte del mundo. Porque la gente organiza sus vidas según las horas en que el sol está en lo más alto, y en muchas ubicaciones les gusta el horario de verano.
+Y la respuesta es que no, no podéis, porque el UTC no es una abstracción natural para la mayor parte del mundo. La gente organiza su vida según la posición del sol y a muchos les gusta el horario de verano.
 
-Entonces, en el mundo real, si quieres representar las horas que se marcan en el reloj de pared, hay que utilizar una abstracción que capture el tiempo como se observa.
+Así que, en el mundo real, si quieres representar la hora que marca el reloj de pared, hay que utilizar una abstracción que capture el tiempo tal y como se observa.
 
-Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hacerlo con una regla que gira en torno al hora de reloj, con un mapeo entre la hora local y UTC, para capturar fácilmente cosas como la transición de horario de verano.
+Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hacerlo con una regla que diga "de lunes a viernes a las cinco", en lugar de algo que gire en torno al UTC, donde tienes que andar comprobando cuándo cambia la hora entre las veintidós y las veintiuno.
+
+[1m15s; T:9m15s]
 
 --
 
 <div class="centered-container splash">
-<p style="font-size: 2em;">
+<img src="images/egipto_noticias.png"/>
+<p style="font-size: 1.25em;">
 Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, hay que almacenar el tiempo local, porque el mapeo entre UTC y el tiempo local <em>no es estable</em>.
 </p>
 </div>
 
 Notes:
 
-Y podéis pensar: "Pues sí, seguro que tenemos que manejar zonas horarias cuando estamos lidiando con humanos, pero ¿al menos podemos almacenar los `datetimes` en UTC para no tener que pensar en ello?".
+Y podéis pensar: "Bueno, seguro que tenemos que manejar zonas horarias al tratar con humanos, pero ¿podemos al menos *guardar* los datetimes en UTC para evitar todo el tinglado?".
 
-Y siento ser otra vez el portador de malas noticias, pero tampoco puedes hacer eso, porque no funciona cuando lo que te importa es la hora de reloj.
+Y siento ser otra vez el pájaro de mal agüero, pero tampoco podéis, porque no funciona cuando lo que importa es la hora de reloj.
 
-El problema es que el mapeo entre la hora local y UTC no es estable, entonces para fechas en el futuro, si alacenas el `datetime` en UTC y el mapeo cambia (como ocurre muy frecuentemente, y a menudo con muy poca antelación), habrás perdido información sobre lo que te importaba: la hora *local*.
+El problema es que el mapeo entre la hora local y el UTC no es estable; por eso, para fechas futuras, si guardas el datetime en UTC y el mapeo cambia (lo cual pasa a menudo y con poco aviso), habrás perdido la información que te importaba: la hora local.
 
-Si tienes una reunión a la una en algún lugar, no te importa la hora en UTC, y si tu desplazamiento para la fecha indicada cambia, seguro que quieres mantener la hora original, así que si lo que te importa es la hora en una zona indicada, tienes que almacenar *esa hora*.
+Si tienes una reunión a la una, no te importa la hora en UTC; y si el desplazamiento para ese día cambia, seguro que quieres mantener la hora original. Por eso, si lo que te importa es la hora en una zona concreta, tienes que guardar esa hora.
 
-Lo que eso quiere decir es que lo que tenéis que buscar es la abstracción que más se parezca al concepto que queréis representar.
+En resumen: lo que tenéis que buscar es la abstracción que mejor represente el concepto que queréis capturar.
+
+[1m; T: 10m15s]
 
 --
 
