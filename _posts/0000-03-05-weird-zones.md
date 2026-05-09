@@ -31,9 +31,11 @@ img.tzmap {
 
 Notes:
 
-Vale, ya tenemos claros los conceptos básicos, así que hemos llegado a la parte obligatoria de cualquier charla sobre zonas horarias: esa en la que el ponente os cuenta las aberraciones estrafalarias que la gente ha perpetrado con su medición del tiempo local.
+Vale, ya tenemos claros los conceptos básicos, así que hemos llegado a la parte casi obligatoria de cualquier charla sobre zonas horarias: esa en la que el ponente os cuenta las aberraciones estrafalarias que la gente ha perpetrado con su medición del tiempo local.
 
-Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja, como así. Podéis ver que en Australia, Nepal o la India hay zonas con desplazamientos que son múltiplos de media hora, quince minutos, y en los datos históricos hay zonas con desplazamientos que ni siquiera eran de minutos enteros.
+Quizás tengas un cuñado que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja, ⏭️ tal que así. Podéis ver que en ⏭️ Australia o la India hay zonas con desplazamientos que son múltiplos de media hora, en Nepal hay una de quince minutos, y en los datos históricos hay zonas con desplazamientos que ni siquiera eran de minutos enteros.
+
+[45s; T: 3m 00s]
 
 --
 
@@ -95,21 +97,19 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
 
 Notes:
 
-Además, puede ser que tengas un cuñado que crea que el desplazamiento del UTC solo cambia debido al horario de verano o que el estatus de horario de verano solo cambia cuando cambia el desplazamiento... ¡pero ninguna de las dos cosas es cierta!
+Además, puede ser que tu cuñado crea que el desplazamiento del UTC solo cambia debido al horario de verano y viceversa — que el desplazamiento solo cambia cuando cambia el estatus de horario de verano.
 
-De vez en cuando, una localidad quiere cambiar su desplazamiento estándar, como hizo Venezuela en dos mil siete o Singapur, que adelantó su hora estándar media hora para alinearse con Malasia.
+Pero de vez en cuando hay localidades que cambian su desplazamiento por motivos ajenos a los cambios estacionales, como ocurrió cuando Venezuela cambió su hora estándar o cuando Singapur quiso alinear su zona horaria con la de Malasia.
 
-O al revés, ha habido ejemplos de cambio de estatus de horario de verano sin cambio de desplazamiento del UTC.
+Y en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, adelantando su desplazamiento estándar una hora.
 
-Por ejemplo, en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, cambiando su desplazamiento una hora. Por comodidad para las personas, este cambio se hizo saltándose un cambio de horario: hicieron la transición al horario de verano y, cuando se acabó el verano, los relojes no cambiaron, pero la interpretación cambió de 'horario de verano de Europa Occidental' a 'horario estándar de Europa Central'. Muy conveniente para humanos, pero te romperá el código si estás asumiendo que horario de verano no va a terminar sin cambio del reloj.
+Así que cuando su horario de verano iba a acabar, simplemente no cambiaron los relojes, sino que cambiaron la interpretación de su zona horaria a 'horario estándar'. Lo cual es muy conveniente para los humanos, pero te romperá el código si asumes que el horario de verano no va a terminar sin un cambio de desplazamiento.
 
-Y este año esta lección será relevante para la Columbia Británica, porque han adoptado el "horario de verano permanente", y creo que se va a modelar de la misma manera — el horario de verano va a terminar este noviembre sin atrasar los relojes.
-
-De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior, con la misma forma de transicionar, pero al revés. No sé qué augura esto para la Columbia Británica.
+De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior, con la misma forma de transicionar, pero al revés.
 
 Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, pero seguramente o una zona tiene horario de verano o no lo tiene, ¿no? O sea, o hay dos transiciones al año o cero, ¿cierto?
 
-[2m 15s; T: 4:00]
+[1m 30s; T: 4m 30s]
 
 --
 
@@ -231,7 +231,7 @@ E, históricamente, ha habido sitios que han ido en la dirección contraria tamb
 
 Entonces sí, seguro que hemos llegado al fondo del asunto. Estamos convencidos de que las transiciones de horario pueden ocurrir en cualquier época del año, a cualquier hora del día, millones de veces al año... de acuerdo. Pero seguramente puedo contar con una cosa: que si sé la ubicación de alguien, sé la zona que se aplica. Aunque imagino que podéis vaticinar lo que viene...
 
-[15s; T: 6m30s]
+[45s; T: 6m45s]
 
 --
 
@@ -250,11 +250,11 @@ img.china_map {
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín en que es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
-[1m15s; 7m45s]
+[1m15s; 8m00s]
 
 --
 
@@ -266,8 +266,8 @@ De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín en que es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
-[1m15s; 7m45s]
+[1m15s; 8m00s]
