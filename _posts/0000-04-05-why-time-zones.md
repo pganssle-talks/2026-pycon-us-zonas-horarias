@@ -89,7 +89,7 @@ Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hac
 .egypt-panel .tz-arrow-wrap {
   position: relative;
   width: 100%;
-  height: 3.5em;
+  min-height: 1.1em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,9 +122,62 @@ Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hac
   background: var(--r-background-color, #fff);
   border: 1px solid #999;
   border-radius: 0.25em;
+  margin-bottom: 1.25em;
+  margin-top: 0.5em;
   padding: 0.05em 0.5em;
   font-size: 0.85em;
   white-space: nowrap;
+}
+
+.egypt-panel .tz-arrow-wrap.up {
+    .tz-label {
+        margin-bottom: 0.5em;
+        margin-top: 1.25em;
+    }
+}
+
+.egypt-panel .tz-arrow-wrap.up::before {
+  top: 15px;
+  height: calc(100% - 15px);
+}
+.egypt-panel .tz-arrow-wrap.up::after {
+  top: 0;
+  bottom: auto;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 15px solid rgba(0, 0, 0, 0.6);
+  border-top: none;
+}
+.egypt-panel .db-icon {
+  position: relative;
+  width: 3.5em;
+  height: 2.2em;
+  margin: 0.1em auto;
+}
+.egypt-panel .db-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.65em;
+  background: #b4cce0;
+  border: 2px solid #5a7a9a;
+  border-radius: 50%;
+  z-index: 1;
+}
+.egypt-panel .db-icon::after {
+  content: '';
+  position: absolute;
+  top: 0.32em;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, #8aaccc 0%, #b4cce0 50%, #8aaccc 100%);
+  border: 2px solid #5a7a9a;
+  border-top: none;
+  border-bottom-left-radius: 50% 35%;
+  border-bottom-right-radius: 50% 35%;
 }
 .egypt-panel .egypt-cell img {
   max-width: 100%;
@@ -144,6 +197,8 @@ Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hac
       <span>2016-07-09 <span class="fragment highlight-current-fragment" data-fragment-index="1">13:00:00 EEST</span></span>
       <div class="tz-arrow-wrap"><span class="tz-label">Africa/Cairo</span></div>
       <span>2016-07-09 10:00:00 UTC</span>
+      <div class="tz-arrow-wrap"></div>
+      <div class="db-icon"></div>
     </div>
   </div>
   <div class="egypt-cell">
@@ -153,9 +208,11 @@ Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hac
   </div>
   <div class="egypt-cell">
     <div class="dt-convert">
-      <span>2016-07-09 10:00:00 UTC</span>
-      <div class="tz-arrow-wrap"><span class="tz-label">Africa/Cairo</span></div>
       <span>2016-07-09 <span class="fragment highlight-current-fragment" data-fragment-index="1">14:00:00 EET</span></span>
+      <div class="tz-arrow-wrap up"><span class="tz-label">Africa/Cairo</span></div>
+      <span>2016-07-09 10:00:00 UTC</span>
+      <div class="tz-arrow-wrap up"></div>
+      <div class="db-icon"></div>
     </div>
   </div>
 </div>
