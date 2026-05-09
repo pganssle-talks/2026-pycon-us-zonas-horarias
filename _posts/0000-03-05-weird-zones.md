@@ -39,7 +39,9 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
 
 <div class="bullet-container">
 
-<div class="bullets-with-header">
+<div class="bullets-with-header fragment custom highlight-current-dashed" data-fragment-index="1" style="padding: 0.5em;">
+<!-- Turn off the previous highlight -->
+<span class="fragment custom do-nothing" data-fragment-index="2"></span>
 
 ## Cambio de desplazamiento sin cambio de estatus de horario de verano
 
@@ -57,8 +59,9 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
     </li>
 </ul>
 
+
 </div>
-<div class="bullets-with-header">
+<div class="bullets-with-header" style+"padding: 0.5em">
 
 ## Cambio de estatus de horario de verano sin cambio de desplazamiento
 
@@ -67,7 +70,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
     Portugal, 1992
     <ul>
         <li><tt>WET (+0 STD) → WEST (+1 DST) 1992-03-29</tt></li>
-        <li><tt>WEST (+1 DST) → CET (+1 STD) 1992-09-27</tt><br/></li>
+        <li><tt>WEST <span class="fragment custom highlight-current-fragment" data-fragment-index="3">(+1 DST)</span> → CET <span class="custom fragment highlight-current-fragment" data-fragment-index="3">(+1 STD)</span> 1992-09-27</tt><br/></li>
     </ul>
     </li>
 <!--
@@ -82,7 +85,7 @@ Quizás tengas un amigo que crea que solo hay veinticuatro zonas horarias y que 
     <li>
     Portugal, 1996
     <ul>
-        <li><tt>CET  (+1 STD) -> WEST (+1 DST)  1996-03-31</tt></li>
+        <li><tt>CET  <span class="fragment custom highlight-current-fragment" data-fragment-index="4">(+1 STD)</span> -> WEST <span class="fragment custom bolds highlight-current-fragment" data-fragment-index="4">(+1 DST)</span>  1996-03-31</tt></li>
         <li><tt>WEST (+1 DST) -> WET  (+0 STD)  1996-10-27</tt></li>
     </ul>
     </li>
@@ -120,10 +123,10 @@ Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, per
     <li>
     Marruecos, 2012
     <ul>
-        <li><tt>WET  (+0 STD) -> WEST (+1 DST)  2012-04-29</tt></li>
-        <li><tt>WEST (+1 DST) -> WET  (+0 STD)  2012-07-20</tt></li>
-        <li><tt>WET  (+0 STD) -> WEST (+1 DST)  2012-08-20</tt></li>
-        <li><tt>WEST (+1 DST) -> WET  (+0 STD)  2012-09-30</tt></li>
+        <li data class="fragment custom highlight-current-fragment" data-fragment-index="1"><tt>WET  (+0 STD) → WEST (+1 DST)  2012-04-29</tt></li>
+        <li data class="fragment custom highlight-current-fragment" data-fragment-index="2"><tt>WEST (+1 DST) → WET  (+0 STD)  <span class="fragment custom highlight-current-fragment" data-fragment-index="4">2012-07-20</span></tt></li>
+        <li data class="fragment custom highlight-current-fragment" data-fragment-index="3"><tt>WET  (+0 STD) → WEST (+1 DST)  <span class="fragment custom highlight-current-fragment" data-fragment-index="4">2012-08-20</tt></li>
+        <li><tt>WEST (+1 DST) → WET  (+0 STD)  2012-09-30</tt></li>
     </ul>
     </li>
 </ul>
@@ -222,7 +225,7 @@ Y quizá digas: 'Pues esto era una cosa de la antigüedad. Eran los noventa, est
 </div>
 
 
-Notes: 
+Notes:
 
 E, históricamente, ha habido sitios que han ido en la dirección contraria también. En el atolón de Kwajalein, en mil novecientos sesenta y nueve, ¡el treinta de septiembre pasó dos veces!
 
