@@ -48,6 +48,8 @@ Notes:
 
 Bueno, e históricamente, eso fue todo lo que tenías en Python. En Python dos punto tres, dijeron: "Aquí tienes una interfaz, pero no queremos encargarnos de implementar las reglas por ti". Se suponía que debías averiguar por tu cuenta, según tu lógica de negocio, cuál sería el mejor método para representar tus zonas horarias, y quizá se esperaba que hicieras algo así: una clase con las reglas que representen la hora del Este.
 
+[30s; T: 11m45s]
+
 --
 
 <div class="bullet-container">
@@ -78,6 +80,8 @@ Pero si lo pensáis un poco, la verdad es que solo hay tres tipos de zona horari
 Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o sea, la hora de tu sistema; y el tercero es una zona de la base de datos de IANA, por ejemplo America/Chicago o America/New_York, ese tipo de cosas.
 
 Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
+
+[30s; T:12m15s]
 
 --
 
@@ -161,6 +165,8 @@ Y fijaos en que en esta lista que tengo aquí hay dos una y media, y la diferenc
 
 Y esto es un problema fundamental, un defecto que había en la interfaz de `tzinfo` en aquella época.
 
+[1m15s; T: 13m30s]
+
 --
 
 <div class="bullet-container">
@@ -204,3 +210,5 @@ Notes:
 Y además hay otro problema, el complemento de las horas ambiguas, que llamamos horas imaginarias. Estas son básicamente horas que no existen en una zona horaria, por ejemplo cuando toca adelantar el reloj una hora: cualquier hora en ese hueco no corresponderá a un tiempo real, a una hora que haya pasado o vaya a pasar.
 
 Y es más fácil lidiar con esto porque estos tiempos simplemente no existen, en lugar de ser irrepresentables, pero aun así, como detalle de implementación, es importante saber qué desplazamiento deben devolver tus funciones de `tzinfo`, algo que será indefinido para las horas imaginarias.
+
+[15s; 13m45s]

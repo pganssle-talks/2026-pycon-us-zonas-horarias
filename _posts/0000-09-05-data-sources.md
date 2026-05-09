@@ -23,6 +23,8 @@ Así que ya mencioné zonas horarias de IANA algunas veces, y esto refiere a la 
 
 Así que pensábamos incluirlo con Python como fuente de las reglas, pero el problema es que hacen releases demasiado frecuentemente, mucho más frecuentemente de la cadencia anual del release de Python, y a menudo es importante que la gente reciba datos actualizados muy pronto.
 
+[1m15s ; T: 20:45]
+
 --
 
 <div class="bullet-container">
@@ -53,6 +55,8 @@ Así que pensábamos incluirlo con Python como fuente de las reglas, pero el pro
 Notes:
 
 Decidimos resolver este dilema covertiendolo en una situación de "traer sus propios datos". En vez de incluir un base de datos directamente en Python, `zoneinfo` buscalo en ubicaciones bien conocidas, y puedes configurar la ruta de búsqueda de varias formas. También proporcionamos un paquete (?) de PyPI que puedes usar como fallback para plataformas que no traen los datos en forma accesible, como Windows.
+
+[1m ; T: 21:45]
 
 --
 
@@ -108,3 +112,5 @@ Hoy en día si usas cualquier version apoyada de Python, puedes usar el modulo `
 Y no tengo que explicaros como usarlo porque lo haces como imaginaría. Pasas un objeto `ZoneInfo` al constructor o `.replace` o `.now` o `.astimezone` y funciona bien.
 
 Aunque lo importante a notar aquí es que en este mundo post-`pytz`, es mucho más probable que te enfrentes a las semánticas poco intuitivas inherentes al modelo de `datetimes` que tiene Python.
+
+[1m; T: 22:45]

@@ -35,6 +35,8 @@ Notes:
 
 Y además de la comparación, hay un problema análogo con la aritmética. Porque imagínate que quieres añadir veinticuatro horas a un `datetime` justo antes de una transición de horario de verano. Puedes optar por la semántica de la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían, por ejemplo, veintitrés horas de tiempo real. O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas", lo que supone una hora de diferencia respecto al caso anterior.
 
+[30s; T: 26m15s]
+
 --
 
 <div class="bullet-container medium-code code-indented">
@@ -82,6 +84,8 @@ Y la dicotomía es la misma que con la comparación, ya que a `datetime` le gust
 
 Pero si están en zonas diferentes, de nuevo no tiene sentido usar la semántica de hora de reloj, así que se usa tiempo absoluto. Tengo un artículo en mi blog que profundiza en por qué esto no es tan descabellado como parece; pero, aunque sea razonable, la gente no cree en absoluto que debería ser así y no paran de enviar «bug reports» diciendo que los cálculos están mal.
 
+[30s; T: 26m45s]
+
 --
 
 <div class="bullet-container big-code code-indented">
@@ -114,3 +118,5 @@ def restar_absoluto(dt1: datetime, dt2: datetime) -> timedelta:
 Notes:
 
 Por desgracia, a estas alturas ya no es algo que podamos cambiar, así que lo que os recomiendo es que definas algunas funciones auxiliares como las que tengo aquí, que tomen tus operandos y los conviertan a UTC antes de hacer las operaciones, para que así no importe si están en la misma zona o no.
+
+[30s; T: 27m15s]

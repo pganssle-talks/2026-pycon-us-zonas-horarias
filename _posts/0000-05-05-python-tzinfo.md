@@ -23,3 +23,5 @@ El modelo de zonas horarias de Python se centra en una clase base abstracta que 
 Tienes `tzname`, que da el nombre de la zona para el `datetime` indicado, y `utcoffset`, que es la que de verdad tira del carro; esa función da el desplazamiento respecto al UTC que se aplica al `datetime`.
 
 Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. La verdad es que creo que cada vez que he visto a alguien usar este método ha sido un error de algún tipo.
+
+[1m; T: 11m15s]

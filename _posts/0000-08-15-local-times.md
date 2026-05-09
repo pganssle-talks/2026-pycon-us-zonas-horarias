@@ -53,3 +53,5 @@ Pero algo sobre lo que quiero llamar la atención es que, en este caso, hay una 
 Pero al igual que con `pytz`, no puedes hacer aritmética con ese tipo de cosas, se supone que tienes que hacer los cálculos antes de llamar a `astimezone`.
 
 Así que esto nos da dos de nuestros tres tipos de zonas horarias, pero en Python tres punto ocho (3.8), todavía no teníamos zonas de IANA.
+
+[1m30s; T: 19:30]
