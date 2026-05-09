@@ -289,8 +289,8 @@ Consultad el [PEP 615](https://www.python.org/dev/peps/pep-0615/) y [la document
 
 Notes:
 
-Dicho sea de paso, este issue influyó bastante en cómo se diseñó `ZoneInfo`, porque no queríamos esta situación confusa en la que a veces aplica la semántica de la hora de reloj y a veces aplica la de tiempo absoluto.
+Dicho sea de paso, este problema influyó bastante en cómo se diseñó `ZoneInfo`, porque no queríamos esta situación tan confusa en la que a veces se aplica la semántica de la hora de reloj y otras la de tiempo absoluto.
 
-Así que `ZoneInfo` garantiza que vas a recibir el mismo objeto siempre si le pasas la misma clave. Entonces, si le pasas "America/New_York" a un nuevo constructor, o vas pasando por ahí un único objeto de "America/New_York", será el mismo objeto, y siempre se aplicará la semántica de la hora de reloj.
+Así que `ZoneInfo` garantiza que siempre vas a recibir el mismo objeto si usas la misma clave. Por tanto, si le pasas "America/New_York" al constructor, o si vas moviendo por ahí un único objeto de "America/New_York", el objeto será el mismo y siempre se aplicará la semántica de la hora de reloj.
 
 [15s; T: 25:45]
