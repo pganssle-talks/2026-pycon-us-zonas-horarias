@@ -235,34 +235,28 @@ Entonces sí, seguro que hemos llegado al fondo del asunto. Estamos convencidos 
 
 --
 
-<!-- .slide: data-transition="slide-in none" -->
-
-<h2 style="margin-top: 0.5em; font-family: monospace">Asia/Shanghai</h2>
-
 <style>
 img.china_map {
     height: 80dvh;
 }
 </style>
 
-![Asia/Shanghai time zone map](images/china_shanghai.png) <!-- .element: id="splash-noborder" class="splash china_map" -->
 
+<div class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">
+    <h2 style="margin-top: 0.5em; font-family: monospace">Asia/Shanghai</h2>
+</div>
+<div class="fragment nospace-fragment fade-in" data-fragment-index="1">
+    <h2 style="margin-top: 0.5em; font-family: monospace">Asia/Urumqi</h2>
+</div>
 
-Notes:
-
-Al gobierno de China le parece una buena idea tener solo una zona horaria para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, los locales tienden a observar el UTC más seis, pero no todos los locales.
-
-De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
-
-[1m15s; 8m00s]
-
---
-
-<!-- .slide: data-transition="none slide-out" -->
-
-<h2 style="margin-top: 0.5em; font-family: monospace">Asia/Urumqi</h2>
-
-![Asia/Shanghai time zone map](images/china_overlay.png) <!-- .element: id="splash-noborder"  class="splash china_map" -->
+<img src="images/china_shanghai.png"
+     alt="Asia/Shanghai time zone map"
+     class="fragment disappearing-fragment nospace-fragment fade-out china_map splash"
+     data-fragment-index="1"/>
+<img src="images/china_overlay.png"
+     alt="Asia/Shanghai time zone map with Asia/Urumqi overlaid"
+     class="fragment nospace-fragment fade-in china_map splash"
+     data-fragment-index="1"/>
 
 Notes:
 
