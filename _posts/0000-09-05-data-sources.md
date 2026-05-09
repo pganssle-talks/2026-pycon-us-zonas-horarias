@@ -19,9 +19,9 @@
 
 Notes:
 
-Así que ya mencioné zonas horarias de IANA algunas veces, y esto refiere a la fuente de los datos. Es basicamente el base de datos canonico sobre zonas horarias que todo el mundo usa; bastantes sistemas operativos lo incluyen.
+Así que ya he mencionado las zonas horarias de IANA algunas veces, y esto se refiere a la fuente de los datos. Es básicamente la base de datos canónica sobre zonas horarias que todo el mundo usa; bastantes sistemas operativos la incluyen, pero no todos.
 
-Así que pensábamos incluirlo con Python como fuente de las reglas, pero el problema es que hacen releases demasiado frecuentemente, mucho más frecuentemente de la cadencia anual del release de Python, y a menudo es importante que la gente reciba datos actualizados muy pronto.
+Y la idea era incluirla con Python como fuente de las reglas, pero el problema es que sacan versiones nuevas demasiado frecuentemente, con mucha más frecuencia que la cadencia anual de Python, y a menudo es importante que la gente reciba los datos actualizados cuanto antes.
 
 [1m15s ; T: 20:45]
 
@@ -54,7 +54,7 @@ Así que pensábamos incluirlo con Python como fuente de las reglas, pero el pro
 
 Notes:
 
-Decidimos resolver este dilema covertiendolo en una situación de "traer sus propios datos". En vez de incluir un base de datos directamente en Python, `zoneinfo` buscalo en ubicaciones bien conocidas, y puedes configurar la ruta de búsqueda de varias formas. También proporcionamos un paquete (?) de PyPI que puedes usar como fallback para plataformas que no traen los datos en forma accesible, como Windows.
+Decidimos resolver este dilema convirtiéndolo en una situación de "traer sus propios datos". En vez de incluir una base de datos directamente en Python, `zoneinfo` la busca en ubicaciones bien conocidas, y puedes configurar la ruta de búsqueda de varias formas. También proporcionamos un paquete de PyPI que puedes usar como fallback para plataformas que no traen los datos de forma accesible, como Windows.
 
 [1m ; T: 21:45]
 
@@ -107,9 +107,9 @@ except ImportError:
 
 Notes:
 
-Hoy en día si usas cualquier version apoyada de Python, puedes usar el modulo `zoneinfo` para tus zonas IANA. En versiones anteriores que 3.9, hay un backport que pudieras usar.
+Hoy en día si usas cualquier versión con soporte de Python, puedes usar el módulo `zoneinfo` para tus zonas IANA. En versiones anteriores a 3.9, hay un backport que podrías usar.
 
-Y no tengo que explicaros como usarlo porque lo haces como imaginaría. Pasas un objeto `ZoneInfo` al constructor o `.replace` o `.now` o `.astimezone` y funciona bien.
+Y no tengo que explicaros cómo usarlo porque lo haces como os imaginaréis. Pasas un objeto `ZoneInfo` al constructor o `.replace` o `.now` o `.astimezone` y funciona bien.
 
 Aunque lo importante a notar aquí es que en este mundo post-`pytz`, es mucho más probable que te enfrentes a las semánticas poco intuitivas inherentes al modelo de `datetimes` que tiene Python.
 
