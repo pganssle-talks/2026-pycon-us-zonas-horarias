@@ -55,11 +55,11 @@ zoneinfo:      2038-12-02     PST  -08:00
 
 Notes:
 
-Vale, ya os he asustado un poco con la complejidad de migrar a `ZoneInfo`, y no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo. Por eso, quiero daros otros motivos de peso.
+Vale, sé que esto puede asustar un poco con la complejidad de migrar a `ZoneInfo`, y no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo. Por eso, quiero daros otros motivos de peso.
 
 Lo más importante es que `pytz` no soporta el nuevo formato de los datos de IANA, y el formato antiguo no admite timestamps de más de treinta y dos bits. Así que para fechas posteriores a dos mil treinta y ocho, deja de funcionar; las transiciones simplemente se detienen.
 
-Pero algo más urgente es que algunas distros ya usan un formato "slim" que aprovecha una nueva capacidad en el nuevo formato de usar reglas en lugar de listas de transiciones. Como `pytz` tampoco lo soporta, en muchos sitios, como en los Estados Unidos, si usas los datos del sistema, `pytz` ya falla hoy mismo.
+Pero algo más urgente es que algunas distros ya usan el formato "slim", que aprovecha una nueva capacidad en el nuevo formato de usar reglas en lugar de listas de transiciones. Como `pytz` tampoco lo soporta, en muchos sitios, como en los Estados Unidos, si usas los datos del sistema, `pytz` ya falla hoy mismo.
 
 [1m 15s; T: 28m 15s]
 
