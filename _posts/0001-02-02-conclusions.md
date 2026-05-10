@@ -95,9 +95,9 @@ style="font-size: 1.5em; display: flex; flex-direction: column; justify-content:
 
 Notes:
 
-Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias, y que podáis salir y escribir código que funcione en cualquier parte del mundo.
+Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias y que podáis salir de aquí y escribir código que funcione en cualquier parte del mundo.
 
-Creo que al menos en parte por la lentitud de mi habla en español, faltamos tiempo para preguntas, pero estaré afuera en los pasillos después de la charla, y luego deambulando por la conferencia, y os animo de platicarme allí.
+Creo que, al menos en parte por lo despacio que hablo en español, ya no nos queda tiempo para preguntas, pero estaré en los pasillos después de la charla y luego deambulando por la conferencia; os animo a venir a hablar conmigo allí.
 
 ¡Gracias por venir, nos vemos pronto!
 
