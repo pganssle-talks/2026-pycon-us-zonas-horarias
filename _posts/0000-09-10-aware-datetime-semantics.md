@@ -45,9 +45,9 @@ True
 
 Notes:
 
-Y para ilustrar eso, pensaba hablaros de este «bug report» que llegó a `dateutil` hace años y años, y que fue muy divertido de debuggear. Alguien dijo: "Vale, esta fecha, el veinticinco de marzo a la una de la madrugada en Londres — si creo este objeto, lo convierto en un timestamp y luego lo vuelvo a convertir en `datetime` —básicamente pasándolo a UTC y de nuevo a la zona original— los `datetime`s no evalúan como iguales". Un poco chungo, ¿no?
+Para ilustrar eso, os cuento un «bug report» que llegó a `dateutil` hace años y años y fue muy divertido de debuggear. Alguien dijo: "Esta fecha, el veinticinco de marzo a la una de la madrugada en Londres — si la paso a timestamp y de vuelta — los `datetime`s no evalúan como iguales". Un poco chungo, ¿no?
 
-Y más raro aún, si creo una nueva instancia del objeto que representa la zona horaria de Londres y lo uso para crear mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos cosas sí evalúan como iguales entre sí! Así que tienen una relación no transitiva, lo cual es rarísimo, ¿cierto?
+Y más raro aún: si creo una nueva instancia del objeto de la zona horaria de Londres para hacer mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos también son iguales entre sí! Así que la relación no es transitiva, ¿cierto?
 
 [45s; T: 23m 30s]
 
@@ -86,11 +86,11 @@ Y más raro aún, si creo una nueva instancia del objeto que representa la zona 
 
 Notes:
 
-Y mi primera pista de cómo debuggearlo fue cuando me di cuenta de que esta hora en realidad no existía, era una hora imaginaria.
+Mi primera pista fue darme cuenta de que esta hora no existía — era imaginaria.
 
-Así que Y y Z no pueden representar el `datetime` original que teníamos; no puede ser la una porque no puedes ir de UTC a una hora imaginaria.
+Así que Y y Z no podían representar el `datetime` original; no puedes llegar a una hora imaginaria desde UTC.
 
-Y lo que pasa aquí es que X se convierte a una hora real en UTC, y luego de vuelta a la hora equivalente en Londres.
+Y lo que pasa aquí es que X va a UTC — que sí existe — y de ahí al equivalente en Londres.
 
 [30s; T: 24m 00s]
 
@@ -206,13 +206,15 @@ False
 
 Notes:
 
-Entonces esto saca el tema de la igualdad: ¿qué significa que dos `datetime`s sean iguales? Porque de hecho hay dos candidatos muy buenos. Uno es la semántica de la hora de reloj, en la que solo comparas la parte del `datetime` que representa el reloj y el calendario — la parte naíf. En esa situación, X no debería ser igual a Y o Z, e Y y Z deberían ser iguales entre sí.
+Esto nos lleva al tema de la igualdad: ¿qué significa que dos `datetime`s sean iguales? Porque de hecho hay dos candidatos buenos.
 
-La otra opción es la semántica del tiempo absoluto, en la que conviertes todo a UTC antes de hacer la comparación, y en ese caso, los tres son iguales.
+Uno es la semántica de hora de reloj: solo comparas la parte naif, ignorando el desplazamiento. En esa situación, X no debería ser igual a Y o Z, e Y y Z deberían ser iguales entre sí.
 
-Pero no vemos ninguno de estos patrones en el resultado real, ¿cierto? ¿Qué pasa?
+La otra es la semántica de tiempo absoluto: pasas todo a UTC, y entonces los tres son iguales.
 
-Y la otra pista que necesitamos para explicar por qué ocurre esto es que X e Y usan exactamente el mismo objeto como zona horaria, pero Z tiene un objeto *diferente* a los otros dos.
+Pero no vemos ninguno de esos patrones, ¿cierto? ¿Qué pasa?
+
+La última pista que necesitamos es que X e Y usan el mismo objeto `tzinfo`, pero Z tiene uno diferente, aunque sea igual a los otros.
 
 [45s; T: 24m 45s]
 
@@ -269,11 +271,11 @@ Y la otra pista que necesitamos para explicar por qué ocurre esto es que X e Y 
 
 Notes:
 
-La semántica real de comparación de `datetime` es que cuando dos `datetime`s están en la misma zona, usará la semántica de la hora de reloj, pero cuando están en zonas diferentes, no tiene sentido comparar sus horas de reloj, ¿cierto? ¿A quién le importa una comparación entre las partes naíf de zonas diferentes?
+Y resulta que la semántica que se usa de verdad es que cuando dos `datetime`s están en la misma zona, se usa la hora de reloj, pero cuando están en zonas diferentes, no tiene sentido comparar las partes naif, ¿cierto? Así que primero hay que ponerlos en la misma zona: UTC.
 
-Así que primero tienes que convertirlos a UTC. La clave final de nuestro misterio es que solo se considera que dos `datetime`s están en la misma zona si tienen el mismo objeto `tzinfo` —tiene que ser el mismo objeto, no basta con que tengan el mismo valor.
+Y la clave final de nuestro misterio es que solo se considera que dos `datetime`s están en la misma zona si tienen el mismo objeto `tzinfo` — el mismísimo objeto, no basta con que tengan el mismo valor.
 
-Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la semántica de hora de reloj, para `x == z` tenemos la semántica de tiempo absoluto, y para `y == z`, otra vez tenemos la semántica de hora de reloj, aunque para la última no hace ninguna diferencia porque ambas dan el mismo resultado.
+Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la hora de reloj, para `x == z` tenemos tiempo absoluto, y para `y == z`, otra vez tenemos la hora de reloj, aunque para la última las dos dan el mismo resultado.
 
 [45s; T: 25m 30s]
 
@@ -321,6 +323,6 @@ Notes:
 
 Dicho sea de paso, este problema influyó bastante en cómo se diseñó `ZoneInfo`, porque no queríamos esta situación tan confusa en la que a veces se aplica la semántica de la hora de reloj y otras la de tiempo absoluto.
 
-Así que `ZoneInfo` garantiza que siempre vas a recibir el mismo objeto si usas la misma clave. Por tanto, si le pasas "America/New_York" al constructor, o si vas moviendo por ahí un único objeto de "America/New_York", el objeto será el mismo y siempre se aplicará la semántica de la hora de reloj.
+Así que `ZoneInfo` garantiza que siempre vas a recibir el mismo objeto si usas la misma clave.
 
 [15s; T: 25m 45s]
