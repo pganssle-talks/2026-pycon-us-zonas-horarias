@@ -8,9 +8,6 @@
 >>> LON = ZoneInfo("Europe/London")
 
 >>> x = datetime(2007, 3, 25, 1, 0, tzinfo=LON)
->>> ts = x.timestamp()
->>> y = datetime.fromtimestamp(ts, LON)
->>> z = datetime.fromtimestamp(ts, ZoneInfo.no_cache("Europe/London"))
 ```
 
 
@@ -18,15 +15,16 @@
 
 
 ```python
+>>> y = datetime.fromtimestamp(x.timestamp(), LON)
 >>> x == y
 False
 ```
-<fragment/>
 
 <div class="small-spacer"></div>
 
 
 ```python
+>>> z = datetime.fromtimestamp(x.timestamp(), ZoneInfo.no_cache("Europe/London"))
 >>> x == z
 True
 ```
@@ -35,7 +33,7 @@ True
 <div class="small-spacer"></div>
 
 ```python
->>> y == z
+>>> y == z          # 🤯
 True
 ```
 <fragment/>
@@ -65,15 +63,20 @@ Y más raro aún, si creo una nueva instancia del objeto que representa la zona 
 
 </div>
 
-```python
+```pycon
 >>> print(x)                                # x (LON)
+
 2007-03-25 01:00:00+01:00
 
->>> print(x.astimezone(timezone.utc))       # x (LON → UTC)
+
+>>> print(x.astimezone(UTC))                # x (LON ➜ UTC)
+
 2007-03-25 00:00:00+00:00
 
->>> print(x.astimezone(timezone.utc).
-...        .astimezone(LON))                # x (LON → UTC → LON)
+
+>>> print(x.astimezone(UTC).
+...        .astimezone(LON))                # x (LON ➜ UTC ➜ LON)
+
 2007-03-25 00:00:00+00:00
 ```
 
@@ -137,8 +140,35 @@ Y lo que pasa aquí es que X se convierte a una hora real en UTC, y luego de vue
 </ol>
 </div>
 
-<div style="border: 1px solid; background: #fff; align-items: flex-start; margin-left: 1em;">
-<div class="fragment disappearing-fragment nospace-fragment fade-out" data-fragment-index="1">
+<style>
+div#hours-compare {
+    border: 1px solid;
+    background: #fff;
+    align-items: center;
+    margin-left: 1em;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+
+        tt {
+            /* Container query units */
+            font-size: 1.8cqi;
+            white-space: nowrap;
+            margin-left: 0.5em;
+            margin-right: 0.5em;
+        }
+
+    }
+
+}
+</style>
+<div id="hours-compare">
+<div class="fragment disappearing-fragment nospace-fragment fade-out"
+     data-fragment-index="1">
 <u>Horas de reloj:</u><br/>
 <tt>
     x: <b>2007-03-25 01:00:00</b>+01:00<br/><br/>
