@@ -54,4 +54,4 @@ Pero al igual que con `pytz`, no puedes hacer aritmética con ese tipo de cosas,
 
 Así que esto nos da dos de nuestros tres tipos de zonas horarias, pero en Python tres punto ocho (3.8), todavía no teníamos zonas de IANA, y el motivo eran los datos.
 
-[1m30s; T: 19:30]
+[1m 30s; T: 19m 30s]

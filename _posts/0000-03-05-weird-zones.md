@@ -147,7 +147,7 @@ De repente, esa hora que sobra antes de la puesta del sol ya no te hace tanta gr
 
 Pues nada, ya sabemos que la gente es muy rara con sus transiciones de hora, pero seguro que este tipo de cosa solo pasa a las tantas de la madrugada o algo así, y nunca vamos a ver algo raro sucediendo a mitad del día, ¿cierto?
 
-[1m; T: 5m]
+[1m; T: 5m 00s]
 
 --
 
@@ -191,7 +191,7 @@ SKIP THIS PART:
 
 Y quizá digas: 'Pues esto era una cosa de la antigüedad. Eran los noventa, estábamos repartiendo direcciones de IPv4 a mansalva y viendo **Friends**; claro que eso no podría pasar hoy, ¿no?'. Pero hace solo quince años, en dos mil once, lo mismo ocurrió en Samoa.
 
-[1m 15s; T: 6m15s]
+[1m 15s; T: 6m 15s]
 
 
 --
@@ -233,7 +233,7 @@ E, históricamente, ha habido sitios que han ido en la dirección contraria tamb
 
 Entonces sí, seguro que hemos llegado al fondo del asunto. Estamos convencidos de que las transiciones de horario pueden ocurrir en cualquier época del año, a cualquier hora del día, millones de veces al año... de acuerdo. Pero seguramente puedo contar con una cosa: que si sé la ubicación de alguien, sé la zona que se aplica. Aunque imagino que podéis vaticinar lo que viene...
 
-[45s; T: 6m45s]
+[45s; T: 6m 45s]
 
 --
 
@@ -266,4 +266,4 @@ Al gobierno de China le parece una buena idea tener solo una zona horaria para t
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y etnia. Entonces, a veces, incluso tu zona horaria puede ser PII.
 
-[1m15s; 8m00s]
+[1m 15s; T: 8m 00s]

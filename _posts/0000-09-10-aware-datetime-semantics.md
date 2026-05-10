@@ -51,7 +51,7 @@ Y para ilustrar eso, pensaba hablaros de este «bug report» que llegó a `dateu
 
 Y más raro aún, si creo una nueva instancia del objeto que representa la zona horaria de Londres y lo uso para crear mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos cosas sí evalúan como iguales entre sí! Así que tienen una relación no transitiva, lo cual es rarísimo, ¿cierto?
 
-[45s; T:23:30]
+[45s; T: 23m 30s]
 
 --
 
@@ -89,7 +89,7 @@ Así que Y y Z no pueden representar el `datetime` original que teníamos; no pu
 
 Y lo que pasa aquí es que X se convierte a una hora real en UTC, y luego de vuelta a la hora equivalente en Londres.
 
-[30s; T: 24m00s]
+[30s; T: 24m 00s]
 
 --
 
@@ -184,7 +184,7 @@ Pero no vemos ninguno de estos patrones en el resultado real, ¿cierto? ¿Qué p
 
 Y la otra pista que necesitamos para explicar por qué ocurre esto es que X e Y usan exactamente el mismo objeto como zona horaria, pero Z tiene un objeto *diferente* a los otros dos.
 
-[45s; T: 24m45s]
+[45s; T: 24m 45s]
 
 --
 
@@ -245,7 +245,7 @@ Así que primero tienes que convertirlos a UTC. La clave final de nuestro mister
 
 Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la semántica de hora de reloj, para `x == z` tenemos la semántica de tiempo absoluto, y para `y == z`, otra vez tenemos la semántica de hora de reloj, aunque para la última no hace ninguna diferencia porque ambas dan el mismo resultado.
 
-[45s; T:25m30s]
+[45s; T: 25m 30s]
 
 --
 
@@ -293,4 +293,4 @@ Dicho sea de paso, este problema influyó bastante en cómo se diseñó `ZoneInf
 
 Así que `ZoneInfo` garantiza que siempre vas a recibir el mismo objeto si usas la misma clave. Por tanto, si le pasas "America/New_York" al constructor, o si vas moviendo por ahí un único objeto de "America/New_York", el objeto será el mismo y siempre se aplicará la semántica de la hora de reloj.
 
-[15s; T: 25:45]
+[15s; T: 25m 45s]

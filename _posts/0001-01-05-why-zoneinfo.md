@@ -61,7 +61,7 @@ Lo más importante es que `pytz` no soporta el nuevo formato de los datos de IAN
 
 Pero algo más urgente es que algunas distros ya usan un formato "slim" que aprovecha una nueva capacidad en el nuevo formato de usar reglas en lugar de listas de transiciones. Como `pytz` tampoco lo soporta, en muchos sitios, como en los Estados Unidos, si usas los datos del sistema, `pytz` ya falla hoy mismo.
 
-[1m15s; T: 28m15s]
+[1m 15s; T: 28m 15s]
 
 --
 
@@ -101,4 +101,4 @@ Notes:
 
 Y además de ser más preciso, `ZoneInfo` es increíblemente rápido porque está escrito en C, mientras que `pytz` y `dateutil` están hechos en Python. En prácticamente todos los benchmarks que he pasado, `ZoneInfo` ha sido mucho más rápido que las otras dos, así que no tenéis que sacrificar rendimiento para empezar a usarlo.
 
-[25s; T: 28m40s]
+[25s; T: 28m 40s]

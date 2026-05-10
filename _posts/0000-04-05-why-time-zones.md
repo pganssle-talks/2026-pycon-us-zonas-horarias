@@ -50,7 +50,7 @@ Así que, en el mundo real, si quieres representar la hora que marca el reloj de
 
 Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hacerlo con una regla que diga "de lunes a viernes a las cinco", en lugar de algo que gire en torno al UTC, donde tienes que andar comprobando cuándo cambia la hora entre las veintidós y las veintiuno.
 
-[1m15s; T:9m15s]
+[1m 15s; T: 9m 15s]
 
 --
 
@@ -236,7 +236,7 @@ Si tienes una reunión a la una, no te importa la hora en UTC; y si el desplazam
 
 En resumen: lo que tenéis que buscar es la abstracción que mejor represente el concepto que queréis capturar.
 
-[1m; T: 10m15s]
+[1m; T: 10m 15s]
 
 --
 
