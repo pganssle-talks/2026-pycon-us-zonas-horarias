@@ -95,4 +95,10 @@ style="font-size: 1.5em; display: flex; flex-direction: column; justify-content:
 
 Notes:
 
-Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias, y que podáis salir y escribir código que funcione en cualquier parte del mundo. ¡Gracias por venir!
+Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias, y que podáis salir y escribir código que funcione en cualquier parte del mundo.
+
+Creo que al menos en parte por la lentitud de mi habla en español, faltamos tiempo para preguntas, pero estaré afuera en los pasillos después de la charla, y luego deambulando por la conferencia, y os animo de platicarme allí.
+
+¡Gracias por venir, nos vemos pronto!
+
+[30s; T: 29m 20s]

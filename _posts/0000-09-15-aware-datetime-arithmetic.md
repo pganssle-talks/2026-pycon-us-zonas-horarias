@@ -33,7 +33,11 @@ Dado que hay una transición entre `dt1` y `dt2`, hay dos opciones:
 
 Notes:
 
-Y además de la comparación, hay un problema análogo con la aritmética. Porque imagínate que quieres añadir veinticuatro horas a un `datetime` justo antes de una transición de horario de verano. Puedes optar por la semántica de la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían, por ejemplo, veintitrés horas de tiempo real. O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas", lo que supone una hora de diferencia respecto al caso anterior.
+Y además de la comparación, hay un problema análogo con la aritmética. Porque imagínate que quieres añadir veinticuatro horas a un `datetime` justo antes de un cambio de hora.
+
+Puedes optar por la semántica de la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían veintitrés horas de tiempo real.
+
+O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas", lo que supone una hora de diferencia respecto al caso anterior.
 
 [30s; T: 26m 15s]
 
