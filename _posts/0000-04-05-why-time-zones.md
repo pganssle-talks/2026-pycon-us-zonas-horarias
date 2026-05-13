@@ -42,13 +42,13 @@ for dt in horas_de_cerrar:
 
 Notes:
 
-Vale, ya os he metido un poco de miedo, y quizás os preguntéis: ¿por qué tenemos que pelearnos con las zonas horarias? ¿No podemos usar UTC para todo?
+Vale, ya os he metido un poco de miedo, y quizás os preguntéis: "Ostras, menudo follón, ¿no podemos usar UTC para todo?"
 
-Y la respuesta es que no, no podéis, porque el UTC no es una abstracción natural para la mayor parte del mundo. La gente organiza su vida según la posición del sol y a muchos les gusta el horario de verano.
+Y la respuesta es que no, no podéis, porque el UTC no es una abstracción natural para la mayor parte del mundo. La gente organiza su vida según la posición del sol.
 
 Así que, en el mundo real, si quieres representar la hora que marca el reloj de pared, hay que utilizar una abstracción que capture el tiempo tal y como se observa.
 
-Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hacerlo con una regla que diga "de lunes a viernes a las cinco", en lugar de algo que gire en torno al UTC, donde tienes que andar comprobando cuándo cambia la hora entre las veintidós y las veintiuno.
+Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hacerlo con una regla que diga "de lunes a viernes a las cinco", en lugar de algo que gire en torno al UTC, donde a veces son las veintidós y otras las veintiuno.
 
 [1m 15s; T: 9m 15s]
 
@@ -218,7 +218,7 @@ Si quieres representar el fin de jornada en Nueva York, es jarto conveniente hac
 </div>
 <div class="small-spacer"></div>
 <p style="font-size: 1.25em; text-align: center; margin-top: 0.75em;">
-Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, hay que almacenar el tiempo local, porque el mapeo entre UTC y el tiempo local <em>no es estable</em>.
+Cuando guardas objetos datetime y lo que importa es la <em>hora de reloj</em>, hay que guardar el tiempo local, porque el mapeo entre UTC y el tiempo local <em>no es estable</em>.
 </p>
 </div>
 
@@ -226,15 +226,13 @@ Cuando guardas objetos datetime y lo que importa es la <em>hora de pared</em>, h
 
 Notes:
 
-Y podéis pensar: "Bueno, seguro que tenemos que manejar zonas horarias al tratar con humanos, pero ¿podemos al menos *guardar* los datetimes en UTC para evitar todo el tinglado?".
+Y podéis pensar: "Bueno, seguro que tenemos que manejar zonas horarias al tratar con *humanos*, pero ¿podemos al menos *guardar* los datetimes en UTC, y evitar todo el tinglado?".
 
-Y siento ser otra vez el pájaro de mal agüero, pero tampoco podéis, porque no funciona cuando lo que importa es la hora de reloj.
+Y siento ser otra vez el pájaro de mal agüero, pero tampoco podéis, porque eso no funciona cuando lo que importa es la hora local.
 
-El problema es que el mapeo entre la hora local y el UTC no es estable; por eso, para fechas futuras, si guardas el datetime en UTC y el mapeo cambia (lo cual pasa a menudo y con poco aviso), habrás perdido la información que te importaba: la hora local.
+Si programas una reunión a la una en el futuro y, antes de la cita, el desplazamiento cambia (lo cual pasa todo el rato, y muchas veces sin mucho aviso), seguro que quieres mantener la reunión a la una, pero si has guardado el `datetime` en UTC antes del cambio, ⏭️ cuando lo saques después, lo que sale no será correcto. El mapeo entre la hora local y UTC no es estable, así que has perdido la información que te importaba.
 
-Si tienes una reunión a la una, no te importa la hora en UTC; y si el desplazamiento para ese día cambia, seguro que quieres mantener la hora original. Por eso, si lo que te importa es la hora en una zona concreta, tienes que guardar esa hora.
-
-En resumen: lo que tenéis que buscar es la abstracción que mejor represente el concepto que queréis capturar.
+Dicho de otro modo: tienes que usar la abstracción que mejor represente tu situación; si lo que importa es la hora local, guarda la hora local.
 
 [1m; T: 10m 15s]
 
