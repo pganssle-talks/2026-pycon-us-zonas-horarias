@@ -9,7 +9,7 @@
 
 * La información se proporciona en función del objeto `datetime`:
     * <span class="fragment highlight-current-fragment" data-fragment-index="0">`utcoffset`</span>: El desplazamiento respecto a UTC para ese `datetime`.
-    * <span class="fragment highlight-current-fragment" data-fragment-index="1">`tzname`</span>: El nombre (normalmente abreviado) de la horaria para el `datetime` indicado.
+    * <span class="fragment highlight-current-fragment" data-fragment-index="1">`tzname`</span>: El nombre (normalmente abreviado) del horario para el `datetime` indicado.
     * <span class="fragment strike highlight-red" data-fragment-index="3"><span class="fragment highlight-current-fragment" data-fragment-index="2">`dst`</span>: La magnitud del desplazamiento del `datetime` que se atribuye al horario de verano (normalmente 0 o 1 hora)</span>
 
 </div>
@@ -55,7 +55,7 @@
 >>> dt_mayo.dst() / timedelta(hours=1)
 1.0
 
->>> dt_noviembre.tzname()
+>>> dt_noviembre.dst()
 0.0
 ```
 
@@ -67,7 +67,7 @@
 
 Notes:
 
-Ok, ya que hemos establecido que en realidad hace falta *ugh* entender las abstracciones con las que trabajamos, vamos a bucear más en los detalles de cómo funciona en Python.
+Ok, ya que hemos establecido que en realidad *ugh* hace falta entender las abstracciones con las que trabajamos, vamos a bucear más en los detalles de cómo funciona en Python.
 
 El modelo de zonas horarias de Python se centra en una clase base abstracta que se llama `tzinfo`. La idea es que cada objeto que representa una zona horaria proporciona tres funciones que toman como argumento un `datetime`.
 
