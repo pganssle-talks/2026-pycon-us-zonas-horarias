@@ -101,4 +101,4 @@ No creo que nos quede tiempo para preguntas, pero aquí tenéis mi información,
 
 No, es broma, habéis sido una audiencia genial. Gracias por venir y nos vemos por los pasillos.
 
-[30s; T: 29m 20s]
+[30s; T: 29m 00s]

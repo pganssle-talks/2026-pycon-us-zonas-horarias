@@ -35,7 +35,7 @@ Vale, ya tenemos claros los conceptos básicos, así que hemos llegado a la part
 
 Quizás tengas un cuñado que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja, ⏭️ tal que así. Podéis ver que en ⏭️ Australia o la India hay zonas con desplazamientos que son múltiplos de media hora, en Nepal hay una de quince minutos, y en los datos históricos hay zonas con desplazamientos que ni siquiera eran de minutos enteros.
 
-[45s; T: 3m 00s]
+[45s; T: 3m 15s]
 
 --
 
@@ -109,7 +109,7 @@ Para realizar este cambio, cuando su hora de verano iba a acabar, ⏭️simpleme
 
 Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, pero seguramente o una zona tiene hora de verano o no la tiene, ¿no? O sea, o hay dos cambios al año o cero, ¿cierto?
 
-[1m 30s; T: 4m 30s]
+[1m 30s; T: 4m 45s]
 
 --
 
@@ -147,7 +147,7 @@ De repente, esa hora que sobra antes de la puesta del sol ya no te hace tanta gr
 
 Pues nada, ya sabemos que la gente es muy rara con sus cambios de reloj, pero seguro que este tipo de cosa solo sucede a las tantas de la madrugada y sus travesuras no se van a extender a la mitad del día, cierto?
 
-[1m 15s; T: 5m 15s]
+[1m 30s; T: 6m 15s]
 
 --
 
@@ -191,7 +191,7 @@ SKIP THIS PART:
 
 Y quizá digas: 'Pues esto era una cosa de la antigüedad. Eran los noventa, estábamos repartiendo direcciones de IPv4 a mansalva y viendo **Friends**; claro que eso no podría pasar hoy, ¿no?'. Pero hace solo quince años, en dos mil once, lo mismo ocurrió en Samoa.
 
-[45s; T: 5m 45s]
+[45s; T: 7m 00s]
 
 
 --
@@ -233,7 +233,7 @@ E, históricamente, ha habido sitios que han ido en la dirección contraria tamb
 
 Entonces sí, seguro que hemos llegado al fondo del asunto. Estamos convencidos de que los cambios de reloj pueden ocurrir en cualquier época del año, a cualquier hora del día, millones de veces al año... de acuerdo. Pero seguramente puedo contar con una cosa: que si sé la ubicación de alguien, sé la zona que se aplica. Aunque imagino que podéis vaticinar lo que viene...
 
-[45s; T: 6m 30s]
+[45s; T: 7m 45s]
 
 --
 
@@ -266,4 +266,4 @@ Al gobierno de China le parece una buena idea tener solo un desplazamiento para 
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y... ¿raza?
 
-[1m 15s; T: 7m 45s]
+[1m 15s; T: 9m 00s]

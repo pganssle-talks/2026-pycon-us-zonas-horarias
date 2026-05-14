@@ -48,7 +48,7 @@ Notes:
 
 Bueno, e históricamente, eso fue todo lo que tenías en Python. En Python dos punto tres, dijeron: "Aquí tienes una interfaz, pero no queremos encargarnos de implementar las reglas por ti". Se suponía que debías averiguar por tu cuenta, según tu lógica de negocio, cuál sería el mejor método para representar tus zonas horarias, y quizá se esperaba que hicieras algo así: una clase con las reglas que representen la hora del Este.
 
-[30s; T: 11m 45s]
+[30s; T: 13m 00s]
 
 --
 
@@ -81,7 +81,7 @@ Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o 
 
 Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
 
-[30s; T: 12m 15s]
+[30s; T: 13m 30s]
 
 --
 
@@ -165,7 +165,7 @@ Fijaos en que en esta lista que tengo aquí la "una y media" aparece dos veces, 
 
 Y esto es un problema fundamental, un defecto que tenía la interfaz de `tzinfo` en aquella época.
 
-[1m 15s; T: 13m 30s]
+[1m 15s; T: 14m 45s]
 
 --
 
@@ -211,4 +211,4 @@ Y además hay otro problema, el complemento de las horas ambiguas, que llamamos 
 
 Lidiar con esto es más fácil porque estos tiempos simplemente no existen, pero aun así, es importante definir qué debe hacer `tzinfo` en estos casos.
 
-[15s; T: 13m 45s]
+[15s; T: 15m 00s]

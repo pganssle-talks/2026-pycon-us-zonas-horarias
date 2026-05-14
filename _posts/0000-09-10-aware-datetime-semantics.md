@@ -49,7 +49,7 @@ Para ilustrar eso, os cuento un «bug report» que llegó a `dateutil` hace año
 
 Y más raro aún: si creo una nueva instancia del objeto de la zona horaria de Londres para hacer mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos también son iguales entre sí! Así que la relación no es transitiva, ¿cierto?
 
-[45s; T: 23m 30s]
+[45s; T: 23m 15s]
 
 --
 
@@ -92,7 +92,7 @@ Así que Y y Z no podían representar el `datetime` original; no puedes llegar a
 
 Y lo que pasa aquí es que X va a UTC — que sí existe — y de ahí al equivalente en Londres.
 
-[30s; T: 24m 00s]
+[30s; T: 23m 45s]
 
 --
 
@@ -216,7 +216,7 @@ Pero no vemos ninguno de esos patrones, ¿cierto? ¿Qué pasa?
 
 La última pista que nos falta es que X e Y usan el mismo objeto `tzinfo`, pero Z tiene uno diferente, aunque sea igual a los otros.
 
-[45s; T: 24m 45s]
+[45s; T: 24m 30s]
 
 --
 
@@ -277,7 +277,7 @@ Y la clave final de nuestro misterio es que solo se considera que dos `datetime`
 
 Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la hora de reloj, para `x == z` tenemos tiempo absoluto, y para `y == z`, otra vez tenemos la hora de reloj, aunque para la última las dos dan el mismo resultado.
 
-[45s; T: 25m 30s]
+[1m; T: 25m 30s]
 
 --
 
@@ -325,4 +325,4 @@ Dicho sea de paso, este problema influyó bastante en cómo se diseñó `ZoneInf
 
 Así que `ZoneInfo` garantiza que siempre vas a recibir el mismo objeto si usas la misma clave.
 
-[15s; T: 25m 45s]
+[30s; T: 26m 00s]

@@ -45,4 +45,4 @@ Y quizás hayáis visto algo como "CST". "CST" es una abreviatura que depende to
 
 Un consejo: nunca confiéis en estas abreviaturas. No intentéis obtener una zona horaria específica de ellas; no deis por hecho que tengan un significado único y ni siquiera podéis asumir que todas las zonas tengan una abreviatura asociada.
 
-[1m 30s; T: 2m 15s]
+[1m 45s; T: 2m 30s]
