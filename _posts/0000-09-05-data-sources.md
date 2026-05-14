@@ -64,7 +64,9 @@ Decidimos resolver este dilema convirtiéndolo en una situación de "traer sus p
 
 # Cómo usar `zoneinfo`
 
-<div class="bullets-with-header">
+<div style="display: flex; align-items: space-around;">
+
+<div class="bullets-with-header" style="flex-grow: 1">
 
 ## Backport (3.6+)
 
@@ -74,6 +76,12 @@ try:
 except ImportError:
     import zoneinfo
 ```
+
+</div>
+
+<div class="fragment" style="font-size: 4em; padding: 0 0.5em; transform: scaleX(1);">(≖_≖ ) <!--ಠಿ_ಠ--></div>
+
+<div class="small-spacer" style="flex-grow: 3.5;"></div>
 
 </div>
 
