@@ -178,7 +178,7 @@ Pues nada, ya sabemos que la gente es muy rara con sus cambios de reloj, pero se
 
 </div>
 
-Tambien Samoa en 29 Enero 2011
+También Samoa el 29 Enero 2011
 <div class="small-spacer"></div>
 </div>
 

@@ -32,7 +32,7 @@ Gracias a su implementación en C, `zoneinfo` es más rápida que `pytz` y `date
 
 Notes:
 
-Vale, pues no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo que acabo de explicar. Y creo que, además de ser el librería más armónica con el diseño de `datetime`, aun hay al menos dos más motivos buenos para usarla.
+Vale, pues no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo que acabo de explicar. Y creo que, además de ser la librería más armónica con el diseño de `datetime`, aun hay al menos dos buenos motivos más para usarla.
 
 Uno es que es muy rápida, ya que está escrita en C. Pero no quiero jactarme del rendimiento, así que no vamos a pasar mucho tiempo en esta diapositiva.
 

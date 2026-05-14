@@ -47,7 +47,7 @@ Notes:
 
 Para ilustrar eso, os cuento un «bug report» que llegó a `dateutil` hace años y años y fue muy divertido de debuggear. Alguien dijo: "Esta fecha, el veinticinco de marzo a la una de la madrugada en Londres — si la paso a timestamp y de vuelta — los `datetime`s no evalúan como iguales". Un poco chungo, ¿no?
 
-Y más raro aún: si creo una nueva instancia del objeto de la zona horaria de Londres para hacer mi `datetime`, *sí* que evalúan como iguales. E incluso más raro: ¡esas dos también son iguales entre sí! Así que la relación no es transitiva, ¿cierto?
+⏭️ Y más raro aún: si creo una nueva instancia del objeto de la zona horaria de Londres para hacer mi `datetime`, *sí* que evalúan como iguales. ⏭️ E incluso más raro: ¡esas dos también son iguales entre sí! Así que la relación no es transitiva, ¿cierto?
 
 [45s; T: 23m 15s]
 
