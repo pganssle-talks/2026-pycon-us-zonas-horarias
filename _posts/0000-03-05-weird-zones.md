@@ -33,7 +33,7 @@ Notes:
 
 Vale, ya tenemos claros los conceptos básicos, así que hemos llegado a la parte casi obligatoria de cualquier charla sobre zonas horarias: esa en la que el ponente os cuenta las aberraciones estrafalarias que la gente ha perpetrado con su medición del tiempo local.
 
-Quizás tengas un cuñado que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja, ⏭️ tal que así. Podéis ver que en ⏭️ Australia o la India hay zonas con desplazamientos que son múltiplos de media hora, en Nepal hay una de quince minutos, y en los datos históricos hay zonas con desplazamientos que ni siquiera eran de minutos enteros.
+Quizás tengas un cuñado que crea que solo hay veinticuatro zonas horarias y que avanzan en incrementos de una hora respecto al UTC, así tal cual. Pero la realidad es más compleja, ➡️ tal que así. Podéis ver que en ➡️ Australia o la India hay zonas con desplazamientos que son múltiplos de media hora, en Nepal hay una de quince minutos, y en los datos históricos hay zonas con desplazamientos que ni siquiera eran de minutos enteros.
 
 [45s; T: 3m 15s]
 
@@ -99,13 +99,13 @@ Notes:
 
 Además, puede ser que tu cuñado crea que el desplazamiento del UTC solo cambia debido a la hora de verano y viceversa.
 
-⏭️ Pero de vez en cuando hay localidades que cambian su desplazamiento por motivos ajenos a los cambios estacionales.
+➡️ Pero de vez en cuando hay localidades que cambian su desplazamiento por motivos ajenos a los cambios estacionales.
 
-⏭️ Por ejemplo en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, adelantando su desplazamiento estándar una hora.
+➡️ Por ejemplo en Portugal, en mil novecientos noventa y dos, decidieron que querían usar la zona horaria de Europa Central en vez de la de Europa Occidental, adelantando su desplazamiento estándar una hora.
 
-Para realizar este cambio, cuando su hora de verano iba a acabar, ⏭️simplemente no cambiaron los relojes, sino que cambiaron la interpretación de su zona horaria a 'horario estándar'. Lo cual es muy conveniente para los humanos, pero te romperá el código si asumes que el horario de verano no va a terminar sin un cambio de reloj.
+Para realizar este cambio, cuando su hora de verano iba a acabar, ➡️simplemente no cambiaron los relojes, sino que cambiaron la interpretación de su zona horaria a 'horario estándar'. Lo cual es muy conveniente para los humanos, pero te romperá el código si asumes que el horario de verano no va a terminar sin un cambio de reloj.
 
-⏭️ De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior,  con la misma forma de transicionar, pero al revés.
+➡️ De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior,  con la misma forma de transicionar, pero al revés.
 
 Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, pero seguramente o una zona tiene hora de verano o no la tiene, ¿no? O sea, o hay dos cambios al año o cero, ¿cierto?
 
@@ -141,7 +141,7 @@ Notes:
 
 Por supuesto que no. Un contraejemplo es Marruecos, que durante varios años tuvo dos transiciones de hora al año.
 
-Por ejemplo, en dos mil doce cambiaron a la hora de verano en ⏭️ abril, pero en ⏭️ julio volvieron a la hora estándar durante un mes y después ⏭️ regresaron a la hora de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ⏭️ ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes del anochecer.
+Por ejemplo, en dos mil doce cambiaron a la hora de verano en ➡️ abril, pero en ➡️ julio volvieron a la hora estándar durante un mes y después ➡️ regresaron a la hora de verano durante lo que quedaba de verano. ¿Y por qué? Parece muy raro hasta que te das cuenta de que Marruecos es un país de mayoría musulmana, y en dos mil doce ➡️ ese mes era el mes de Ramadán, durante el cual los musulmanes no comen antes del anochecer.
 
 De repente, esa hora que sobra antes de la puesta del sol ya no te hace tanta gracia, ¿no? Así que suspendían el horario de verano. Hoy eso ya no ocurre porque han adoptado la hora de verano permanente, excepto durante el Ramadán; entonces su zona parece más normal, salvo por la extraña brevedad de su hora de verano, o sea, su hora de invierno, porque hoy en día su hora normal es la de verano.
 
@@ -262,7 +262,7 @@ img.china_map {
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo un desplazamiento para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, ⏭️ los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo un desplazamiento para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, ➡️ los locales tienden a observar el UTC más seis, pero no todos los locales.
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y... ¿raza?
 

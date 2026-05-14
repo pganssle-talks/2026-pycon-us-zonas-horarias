@@ -118,7 +118,7 @@ except ImportError:
 
 Notes:
 
-Hoy en día si usas cualquier versión con soporte de Python, ⏭️ e incluso muchas versiones sin soporte, puedes usar el módulo `zoneinfo` para tus zonas IANA.
+Hoy en día si usas cualquier versión con soporte de Python, ➡️ e incluso muchas versiones sin soporte, puedes usar el módulo `zoneinfo` para tus zonas IANA.
 
 Y no tengo que explicaros cómo usarlo porque lo haces como os imaginaréis. Pasas un objeto `ZoneInfo` al constructor o `.replace` o `.now` o `.astimezone` y funciona bien.
 

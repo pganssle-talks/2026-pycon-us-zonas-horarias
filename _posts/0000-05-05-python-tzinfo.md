@@ -82,10 +82,10 @@ Ok, ya que hemos establecido que en realidad hace falta *ugh* entender las abstr
 
 El modelo de zonas horarias de Python se centra en una clase base abstracta que se llama `tzinfo`. La idea es que cada objeto que representa una zona horaria proporciona tres funciones que toman como argumento un `datetime`.
 
-⏭️La más importante y la que de verdad tira del carro es `utcoffset`, que da el desplazamiento que aplica a la fecha y hora indicada.
+➡️La más importante y la que de verdad tira del carro es `utcoffset`, que da el desplazamiento que aplica a la fecha y hora indicada.
 
-⏭️A continuación hay `tzname`, que da el nombre que aplica a ese desplazamiento — normalmente estos serían nuestras nefastas abreviaturas de tres letras.
+➡️A continuación hay `tzname`, que da el nombre que aplica a ese desplazamiento — normalmente estos serían nuestras nefastas abreviaturas de tres letras.
 
-⏭️Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. ⏭️La verdad es que creo que cada vez que he visto a alguien usar este método ha sido un error de algún tipo. No lo uséis, amigos.
+➡️Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. ➡️La verdad es que creo que cada vez que he visto a alguien usar este método ha sido un error de algún tipo. No lo uséis, amigos.
 
 [1m 15s; T: 12m 30s]

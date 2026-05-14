@@ -55,10 +55,10 @@ Pero se hizo un poco a escondidas — los `datetime`s naíf, que antes eran hora
 
 Tengo un post de blog en inglés que explica el tortuoso razonamiento detrás de esta decisión, pero ahora basta con decir que ya estoy convencido de que era la decisión correcta.
 
-⏭️ Y algo aquí que quiero destacar es que si quieres saber el desplazamiento o el nombre local, tienen una interfaz tipo `pytz`: si llamas a `.astimezone` sin argumentos, te dará  un `datetime` consciente con el `tzinfo` fijo que aplica a tu sistema.
+➡️ Y algo aquí que quiero destacar es que si quieres saber el desplazamiento o el nombre local, tienen una interfaz tipo `pytz`: si llamas a `.astimezone` sin argumentos, te dará  un `datetime` consciente con el `tzinfo` fijo que aplica a tu sistema.
 
 Pero no debes hacer aritmética con eso — haz los cálculos primero y luego llama a `astimezone`.
 
-Así que esto nos da dos de nuestros tres tipos de zonas horarias, pero en Python tres punto ocho (3.8), ⏭️ todavía no teníamos zonas de IANA, y el motivo eran los datos.
+Así que esto nos da dos de nuestros tres tipos de zonas horarias, pero en Python tres punto ocho (3.8), ➡️ todavía no teníamos zonas de IANA, y el motivo eran los datos.
 
 [1m 30s; T: 20m 30s]

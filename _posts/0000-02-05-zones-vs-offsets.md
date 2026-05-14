@@ -37,7 +37,7 @@ Empecemos por lo fácil, aclarando qué es el UTC, que mencionaré muchas veces 
 
 Debería ser un reloj que avance de manera monótona y lineal, pero los comités de estándares parecen odiarnos, así que han puesto segundos intercalares. Entonces, aunque es mejor que una zona con cambios de horario, el UTC tampoco está libre de complicaciones.
 
-⏭️ Otro concepto importante es la diferencia entre zonas horarias y desplazamientos. "UTC menos seis" es un desplazamiento (u *offset*). Significa que, para obtener la hora local, hay que restar seis horas al UTC.
+➡️ Otro concepto importante es la diferencia entre zonas horarias y desplazamientos. "UTC menos seis" es un desplazamiento (u *offset*). Significa que, para obtener la hora local, hay que restar seis horas al UTC.
 
 "America/Chicago" es una zona horaria, un conjunto de reglas que nos dicen cómo varían los desplazamientos en función del tiempo, y normalmente están asociadas a una región del mundo.
 

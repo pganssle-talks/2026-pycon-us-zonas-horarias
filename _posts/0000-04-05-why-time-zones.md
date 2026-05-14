@@ -244,7 +244,7 @@ Y podéis pensar: "Bueno, seguro que tenemos que manejar zonas horarias al trata
 
 Y siento ser otra vez el pájaro de mal agüero, pero tampoco podéis, porque eso no funciona cuando lo que importa es la hora local.
 
-Si programas una reunión a la una en el futuro y, antes de la cita, el desplazamiento cambia (lo cual pasa todo el rato, y muchas veces sin mucho aviso), seguro que quieres mantener la reunión a la una, pero si has guardado el `datetime` en UTC antes del cambio, ⏭️ cuando lo saques después, lo que sale no será correcto. El mapeo entre la hora local y UTC no es estable, así que has perdido la información que te importaba.
+Si programas una reunión a la una en el futuro y, antes de la cita, el desplazamiento cambia (lo cual pasa todo el rato, y muchas veces sin mucho aviso), seguro que quieres mantener la reunión a la una, pero si has guardado el `datetime` en UTC antes del cambio, ➡️ cuando lo saques después, lo que sale no será correcto. El mapeo entre la hora local y UTC no es estable, así que has perdido la información que te importaba.
 
 Dicho de otro modo: tienes que usar la abstracción que mejor represente tu situación; si lo que importa es la hora local, guarda la hora local.
 

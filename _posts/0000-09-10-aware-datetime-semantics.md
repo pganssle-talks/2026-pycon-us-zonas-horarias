@@ -47,7 +47,7 @@ Notes:
 
 Para ilustrar eso, os cuento un «bug report» que llegó a `dateutil` hace años y años y fue muy divertido de debuggear. Alguien dijo: "Esta fecha, el veinticinco de marzo a la una de la madrugada en Londres — si la paso a timestamp y de vuelta — los `datetime`s no evalúan como iguales". Un poco chungo, ¿no?
 
-⏭️ Y más raro aún: si creo una nueva instancia del objeto de la zona horaria de Londres para hacer mi `datetime`, *sí* que evalúan como iguales. ⏭️ E incluso más raro: ¡esas dos también son iguales entre sí! Así que la relación no es transitiva, ¿cierto?
+➡️ Y más raro aún: si creo una nueva instancia del objeto de la zona horaria de Londres para hacer mi `datetime`, *sí* que evalúan como iguales. ➡️ E incluso más raro: ¡esas dos también son iguales entre sí! Así que la relación no es transitiva, ¿cierto?
 
 [45s; T: 23m 15s]
 
@@ -210,11 +210,11 @@ Eso nos lleva al tema de la igualdad: ¿qué significa que dos `datetime`s sean 
 
 Uno es la semántica de hora de reloj: solo comparas la parte naif, ignorando el desplazamiento. En esa situación, X no debería ser igual a Y o Z, e Y y Z deberían ser iguales entre sí.
 
-⏭️ La otra es la semántica de tiempo absoluto: pasas todo a UTC antes de compararlos, y en este caso, los tres son iguales.
+➡️ La otra es la semántica de tiempo absoluto: pasas todo a UTC antes de compararlos, y en este caso, los tres son iguales.
 
 Pero no vemos ninguno de esos patrones, ¿cierto? ¿Qué pasa?
 
-⏭️ La última pista que nos falta es que X e Y usan el mismo objeto `tzinfo`, pero Z tiene uno diferente, aunque sea igual a los otros.
+➡️ La última pista que nos falta es que X e Y usan el mismo objeto `tzinfo`, pero Z tiene uno diferente, aunque sea igual a los otros.
 
 [45s; T: 24m 30s]
 
@@ -275,7 +275,7 @@ Y resulta que la semántica que se usa de verdad es que cuando dos `datetime`s e
 
 Y la clave final de nuestro misterio es que solo se considera que dos `datetime`s están en la misma zona si tienen el mismo objeto `tzinfo` — el mismísimo objeto, no basta con que tengan el mismo valor.
 
-⏭️ Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la hora de reloj, para `x == z` tenemos tiempo absoluto, y para `y == z`, otra vez tenemos la hora de reloj, aunque para la última las dos dan el mismo resultado.
+➡️ Entonces el misterio está resuelto, ¿lo veis? Porque para `x == y` se aplica la hora de reloj, para `x == z` tenemos tiempo absoluto, y para `y == z`, otra vez tenemos la hora de reloj, aunque para la última las dos dan el mismo resultado.
 
 [1m; T: 25m 30s]
 
