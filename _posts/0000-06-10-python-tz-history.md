@@ -209,6 +209,6 @@ Notes:
 
 Y además hay otro problema, el complemento de las horas ambiguas, que llamamos horas imaginarias. Estas son básicamente horas que no existen en una zona horaria; por ejemplo, cuando toca adelantar el reloj: cualquier hora en ese hueco no corresponderá a un momento real.
 
-Lidiar con esto es más fácil porque estos tiempos simplemente no existen, pero aun así, como detalle de implementación, es importante saber qué desplazamiento deben devolver tus funciones de `tzinfo`.
+Lidiar con esto es más fácil porque estos tiempos simplemente no existen, pero aun así, es importante definir qué debe hacer `tzinfo` en estos casos.
 
 [15s; T: 13m 45s]
