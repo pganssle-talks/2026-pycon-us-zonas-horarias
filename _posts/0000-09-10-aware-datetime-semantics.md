@@ -90,7 +90,7 @@ Mi primera pista fue darme cuenta de que esta hora no existía — era imaginari
 
 Así que Y y Z no podían representar el `datetime` original; no puedes llegar a una hora imaginaria desde UTC.
 
-Y lo que pasa aquí es que X va a UTC — que sí existe — y de ahí al equivalente en Londres.
+Y lo que pasa aquí es que X va a UTC — que sí existe — y de ahí al equivalente existente en Londres.
 
 [30s; T: 23m 45s]
 
