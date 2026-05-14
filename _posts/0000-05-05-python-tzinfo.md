@@ -98,6 +98,6 @@ El modelo de zonas horarias de Python se centra en una clase base abstracta que 
 
 ➡️Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. ➡️La verdad es que creo que casi cada vez que he visto a alguien usar este método ha sido un error de algún tipo. No lo uséis, amigos.
 
-Aunque hace poco, por primera vez en mi vida entera, he dado con un uso legítimo para este método... ➡️ haciendo este mapa de "horas estándares" para esta misma charla. Como si quisiera socavar mi propio argumento...
+Aunque hace poco, por primera vez en mi vida entera, he dado con un uso legítimo para este método... ➡️ haciendo este mapa de "horas estándares" para esta misma charla. Como si mis recomendaciones no fueran lo suficientemente complejas...
 
 [1m 30s; T: 12m 45s]
