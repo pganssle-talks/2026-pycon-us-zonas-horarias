@@ -79,7 +79,7 @@ Pero si lo pensáis un poco, la verdad es que solo hay tres tipos de zona horari
 
 Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o sea, la hora de tu sistema; y el tercero es una zona de la base de datos de IANA, por ejemplo America/Chicago o America/New_York, ese tipo de cosas.
 
-Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
+⏭️ Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
 
 [30s; T: 13m 30s]
 
@@ -161,7 +161,7 @@ Y para explicaros por qué, tengo que irme un poco por las ramas para hablar sob
 
 Las horas ambiguas son momentos en los que la misma hora se marca dos veces; por ejemplo, cuando toca atrasar el reloj. Si se retrasa la hora a las dos, cada minuto entre la una y las dos pasa dos veces.
 
-Fijaos en que en esta lista que tengo aquí la "una y media" aparece dos veces, y la diferencia principal es el desplazamiento. Pero si os acordáis, el modelo de `datetime` es que el desplazamiento es la *salida* del método `utcoffset`, no puede formar parte de la entrada, así que en realidad es imposible distinguir entre estas dos situaciones.
+⏭️ Fijaos en que en esta lista que tengo aquí la "una y media" aparece dos veces, y la diferencia principal es el desplazamiento. Pero si os acordáis, el modelo de `datetime` es que el desplazamiento es la *salida* del método `utcoffset`, no puede formar parte de la entrada, así que en realidad es imposible distinguir entre estas dos situaciones.
 
 Y esto es un problema fundamental, un defecto que tenía la interfaz de `tzinfo` en aquella época.
 
