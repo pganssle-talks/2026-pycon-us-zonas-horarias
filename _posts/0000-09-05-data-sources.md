@@ -13,7 +13,10 @@
 </div>
 
 <div class="centered-container">
-<img src="images/all_zones.png" alt="Mapa de zonas horarias de IANA"/>
+<img src="images/all_zones.png"
+     alt="Mapa de zonas horarias de IANA"
+     style="max-height: 30dvh;"
+     />
 </div>
 </div>
 
