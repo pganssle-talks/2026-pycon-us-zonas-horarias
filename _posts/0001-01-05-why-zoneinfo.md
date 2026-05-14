@@ -97,7 +97,7 @@ zoneinfo:      2038-12-02     PST  -08:00
 
 Notes:
 
-El motivo más importante es que ni `pytz` ni `dateutil` no soporta el nuevo formato de los datos de IANA, y el formato antiguo no admite timestamps de más de treinta y dos bits. Así que para fechas posteriores a dos mil treinta y ocho, deja de funcionar; las transiciones simplemente se detienen, y el "epochalypse" se acerca cada día más.
+El motivo más importante es que ni `pytz` ni `dateutil` soporta el nuevo formato de los datos de IANA, y el formato antiguo no admite timestamps de más de treinta y dos bits. Así que para fechas posteriores a dos mil treinta y ocho, deja de funcionar; las transiciones simplemente se detienen, y el "epochalypse" se acerca cada día más.
 
 <!-- Skip this for now: probably doesn't apply.
 
