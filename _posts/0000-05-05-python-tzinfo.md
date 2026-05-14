@@ -78,7 +78,7 @@
 
 Notes:
 
-Ok, ya que hemos establecido que en realidad *ugh* hace falta entender las abstracciones con las que trabajamos, vamos a bucear más en los detalles de cómo funciona en Python.
+Ok, ya que hemos establecido que en realidad hace falta *ugh* entender las abstracciones con las que trabajamos, vamos a bucear más en los detalles de cómo funciona en Python.
 
 El modelo de zonas horarias de Python se centra en una clase base abstracta que se llama `tzinfo`. La idea es que cada objeto que representa una zona horaria proporciona tres funciones que toman como argumento un `datetime`.
 
