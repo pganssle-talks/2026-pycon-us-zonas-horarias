@@ -206,15 +206,15 @@ False
 
 Notes:
 
-Esto nos lleva al tema de la igualdad: ¿qué significa que dos `datetime`s sean iguales? Porque de hecho hay dos candidatos buenos.
+Eso nos lleva al tema de la igualdad: ¿qué significa que dos `datetime`s sean iguales? Porque de hecho hay dos candidatos buenos.
 
 Uno es la semántica de hora de reloj: solo comparas la parte naif, ignorando el desplazamiento. En esa situación, X no debería ser igual a Y o Z, e Y y Z deberían ser iguales entre sí.
 
-La otra es la semántica de tiempo absoluto: pasas todo a UTC, y entonces los tres son iguales.
+La otra es la semántica de tiempo absoluto: pasas todo a UTC antes de compararlos, y en este caso, los tres son iguales.
 
 Pero no vemos ninguno de esos patrones, ¿cierto? ¿Qué pasa?
 
-La última pista que necesitamos es que X e Y usan el mismo objeto `tzinfo`, pero Z tiene uno diferente, aunque sea igual a los otros.
+La última pista que nos falta es que X e Y usan el mismo objeto `tzinfo`, pero Z tiene uno diferente, aunque sea igual a los otros.
 
 [45s; T: 24m 45s]
 
