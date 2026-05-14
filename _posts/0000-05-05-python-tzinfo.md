@@ -100,4 +100,4 @@ El modelo de zonas horarias de Python se centra en una clase base abstracta que 
 
 Aunque hace poco, por primera vez en mi vida entera, he dado con un uso legítimo para este método... ➡️ haciendo este mapa de "horas estándares" para esta misma charla. Como si quisiera socavar mi propio argumento...
 
-[1m 30s; T: 12m 30s]
+[1m 30s; T: 12m 45s]

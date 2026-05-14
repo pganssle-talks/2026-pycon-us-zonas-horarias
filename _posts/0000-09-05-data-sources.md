@@ -26,7 +26,7 @@ Así que ya he mencionado las zonas horarias de IANA algunas veces, y esto se re
 
 Y la idea era incluirla con Python como fuente de las reglas, pero el problema es que sacan versiones nuevas demasiado frecuentemente, con mucha más frecuencia que la cadencia anual de Python, y a menudo es importante que la gente reciba los datos actualizados cuanto antes.
 
-[45s; T: 21m 15s]
+[45s; T: 21m 30s]
 
 --
 
@@ -59,7 +59,7 @@ Notes:
 
 Decidimos resolver este dilema convirtiéndolo en una situación de "traer sus propios datos". En vez de incluir una base de datos directamente en Python, `zoneinfo` la busca en ubicaciones bien conocidas, y puedes configurar la ruta de búsqueda de varias formas. También proporcionamos un paquete de PyPI que puedes usar como fallback para plataformas que no traen los datos de forma accesible, como Windows.
 
-[30s; T: 21m 45s]
+[30s; T: 22m 00s]
 
 --
 
@@ -124,4 +124,4 @@ Y no tengo que explicaros cómo usarlo porque lo haces como os imaginaréis. Pas
 
 Aunque lo importante a notar aquí es que en este mundo post-`pytz`, es mucho más probable que te enfrentes a las semánticas poco intuitivas inherentes al modelo de `datetimes` que tiene Python.
 
-[45s; T: 22m 30s]
+[45s; T: 22m 45s]

@@ -36,7 +36,7 @@ Vale, pues no quiero dar por sentado que, por el mero hecho de estar en la bibli
 
 Uno es que es muy rápida, ya que está escrita en C. Pero no quiero jactarme del rendimiento, así que no vamos a pasar mucho tiempo en esta diapositiva.
 
-[30s; T: 28m 00s]
+[30s; T: 28m 15s]
 
 --
 
@@ -105,5 +105,5 @@ Pero algo más urgente es que algunas distros ya usan el formato "slim", que apr
 
 -->
 
-[30s; T: 28m 30s]
+[30s; T: 28m 45s]
 

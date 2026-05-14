@@ -101,4 +101,4 @@ No creo que nos quede tiempo para preguntas, pero aquí tenéis mi información,
 
 No, es broma, habéis sido una audiencia genial. Hace casi tres años, empecé a aprender español, y el año pasado, mejorar lo suficiente para dar una charla ha sido algo entre meta y reto para mí, así que, ya cumplido, os agradezco que hayáis venido y participado en este pequeño hito personal. Nos vemos por los pasillos.
 
-[45s; T: 29m 00s]
+[45s; T: 29m 30s]
