@@ -545,7 +545,7 @@ def render(
         if is_frac(h):
             f = f"url(#{pat_id(h)})"
         elif highlight_non_integer:
-            f = desaturate(fill_color(h), factor=0.92)
+            f = desaturate(fill_color(h), factor=0.25)
         else:
             f = fill_color(h)
         lines.append(
@@ -556,6 +556,20 @@ def render(
 
     # All map-specific overlays (fractional labels) are clipped to the map viewport
     lines.append('<g clip-path="url(#mapclip)">')
+
+    # Red outlines for fractional zones in highlight mode
+    if highlight_non_integer:
+        for h in offsets:
+            if not is_frac(h):
+                continue
+            geom = _wrap_for_display(offset_map[h])
+            d = geom_to_svg_path(geom, width, map_height, margin)
+            if not d:
+                continue
+            lines.append(
+                f'<path d="{d}" fill="none" stroke="#990020" stroke-width="3.5"'
+                f' stroke-linejoin="round"/>'
+            )
 
     # Labels for fractional zones placed at their representative point inside the map
     for h in offsets:
