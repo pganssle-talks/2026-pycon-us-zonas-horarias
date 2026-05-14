@@ -45,7 +45,7 @@
 ```
 </div>
 
-<div class="fragment disappearing-fragment nospace-fragment fade-in" data-fragment-index="2">
+<div class="fragment disappearing-fragment nospace-fragment fade-in-then-out" data-fragment-index="2">
 
 ```pycon
 >>> LOS = zoneinfo.ZoneInfo("America/Los_Angeles")
@@ -60,10 +60,21 @@
 ```
 
 </div>
+
+<div class="fragment disappearing-fragment nospace-fragment fade-in"
+     data-fragment-index="3"
+     style="width: 100%; display: flex; justify-content: center"
+     >
+
+<img src="external-images/bob-rakes.gif"
+     style="height: 10em; border: 1px solid;"
+     />
+
 </div>
+</div>
+<div class="small-spacer"></div>
 </div>
 
-<div class="small-spacer"></div>
 
 Notes:
 
