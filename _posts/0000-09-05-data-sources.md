@@ -81,7 +81,7 @@ except ImportError:
 
 ## Construir datetimes conscientes (aware)
 
-```python
+```pycon
 >>> dt = datetime(2020, 11, 12, 19, tzinfo=ZoneInfo("America/Chicago"))
 >>> print(dt)
 2020-11-12 19:00:00-06:00
@@ -96,7 +96,7 @@ except ImportError:
 
 ## Convertir entre zonas
 
-```python
+```pycon
 >>> print(dt.astimezone(ZoneInfo("Europe/Paris")))
 2020-11-13 02:00:00+01:00
 ```
@@ -107,7 +107,7 @@ except ImportError:
 
 Notes:
 
-Hoy en día si usas cualquier versión con soporte de Python, puedes usar el módulo `zoneinfo` para tus zonas IANA. En versiones anteriores a 3.9, hay un backport que podrías usar.
+Hoy en día si usas cualquier versión con soporte de Python, y incluso muchas versiones sin soporte, puedes usar el módulo `zoneinfo` para tus zonas IANA.
 
 Y no tengo que explicaros cómo usarlo porque lo haces como os imaginaréis. Pasas un objeto `ZoneInfo` al constructor o `.replace` o `.now` o `.astimezone` y funciona bien.
 
