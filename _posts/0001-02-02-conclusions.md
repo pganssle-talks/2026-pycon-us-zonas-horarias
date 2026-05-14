@@ -95,10 +95,10 @@ style="font-size: 1.5em; display: flex; flex-direction: column; justify-content:
 
 Notes:
 
-Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias y que podáis salir de aquí y escribir código que funcione en cualquier parte del mundo.
+Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias.
 
-Creo que, al menos en parte por lo despacio que hablo en español, ya no nos queda tiempo para preguntas, pero estaré en los pasillos después de la charla y luego deambulando por la conferencia; os animo a venir a hablar conmigo allí.
+No creo que nos quede tiempo para preguntas, pero aquí tenéis mi información, y estaré en los pasillos después de la charla y luego deambulando por la conferencia; o sea, si no habré muerto de vergüenza pensando en los errores que haya cometido 😅
 
-¡Gracias por venir, nos vemos pronto!
+No, es broma, habéis sido una audiencia genial. Gracias por venir y nos vemos por los pasillos.
 
 [30s; T: 29m 20s]
