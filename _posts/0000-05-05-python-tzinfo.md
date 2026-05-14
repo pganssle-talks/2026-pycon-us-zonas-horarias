@@ -61,12 +61,22 @@
 
 </div>
 
-<div class="fragment disappearing-fragment nospace-fragment fade-in"
+<div class="fragment disappearing-fragment nospace-fragment fade-in-then-out"
      data-fragment-index="3"
      style="width: 100%; display: flex; justify-content: center"
      >
 
 <img src="external-images/bob-rakes.gif"
+     style="height: 10em; border: 1px solid;"
+     />
+
+</div>
+<div class="fragment disappearing-fragment nospace-fragment fade-in"
+     data-fragment-index="4"
+     style="width: 100%; display: flex; justify-content: center"
+     >
+
+<img src="images/figures/tz_map_standard.png"
      style="height: 10em; border: 1px solid;"
      />
 
@@ -86,6 +96,8 @@ El modelo de zonas horarias de Python se centra en una clase base abstracta que 
 
 ➡️A continuación hay `tzname`, que da el nombre que aplica a ese desplazamiento — normalmente estos serían nuestras nefastas abreviaturas de tres letras.
 
-➡️Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. ➡️La verdad es que creo que cada vez que he visto a alguien usar este método ha sido un error de algún tipo. No lo uséis, amigos.
+➡️Y finalmente tenemos a la oveja negra de la familia, `dst`, que da la diferencia entre el desplazamiento actual y el horario estándar. ➡️La verdad es que creo que casi cada vez que he visto a alguien usar este método ha sido un error de algún tipo. No lo uséis, amigos.
 
-[1m 15s; T: 12m 30s]
+Aunque hace poco, por primera vez en mi vida entera, he dado con un uso legítimo para este método... ➡️ haciendo este mapa de "horas estándares" para esta misma charla. Como si quisiera socavar mi propio argumento...
+
+[1m 30s; T: 12m 30s]
