@@ -1,3 +1,43 @@
+<div class="bullet-container medium-code code-indented smaller-margins">
+
+# ¿Por qué usar `zoneinfo`?
+
+¡Es muy **rápida**! (cifras de los benchmarks de `backports.zoneinfo`):
+
+```
+Ejecutando el constructor en la zona America/New_York
+c_zoneinfo: mean: 214.65 ns ± 43.48 ns; min: 190.88 ns (k=5, N=1000000)
+pytz: mean: 1.21 µs ± 78.31 ns; min: 1.10 µs (k=5, N=200000)
+dateutil: mean: 1.33 µs ± 117.35 ns; min: 1.23 µs (k=5, N=200000)
+
+Ejecutando from_utc en la zona America/New_York
+c_zoneinfo: mean: 658.55 ns ± 28.92 ns; min: 617.08 ns (k=5, N=500000)
+pytz: mean: 5.12 µs ± 515.26 ns; min: 4.70 µs (k=5, N=50000)
+dateutil: mean: 10.64 µs ± 746.99 ns; min: 10.20 µs (k=5, N=20000)
+
+Ejecutando to_utc en la zona America/New_York
+c_zoneinfo: mean: 616.13 ns ± 16.14 ns; min: 604.76 ns (k=5, N=500000)
+pytz: mean: 848.44 ns ± 28.10 ns; min: 806.72 ns (k=5, N=500000)
+dateutil: mean: 8.03 µs ± 509.75 ns; min: 7.55 µs (k=5, N=50000)
+
+Ejecutando utcoffset en la zona America/New_York
+c_zoneinfo: mean: 373.89 ns ± 5.76 ns; min: 368.24 ns (k=5, N=1000000)
+pytz: mean: 564.55 ns ± 13.65 ns; min: 552.88 ns (k=5, N=500000)
+dateutil: mean: 7.95 µs ± 642.62 ns; min: 7.44 µs (k=5, N=50000)
+```
+
+Gracias a su implementación en C, `zoneinfo` es más rápida que `pytz` y `dateutil` en todas las métricas de rendimiento.
+
+</div>
+
+Notes:
+
+Vale, pues no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo que acabo de explicar. Y creo que, además de ser el librería más armónica con el diseño de `datetime`, aun hay al menos dos más motivos buenos para usarla.
+
+Uno es que es muy rápida, ya que está escrita en C. Pero no quiero jactarme del rendimiento, así que no vamos a pasar mucho tiempo en esta diapositiva.
+
+--
+
 <style>
 div.bullet-container.smaller-margins {
     ul {
@@ -16,7 +56,7 @@ div.bullet-container.smaller-margins {
 
 <div class="small-spacer"></div>
 
-Es la única librería de zonas horarias con soporte para fechas posteriores a 2038 y para el formato "slim" de `tzdata`.
+Es la única librería de zonas horarias con soporte para fechas posteriores a 2038 (el «epochalypse») y para el formato "slim" de `tzdata`.
 
 ```python
 >>> for i in range(5):
@@ -55,9 +95,7 @@ zoneinfo:      2038-12-02     PST  -08:00
 
 Notes:
 
-Vale, sé que esto puede asustar un poco con la complejidad de migrar a `ZoneInfo`, y no quiero dar por sentado que, por el mero hecho de estar en la biblioteca estándar, vayáis a querer liaros con todo este jaleo. Por eso, quiero daros otros motivos de peso.
-
-Lo más importante es que `pytz` no soporta el nuevo formato de los datos de IANA, y el formato antiguo no admite timestamps de más de treinta y dos bits. Así que para fechas posteriores a dos mil treinta y ocho, deja de funcionar; las transiciones simplemente se detienen.
+El motivo más importante es que ni `pytz` ni `dateutil` no soporta el nuevo formato de los datos de IANA, y el formato antiguo no admite timestamps de más de treinta y dos bits. Así que para fechas posteriores a dos mil treinta y ocho, deja de funcionar; las transiciones simplemente se detienen, y el "epochalypse" se acerca cada día más.
 
 <!-- Skip this for now: probably doesn't apply.
 
@@ -67,42 +105,3 @@ Pero algo más urgente es que algunas distros ya usan el formato "slim", que apr
 
 [1m 15s; T: 28m 15s]
 
---
-
-<div class="bullet-container medium-code code-indented smaller-margins">
-
-# ¿Por qué usar `zoneinfo`?
-
-¡Es muy **rápida**! (cifras de los benchmarks de `backports.zoneinfo`):
-
-```
-Ejecutando el constructor en la zona America/New_York
-c_zoneinfo: mean: 214.65 ns ± 43.48 ns; min: 190.88 ns (k=5, N=1000000)
-pytz: mean: 1.21 µs ± 78.31 ns; min: 1.10 µs (k=5, N=200000)
-dateutil: mean: 1.33 µs ± 117.35 ns; min: 1.23 µs (k=5, N=200000)
-
-Ejecutando from_utc en la zona America/New_York
-c_zoneinfo: mean: 658.55 ns ± 28.92 ns; min: 617.08 ns (k=5, N=500000)
-pytz: mean: 5.12 µs ± 515.26 ns; min: 4.70 µs (k=5, N=50000)
-dateutil: mean: 10.64 µs ± 746.99 ns; min: 10.20 µs (k=5, N=20000)
-
-Ejecutando to_utc en la zona America/New_York
-c_zoneinfo: mean: 616.13 ns ± 16.14 ns; min: 604.76 ns (k=5, N=500000)
-pytz: mean: 848.44 ns ± 28.10 ns; min: 806.72 ns (k=5, N=500000)
-dateutil: mean: 8.03 µs ± 509.75 ns; min: 7.55 µs (k=5, N=50000)
-
-Ejecutando utcoffset en la zona America/New_York
-c_zoneinfo: mean: 373.89 ns ± 5.76 ns; min: 368.24 ns (k=5, N=1000000)
-pytz: mean: 564.55 ns ± 13.65 ns; min: 552.88 ns (k=5, N=500000)
-dateutil: mean: 7.95 µs ± 642.62 ns; min: 7.44 µs (k=5, N=50000)
-```
-
-Gracias a su implementación en C, `zoneinfo` es más rápida que `pytz` y `dateutil` en todas las métricas de rendimiento.
-
-</div>
-
-Notes:
-
-Y además de ser más preciso, `ZoneInfo` es increíblemente rápido porque está escrito en C, mientras que `pytz` y `dateutil` están hechos en Python. En prácticamente todos los benchmarks que he pasado, `ZoneInfo` ha sido mucho más rápido que las otras dos, así que no tenéis que sacrificar rendimiento para empezar a usarlo.
-
-[25s; T: 28m 40s]
