@@ -1,11 +1,12 @@
+<div class="bullet-container big-code">
+<div class=bullets-with-header">
+
 # ¿Por qué narices necesitamos zonas horarias?
 
-<div class="left-container">
-<div class="bullet-container medium-code">
 
 ```python
 from dateutil import rrule as rr
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from zoneinfo import ZoneInfo
 
 # Fin de jornada en Nueva York
@@ -13,6 +14,13 @@ horas_de_cerrar = rr.rrule(freq=rr.DAILY, byweekday=(rr.MO, rr.TU, rr.WE, rr.TH,
                            byhour=17, dtstart=datetime(2023, 3, 8, 17), count=5)
 
 NYC = ZoneInfo("America/New_York")
+```
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1em; align-items: start;">
+
+<div>
+
+```python
 for dt in horas_de_cerrar:
     print(dt.replace(tzinfo=NYC))
 ```
@@ -23,12 +31,14 @@ for dt in horas_de_cerrar:
 2023-03-13 17:00:00<b>-04:00</b>
 2023-03-14 17:00:00-04:00</tt></pre>
 
-<div class="small-spacer"></div>
+</div>
+
+<div>
 
 ```python
 # Obtener fin de jornada en UTC
 for dt in horas_de_cerrar:
-    print(dt.replace(tzinfo=NYC).astimezone(timezone.utc))
+    print(dt.replace(tzinfo=NYC).astimezone(UTC))
 ```
 
 <pre><tt>2023-03-08 22:00:00+00:00
@@ -38,6 +48,10 @@ for dt in horas_de_cerrar:
 2023-03-14 21:00:00+00:00</tt></pre>
 
 </div>
+
+</div>
+</div>
+
 </div>
 
 Notes:
