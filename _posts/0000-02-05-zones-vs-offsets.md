@@ -7,7 +7,7 @@
 ## UTC
 
 - Zona horaria de referencia
-- Cambia a casi un segundo por segundo (¿qué son unos segundos intercalares entre amigos?)
+- Avanza a casi un segundo por segundo (¿qué son unos segundos intercalares entre amigos?)
 
 </div>
 <div class="bullets-with-header">
