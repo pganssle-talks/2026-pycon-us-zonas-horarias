@@ -33,11 +33,11 @@ Dado que hay una transición entre `dt1` y `dt2`, hay dos opciones:
 
 Notes:
 
-Y además de la comparación, hay un problema análogo con la aritmética. Porque imagínate que quieres añadir veinticuatro horas a un `datetime` justo antes de un cambio de hora.
+Y además de la comparación, hay un problema análogo con la aritmética. Imagínate que quieres sumar veinticuatro horas a un `datetime` justo antes de un cambio de hora.
 
-Puedes optar por la semántica de la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían veintitrés horas de tiempo real.
+Puedes optar por usar la hora de reloj, en la que dices en plan: "Solo dame la misma hora, pero de mañana", lo que serían veintitrés horas de tiempo real.
 
-O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas", lo que supone una hora de diferencia respecto al caso anterior.
+O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas" — una hora antes.
 
 [30s; T: 26m 15s]
 
@@ -84,9 +84,9 @@ Consultad mi artículo de blog (en inglés) ["Semantics of timezone-aware dateti
 
 Notes:
 
-Y la dicotomía es la misma que con la comparación, ya que a `datetime` le gusta mucho la semántica de la hora de reloj. Así que, si añades un `timedelta`, Python dice: "Vale, esta es una operación dentro de la misma zona, así que usemos horas de reloj". Y si estás restando `datetime`s y están en la misma zona, también usa la semántica de la hora de reloj.
+Y la dicotomía es la misma que con la comparación, ya que a `datetime` le encanta la hora de reloj. Así que si sumas o restas un `timedelta`, Python dice: "es la misma zona — hora de reloj". Y si restas dos `datetime`s en la misma zona, también.
 
-Pero si están en zonas diferentes, de nuevo no tiene sentido usar la semántica de hora de reloj, así que se usa tiempo absoluto. Tengo un artículo en mi blog que profundiza en por qué esto no es tan descabellado como parece; pero, aunque sea razonable, la gente no cree en absoluto que debería ser así y no paran de enviar «bug reports» diciendo que los cálculos están mal.
+Pero si están en zonas diferentes, de nuevo la hora de reloj no tiene sentido, así que tiempo absoluto. Y tengo un post que explica por qué esto no es tan descabellado como parece; pero aunque sea razonable, la gente no para de enviar «bug reports» diciendo que los cálculos están mal.
 
 [30s; T: 26m 45s]
 
