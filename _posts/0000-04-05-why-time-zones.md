@@ -56,7 +56,7 @@ for dt in horas_de_cerrar:
 
 Notes:
 
-Vale, ya os he metido un poco de miedo, y quizás os preguntéis: "Ostras, menudo follón, ¿no podemos usar UTC para todo?"
+Vale, ya os he metido un poco de miedo, y quizás os preguntéis: "Ostras, menudo follón, ¿no podemos simplemente usar UTC para todo?"
 
 Y la respuesta es que no, no podéis, porque el UTC no es una abstracción natural para la mayor parte del mundo. La gente organiza su vida según la posición del sol.
 
