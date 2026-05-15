@@ -97,7 +97,7 @@ Notes:
 
 Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias.
 
-No creo que nos quede tiempo para preguntas, pero aquí tenéis mi información, y estaré en los pasillos después de la charla y luego deambulando por la conferencia; o sea, si no habré muerto de vergüenza pensando en los errores que haya cometido 😅
+Creo que no hay tiempo para preguntas, pero aquí tenéis mi información, y estaré en los pasillos después de la charla (y luego deambulando por la conferencia); o sea, si no he muerto de vergüenza pensando en los errores que acabo de cometer 😅
 
 No, es broma, habéis sido una audiencia genial. Hace casi tres años, empecé a aprender español, y el año pasado, mejorar lo suficiente para dar una charla ha sido algo entre meta y reto para mí, así que, ya cumplido, os agradezco que hayáis venido y participado en este pequeño hito personal. Nos vemos por los pasillos.
 

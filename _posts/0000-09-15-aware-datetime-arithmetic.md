@@ -84,9 +84,9 @@ Consultad mi artículo de blog (en inglés) ["Semantics of timezone-aware dateti
 
 Notes:
 
-Y la dicotomía es la misma que con la comparación, ya que a `datetime` le encanta la hora de reloj. Así que si sumas o restas un `timedelta`, Python dice: "es la misma zona — hora de reloj". Y si restas dos `datetime`s en la misma zona, también.
+Y la dicotomía es la misma que con la comparación, ya que a `datetime` le encanta la hora de reloj. Así que si sumas o restas un `timedelta`, Python dice: "es la misma zona — hora de reloj". Y si restas dos `datetime`s en la misma zona, también, hora de reloj.
 
-Pero si están en zonas diferentes, de nuevo la hora de reloj no tiene sentido, así que tiempo absoluto. Y tengo un post que explica por qué esto no es tan descabellado como parece; pero aunque sea razonable, la gente no para de enviar «bug reports» diciendo que los cálculos están mal.
+Pero si están en zonas diferentes, de nuevo la hora de reloj no tiene sentido, así que te da tiempo absoluto. Y tengo un post que explica por qué esto no es tan descabellado como parece; pero aunque sea razonable, la gente no para de enviar «bug reports» diciendo que los cálculos están mal.
 
 [30s; T: 27m 45s]
 
