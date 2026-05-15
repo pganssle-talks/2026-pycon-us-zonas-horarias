@@ -53,7 +53,7 @@ Vale, entonces esto te permite implementar las otras dos formas de zona horaria 
 
 Pero se hizo un poco a escondidas — los `datetime`s naíf, que antes eran horas flotantes sin zona horaria, ahora representan la hora local siempre que Python necesite convertirlos a UTC. Así que puedes llamar a `timestamp` o `astimezone` y ya está.
 
-Tengo un post de blog en inglés que explica el tortuoso razonamiento detrás de esta decisión, pero ahora basta con decir que ya estoy convencido de que era la decisión correcta.
+Y si queréis más información sobre por qué lo hicieron y por que era lo correcto, echad un vistazo a mi blog.
 
 ➡️ Y algo aquí que quiero destacar es que si quieres saber el desplazamiento o el nombre local, tienen una interfaz tipo `pytz`: si llamas a `.astimezone` sin argumentos, te dará  un `datetime` consciente con el `tzinfo` fijo que aplica a tu sistema.
 
