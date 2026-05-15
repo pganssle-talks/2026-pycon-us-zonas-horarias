@@ -95,12 +95,12 @@ style="font-size: 1.25em; display: flex; flex-direction: column; justify-content
 
 Notes:
 
-Okay, y hasta aquí mi charla. Sé que normalmente la gente prefiere rematar una charla así con un resumen o unos «top tips», pero pensándolo bien, creo que el resumen de mi charla debe ser que no hay reglas simples, y hay que entender las abstracciones. Lo siento.
+Okay, y hasta aquí mi charla. Sé que normalmente la gente prefiere rematar una charla así con un resumen o unos «top tips», pero pensándolo bien, creo que el resumen de mi charla debe ser que no hay reglas simples, y hay que entender las abstracciones que se usan. Lo siento.
 
 Creo que no hay tiempo para preguntas, pero aquí tenéis mi información, y estaré en los pasillos después de la charla (y luego deambulando por la conferencia); o sea, si no he muerto de vergüenza pensando en los errores que acabo de cometer 😅
 
-No, es broma; me habéis aguantado bien en mi primera charla en español.
+No, es broma; me habéis aguantado bien.
 
-Hace casi tres años, empecé a aprender español, y el año pasado, mejorar lo suficiente para dar una charla ha sido algo entre meta y reto para mí, así que, ya cumplido, os agradezco que hayáis venido y participado en este pequeño hito personal. Nos vemos por la conferencia.
+Hace casi tres años, empecé a aprender español, y el año pasado, mejorar lo suficiente para dar una charla ha sido algo entre meta y reto para mí, así que, mi primera charla en español ya cumplida, os agradezco que hayáis venido y participado en este pequeño hito personal. Gracias y nos vemos por la conferencia.
 
 [1m 15s; T: 29m 30s]
