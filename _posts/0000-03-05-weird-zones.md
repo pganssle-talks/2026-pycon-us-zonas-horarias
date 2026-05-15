@@ -262,7 +262,7 @@ img.china_map {
 
 Notes:
 
-Al gobierno de China le parece una buena idea tener solo un desplazamiento para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene muy bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, ➡️ los locales tienden a observar el UTC más seis, pero no todos los locales.
+Al gobierno de China le parece una buena idea tener solo un desplazamiento para todo el país. Un país que normalmente abarcaría tres o cuatro zonas usa el UTC más ocho por todas partes. Esto le viene bien a Pekín, donde es el desplazamiento natural, pero en Xinjiang, en el extremo occidental de China, el amanecer ocurre a las cuatro y media de la mañana, lo que le viene... menos bien. Así que, mientras los trenes y las oficinas del gobierno observan el UTC más ocho, ➡️ los locales tienden a observar el UTC más seis, pero no todos los locales.
 
 De hecho, según Wikipedia, lo que normalmente decide si usas el UTC más ocho o el UTC más seis es si formas parte del pueblo uigur, que es un grupo étnico minoritario. Así que esta puede ser una zona horaria de ubicación y... ¿raza?
 
