@@ -34,7 +34,7 @@
         var oldToggle = timeEl.querySelector('label');
         if (oldToggle) oldToggle.remove();
 
-        // --- CSS: switch to a 3-column grid, override legacy floats/widths ---
+        // --- CSS ---
         if (!doc.head.querySelector('#slide-timer-style')) {
             var style = doc.createElement('style');
             style.id = 'slide-timer-style';
@@ -52,6 +52,12 @@
                 '  float: none !important;',
                 '}',
                 '.speaker-controls-time .slide-timer { font-size: 1.9em; }',
+                /* Scrolling container is #speaker-controls; hide overflow and make it
+                   a container-query root so cqh units work in descendants. */
+                '#speaker-controls { overflow: hidden !important; container-type: size; }',
+                /* Font size driven by --notes-size (set in cqh by fitNotes) so it
+                   automatically re-scales whenever the container changes size. */
+                '.speaker-controls-notes .value { font-size: var(--notes-size, 1.2em); }',
             ].join('\n');
             doc.head.appendChild(style);
         }
@@ -123,7 +129,7 @@
         toggleLabel.appendChild(doc.createTextNode('Show slide timer'));
         timeEl.appendChild(toggleLabel);
 
-        // --- Inject timer script into the popup's own JS context ---
+        // --- Inject timer + notes-fit script into the popup's own JS context ---
         // Running as a <script> element means the interval and message listener
         // belong to the popup window, not the main page. They survive a main-page
         // refresh without needing to be re-injected.
@@ -136,11 +142,38 @@
             '  if (prev) {',
             '    clearInterval(prev.interval);',
             '    window.removeEventListener("message", prev.msgFn);',
-            '    var te = document.querySelector(".speaker-controls-time");',
-            '    if (te && prev.clickFn) te.removeEventListener("click", prev.clickFn);',
+            '    var pte = document.querySelector(".speaker-controls-time");',
+            '    if (pte && prev.clickFn) pte.removeEventListener("click", prev.clickFn);',
+            '    if (prev.ro) prev.ro.disconnect();',
             '  }',
-            '  var slideStart = new Date(), lastH = -1, lastV = -1;',
+            '',
             '  function zeroPad(n) { return ("0" + n).slice(-2); }',
+            '',
+            '  // Shrink notes font to fit #speaker-controls when it overflows.',
+            '  // Result stored as cqh units so it scales automatically on container resize.',
+            '  // Never grows beyond the CSS default size.',
+            '  function fitNotes() {',
+            '    var speaker = document.querySelector("#speaker-controls");',
+            '    var notes   = document.querySelector(".speaker-controls-notes");',
+            '    var value   = document.querySelector(".speaker-controls-notes .value");',
+            '    if (!speaker || !notes || !value || notes.classList.contains("hidden")) return;',
+            '    speaker.style.removeProperty("--notes-size");',
+            '    if (speaker.scrollHeight <= speaker.clientHeight) return;',
+            '    var h = speaker.clientHeight;',
+            '    if (!h) return;',
+            '    var defaultPx = parseFloat(window.getComputedStyle(value).fontSize);',
+            '    function toCqh(p) { return (p / (h / 100)).toFixed(3) + "cqh"; }',
+            '    var lo = 8, hi = defaultPx, best = lo;',
+            '    for (var i = 0; i < 12; i++) {',
+            '      var mid = (lo + hi) / 2;',
+            '      speaker.style.setProperty("--notes-size", toCqh(mid));',
+            '      if (speaker.scrollHeight <= speaker.clientHeight) { best = mid; lo = mid; }',
+            '      else { hi = mid; }',
+            '    }',
+            '    speaker.style.setProperty("--notes-size", toCqh(best));',
+            '  }',
+            '',
+            '  var slideStart = new Date(), lastH = -1, lastV = -1;',
             '  var msgFn = function (ev) {',
             '    try {',
             '      var d = JSON.parse(ev.data);',
@@ -149,13 +182,16 @@
             '          slideStart = new Date();',
             '          lastH = d.state.indexh; lastV = d.state.indexv;',
             '        }',
+            '        setTimeout(fitNotes, 0);',
             '      }',
             '    } catch (e) {}',
             '  };',
             '  window.addEventListener("message", msgFn);',
+            '',
             '  var clickFn = function () { slideStart = new Date(); };',
             '  var te = document.querySelector(".speaker-controls-time");',
             '  if (te) te.addEventListener("click", clickFn);',
+            '',
             '  var interval = setInterval(function () {',
             '    var s = Math.floor((Date.now() - slideStart) / 1000);',
             '    var m = document.querySelector(".slide-minutes-value");',
@@ -163,7 +199,20 @@
             '    if (m) m.textContent = zeroPad(Math.floor(s / 60));',
             '    if (e) e.textContent = ":" + zeroPad(s % 60);',
             '  }, 1000);',
-            '  window._slideTimerPatch = { interval: interval, msgFn: msgFn, clickFn: clickFn };',
+            '',
+            '  // Re-fit when the window is resized or the layout dropdown changes.',
+            '  var ro = null;',
+            '  var spk = document.querySelector("#speaker-controls");',
+            '  if (spk && window.ResizeObserver) {',
+            '    ro = new ResizeObserver(fitNotes);',
+            '    ro.observe(spk);',
+            '  }',
+            '  var layoutSel = document.querySelector("#speaker-layout select");',
+            '  if (layoutSel) layoutSel.addEventListener("change", function () { setTimeout(fitNotes, 50); });',
+            '',
+            '  window._slideTimerPatch = { interval: interval, msgFn: msgFn, clickFn: clickFn, ro: ro };',
+            '',
+            '  setTimeout(fitNotes, 100);',
             '})();',
         ].join('\n');
         doc.head.appendChild(timerScript);
