@@ -105,7 +105,7 @@ Además, puede ser que tu cuñado crea que el desplazamiento del UTC solo cambia
 
 Para realizar este cambio, cuando su hora de verano iba a acabar, ➡️simplemente no cambiaron los relojes, sino que cambiaron la interpretación de su zona horaria a 'horario estándar'. Lo cual es muy conveniente para los humanos, pero te romperá el código si asumes que el horario de verano no va a terminar sin un cambio de reloj.
 
-➡️ De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior,  con la misma forma de transicionar, pero al revés.
+De paso, en mil novecientos noventa y seis, decidieron que el sol no debería ponerse después de la medianoche y regresaron a su zona horaria anterior,  ➡️ con la misma forma de transicionar, pero al revés.
 
 Vale, entonces ya conocemos que el desplazamiento estándar puede cambiarse, pero seguramente o una zona tiene hora de verano o no la tiene, ¿no? O sea, o hay dos cambios al año o cero, ¿cierto?
 
