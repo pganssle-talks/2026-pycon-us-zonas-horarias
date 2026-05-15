@@ -7,8 +7,15 @@
     <img src="images/ganssleio_rotated.svg"
          style="width: 1.1em;"
          class="sbitem" />
-    <img src="external-images/logos/zero-black.svg"
-         style="width: 1.8em;
-                margin-bottom: 0.5em;"
-        class="sbitem">
+    <div class="sbgroup">
+        {% if site.talk_github_url %}
+        {% assign _qr_parts = site.talk_github_url | split: "/" %}
+        {% assign _qr_url = "https://" | append: _qr_parts[0] | append: ".github.io/" | append: _qr_parts[1] %}
+        <div class="qr-container">{{ _qr_url | to_qr_svg }}</div>
+        {% else %}
+        <img src="external-images/logos/zero-black.svg"
+             style="width: 1.8em;"
+             class="sbitem">
+        {% endif %}
+    </div>
 </div>

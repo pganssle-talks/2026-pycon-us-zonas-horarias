@@ -9,5 +9,6 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem "jekyll", "~> 4"
 gem "json", "~> 2.7"
 gem "webrick", "~> 1.7"
+gem "rqrcode", "~> 2"
 
 gem "json", "~> 2.7"

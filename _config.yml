@@ -6,3 +6,4 @@
 title: "Zonas Horarias en Python"
 subtitle: "Todo lo que ojalá no necesitases"
 talk_github_url: "pganssle-talks/2026-pycon-us-zonas-horarias"
+plugins_dir: [_plugins, _local_plugins]
