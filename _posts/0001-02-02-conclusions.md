@@ -82,7 +82,7 @@ Y finalmente, tengo un bonus, que no tiene que ver mucho con zonas horarias pero
 />
 </div>
 <div class="left-container"
-style="font-size: 1.5em; display: flex; flex-direction: column; justify-content: center; margin-left: 2em; ">
+style="font-size: 1.25em; display: flex; flex-direction: column; justify-content: center; margin-left: 2em; ">
     <p><b>Página web:</b> <a href="https://ganssle.io">https://ganssle.io</a></p>
     <p><b>Blog:</b> <a href="https://blog.ganssle.io">https://blog.ganssle.io</a></p>
     <p><b>Mastodon:</b> <a href="https://qoto.org/@pganssle">@pganssle@qoto.org</a></p>
@@ -95,10 +95,12 @@ style="font-size: 1.5em; display: flex; flex-direction: column; justify-content:
 
 Notes:
 
-Okay, y hasta aquí mi charla. Espero que hayáis aprendido un poco sobre zonas horarias.
+Okay, y hasta aquí mi charla. Sé que normalmente la gente prefiere rematar una charla así con un resumen o unos «top tips», pero pensándolo bien, creo que el resumen de mi charla debe ser que no hay reglas simples, y hay que entender las abstracciones. Lo siento.
 
 Creo que no hay tiempo para preguntas, pero aquí tenéis mi información, y estaré en los pasillos después de la charla (y luego deambulando por la conferencia); o sea, si no he muerto de vergüenza pensando en los errores que acabo de cometer 😅
 
-No, es broma, habéis sido una audiencia genial. Hace casi tres años, empecé a aprender español, y el año pasado, mejorar lo suficiente para dar una charla ha sido algo entre meta y reto para mí, así que, ya cumplido, os agradezco que hayáis venido y participado en este pequeño hito personal. Nos vemos por los pasillos.
+No, es broma; me habéis aguantado bien en mi primera charla en español.
 
-[45s; T: 29m 00s]
+Hace casi tres años, empecé a aprender español, y el año pasado, mejorar lo suficiente para dar una charla ha sido algo entre meta y reto para mí, así que, ya cumplido, os agradezco que hayáis venido y participado en este pequeño hito personal. Nos vemos por la conferencia.
+
+[1m 15s; T: 29m 30s]
