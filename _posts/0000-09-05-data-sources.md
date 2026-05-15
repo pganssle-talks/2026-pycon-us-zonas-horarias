@@ -122,6 +122,6 @@ Hoy en día si usas cualquier versión con soporte de Python, ➡️ e incluso m
 
 Y no tengo que explicaros cómo usarlo porque lo haces como os imaginaréis. Pasas un objeto `ZoneInfo` al constructor o `.replace` o `.now` o `.astimezone` y funciona bien.
 
-Aunque lo importante a notar aquí es que en este mundo post-`pytz`, es mucho más probable que te enfrentes a las semánticas poco intuitivas inherentes al modelo de `datetimes` que tiene Python.
+Aunque algo que quiero destacar aquí es que en este mundo post-`pytz`, es mucho más probable que te enfrentes a las semánticas poco intuitivas inherentes al modelo de `datetimes` que tiene Python.
 
 [45s; T: 23m 15s]
