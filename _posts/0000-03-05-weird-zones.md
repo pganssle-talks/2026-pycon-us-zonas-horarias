@@ -180,11 +180,12 @@ Pues nada, ya sabemos que la gente es muy rara con sus cambios de reloj, pero se
 
 También Samoa el 29 Enero 2011
 <div class="small-spacer"></div>
+<span class="fragment confetti-trigger" aria-hidden="true" style="position:absolute;"></span>
 </div>
 
 Notes:
 
-Por desgracia, ni esto es verdad. En mil novecientos noventa y cuatro, en Kiribati (que se pronuncia 'kiribas'), decidieron que querían estar al otro lado de la línea internacional de cambio de fecha. Se supone que esto tiene que ver con alinear su medición del tiempo con sus socios comerciales o algo así; eso da igual; lo importante es que, para realizar este cambio, ¡se saltaron el treinta y uno de diciembre! Así que eran las once y cincuenta y nueve de la noche del treinta de diciembre y un minuto después... ¡feliz año nuevo!
+Por desgracia, ni esto es verdad. En mil novecientos noventa y cuatro, en Kiribati (que se pronuncia 'kiribas'), decidieron que querían estar al otro lado de la línea internacional de cambio de fecha. Se supone que esto tiene que ver con alinear su medición del tiempo con sus socios comerciales o algo así; eso da igual; lo importante es que, para realizar este cambio, ¡se saltaron el treinta y uno de diciembre! Así que eran las once y cincuenta y nueve de la noche del treinta de diciembre y un minuto después... ➡️ ¡feliz año nuevo!
 
 
 SKIP THIS PART:
