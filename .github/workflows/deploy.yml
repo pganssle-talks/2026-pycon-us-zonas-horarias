@@ -27,6 +27,7 @@ jobs:
           path: .vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
+      - run: bundle config set path .vendor/bundle
       - run: mkdir -p docs
       - run: make html
       - uses: actions/upload-pages-artifact@v3
