@@ -39,7 +39,7 @@ Puedes optar por usar la hora de reloj, en la que dices en plan: "Solo dame la m
 
 O puedes decir: "Dame la hora que será cuando hayan pasado veinticuatro horas" — una hora antes.
 
-[30s; T: 26m 45s]
+[30s; T: 27m 15s]
 
 --
 
@@ -88,7 +88,7 @@ Y la dicotomía es la misma que con la comparación, ya que a `datetime` le enca
 
 Pero si están en zonas diferentes, de nuevo la hora de reloj no tiene sentido, así que tiempo absoluto. Y tengo un post que explica por qué esto no es tan descabellado como parece; pero aunque sea razonable, la gente no para de enviar «bug reports» diciendo que los cálculos están mal.
 
-[30s; T: 27m 15s]
+[30s; T: 27m 45s]
 
 --
 
@@ -123,4 +123,4 @@ Notes:
 
 Por desgracia, a estas alturas ya no es algo que podamos cambiar, así que lo que os recomiendo es que definas algunas funciones auxiliares como las que tengo aquí, que tomen tus operandos y los conviertan a UTC antes de hacer las operaciones, para que así no importe si están en la misma zona o no.
 
-[30s; T: 27m 45s]
+[30s; T: 28m 15s]

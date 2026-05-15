@@ -61,4 +61,4 @@ Pero no debes hacer aritmética con eso — haz los cálculos primero y luego ll
 
 Así que esto nos da dos de nuestros tres tipos de zonas horarias, pero en Python tres punto ocho (3.8), ➡️ todavía no teníamos zonas de IANA, y el motivo eran los datos.
 
-[1m 30s; T: 20m 45s]
+[1m 30s; T: 21m 15s]

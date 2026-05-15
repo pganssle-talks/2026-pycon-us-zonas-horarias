@@ -81,7 +81,7 @@ Uno es el UTC o desplazamientos fijos respecto a este; otro es la hora local, o 
 
 ➡️ Y el primero es muy fácil, porque solo necesitas un `timedelta` fijo, así que eso lo añadieron pronto, en tres punto dos. Pero los otros dos resultan ser un poco más complejos.
 
-[30s; T: 13m 45s]
+[45s; T: 14m 00s]
 
 --
 
@@ -165,7 +165,7 @@ Las horas ambiguas son momentos en los que la misma hora se marca dos veces; por
 
 Y esto es un problema fundamental, un defecto que tenía la interfaz de `tzinfo` en aquella época.
 
-[1m; T: 14m 45s]
+[1m; T: 15m 00s]
 
 --
 
@@ -211,4 +211,4 @@ Y además hay otro problema, el complemento de las horas ambiguas, que llamamos 
 
 Lidiar con esto es más fácil porque estos tiempos simplemente no existen, pero aun así, es importante definir qué debe hacer `tzinfo` en estos casos.
 
-[30s; T: 15m 15s]
+[30s; T: 15m 30s]
