@@ -1,3 +1,5 @@
+<!-- .slide: data-visibility="uncounted" -->
+
 <div class="bullet-container medium-code code-indented smaller-margins">
 
 # ¿Por qué usar `zoneinfo`?
@@ -39,6 +41,8 @@ Uno es que es muy rápida, ya que está escrita en C. Pero no quiero jactarme de
 [30s; T: 28m 15s]
 
 --
+
+<!-- .slide: data-visibility="uncounted" -->
 
 <style>
 div.bullet-container.smaller-margins {
